@@ -7,6 +7,3 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 
 # use zed as the default editor
 export EDITOR="zed"
-
-# rust
-. "$HOME/.cargo/env"

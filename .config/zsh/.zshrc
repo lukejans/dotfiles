@@ -11,23 +11,18 @@ export HISTFILE="${HOME}/.zsh_history"
 export HISTSIZE=10000000
 export SAVEHIST=10000000
 
-# --- homebrew
-# link: https://brew.sh
-# ensure homebrew installed binaries are found
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
 # --- tab completions
 if type brew &>/dev/null; then
   # homebrew builtin completions:
   # this checks if homebrew is present before adding its
   # completions to FPATH.
   #   - packaged with homebrew
-  #   - link: https://docs.brew.sh/Shell-Completion
+  #   - see: https://docs.brew.sh/Shell-Completion
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
   # additional zsh completions:
   #   - brew installed
-  #   - link: https://github.com/zsh-users/zsh-completions
+  #   - see: https://github.com/zsh-users/zsh-completions
   #   - caveats:
   #       $ chmod go-w '/opt/homebrew/share'
   #       $ chmod -R go-w '/opt/homebrew/share/zsh'
@@ -37,23 +32,23 @@ autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
 # --- custom aliases & functions
-source "${XDG_CONFIG_HOME}/zsh/aliases"
-source "${XDG_CONFIG_HOME}/zsh/functions"
+source "${XDG_CONFIG_HOME}/zsh/aliases.zsh"
+source "${XDG_CONFIG_HOME}/zsh/functions.zsh"
 
 # --- plugins
 # starship command prompt:
 #   - brew installed
-#   - link: https://github.com/starship/starship
+#   - see: https://github.com/starship/starship
 export STARSHIP_CONFIG="${HOME}/.config/starship/starship.toml"
 export STARSHIP_CACHE="${HOME}/.cache/starship"
 eval "$(starship init zsh)"
 # fzf:
 #   - brew installed
-#   - link: https://github.com/junegunn/fzf
+#   - see: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
 # zoxide:
 #   - brew installed
-#   - link: https://github.com/ajeetdsouza/zoxide
+#   - see: https://github.com/ajeetdsouza/zoxide
 eval "$(zoxide init --cmd cd zsh)"
 # bat (interactive tool settings)
 export BAT_CONFIG_DIR="${XDG_CONFIG_HOME}/bat"
@@ -68,17 +63,17 @@ export TMUX_CONF_LOCAL="${TMUX_DIR}/tmux.conf.local"
 # --- zsh plugins
 # fast-syntax-highlighting
 #   - brew installed
-#   - link: https://github.com/zdharma-continuum/fast-syntax-highlighting
+#   - see: https://github.com/zdharma-continuum/fast-syntax-highlighting
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 # zsh-autosuggestions:
 #   - brew installed
-#   - link: https://github.com/zsh-users/zsh-autosuggestions
+#   - see: https://github.com/zsh-users/zsh-autosuggestions
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # --- node
 # nvm: node version manager
 #   - git installed
-#   - link: https://github.com/nvm-sh/nvm
+#   - see: https://github.com/nvm-sh/nvm
 #   - note: consider lazy loading nvm as its the heaviest part
 #           of the configuration.
 export NVM_DIR="$HOME/.nvm"
@@ -108,6 +103,15 @@ load-nvmrc() {
 }
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
+# pnpm: performant node package manager
+#   - corepack enabled
+#   - see: https://pnpm.io
+#   - note: the guide on node.js downloads page was followed
+export PNPM_HOME="/Users/lukejans/Library/pnpm"
+case ":$PATH:" in
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 
 # --- java
 # -> openjdk (brew installed)

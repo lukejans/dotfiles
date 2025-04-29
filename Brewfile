@@ -9,7 +9,6 @@ tap "beeftornado/rmtree"
 tap "bell-sw/liberica"
 tap "danielgatis/imgcat"
 tap "homebrew/command-not-found"
-tap "homebrew/core"
 tap "homebrew/test-bot"
 
 # cli tools
