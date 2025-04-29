@@ -1,0 +1,202 @@
+//  ______
+// | z.rs |  lukejans zed
+// |______|  settings.json
+//
+// for information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// to see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  // --- editor
+  "show_edit_predictions": true,
+  "cursor_shape": "block",
+  "extend_comment_on_newline": false,
+  "restore_on_startup": "last_workspace",
+  "relative_line_numbers": true,
+  "format_on_save": "on",
+  "formatter": "auto",
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "show_diagnostics": "all"
+  },
+  "diagnostics": {
+    "include_warnings": true,
+    "inline": {
+      // "enabled": true
+    }
+  },
+  // --- ssh
+  "ssh_connections": [],
+  // --- text
+  "buffer_font_family": "Zed Plex Mono",
+  "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
+  "buffer_font_size": 12,
+  "ui_font_size": 14,
+  "tab_size": 2,
+  // --- theme
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+  // --- ai
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "claude-3.7-sonnet-thought"
+    },
+    "version": "2"
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
+  "edit_predictions": {
+    "disabled_globs": [],
+    "mode": "subtle",
+    "enabled_in_assistant": false
+  },
+  // --- journal
+  "journal": {
+    "path": "~/Notes",
+    "hour_format": "hour24"
+  },
+  // --- git
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true
+    }
+  },
+  // --- terminal
+  "terminal": {
+    "line_height": "standard",
+    "alternate_scroll": "on",
+    "copy_on_select": true,
+    "font_features": {
+      "calt": false
+    },
+    "option_as_meta": true
+  },
+  // --- language specific settings
+  "languages": {
+    // sh
+    "Shell Script": {
+      "formatter": {
+        "external": {
+          "command": "shfmt",
+          "arguments": ["--filename", "{buffer_path}", "--indent", "2"]
+        }
+      }
+    },
+    // js
+    "JavaScript": {
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
+      }
+    },
+    // html
+    "HTML": {
+      "formatter": {
+        "language_server": {
+          "name": "superhtml"
+        }
+      }
+    },
+    // css
+    "CSS": {
+      "formatter": "prettier"
+    },
+    // md
+    "Markdown": {
+      "show_edit_predictions": true,
+      "soft_wrap": "editor_width",
+      "format_on_save": "prettier"
+    },
+    // ruby
+    "Ruby": {
+      "language_servers": ["ruby-lsp", "!solargraph", "!rubocop"],
+      "formatter": "language_server"
+    },
+    // --- xml
+    "XML": {
+      "formatter": "prettier"
+    },
+    // --- json
+    "JSON": {
+      "formatter": "prettier"
+    },
+    "JSONC": {
+      "formatter": "prettier"
+    },
+    // --- java
+    "Java": {
+      "formatter": "language_server",
+      "code_actions_on_format": {
+        "source.organizeImports": true
+      }
+    }
+  },
+  // --- lsp ---
+  "lsp": {
+    // js
+    "eslint": {
+      "settings": {
+        "codeActionOnSave": {
+          "rules": ["import/order"]
+        }
+      }
+    },
+    // java
+    "java": {
+      "settings": {
+        "java.jdt.ls.lombokSupport.enabled": true,
+        "java.format.enabled": true,
+        "java.saveActions.cleanup": true
+        // // clean up options:
+        // // https://github.com/redhat-developer/vscode-java/blob/main/document/_java.learnMoreAboutCleanUps.md#java-clean-ups
+        // "java.cleanup.actions": [
+        //   "organizeImports",
+        //   "qualifyMembers",
+        //   "qualifyStaticMembers",
+        //   "addOverride",
+        //   "addDeprecated",
+        //   "stringConcatToTextBlock",
+        //   "invertEquals",
+        //   "addFinalModifier",
+        //   "instanceofPatternMatch",
+        //   "lambdaExpressionFromAnonymousClass",
+        //   "switchExpression",
+        //   "tryWithResource",
+        //   "lambdaExpression",
+        //   "renameUnusedLocalVariables",
+        //   "useSwitchForInstanceofPattern"
+        // ]
+      },
+      "initialization_options": {}
+    },
+    // ruby
+    "ruby-lsp": {
+      "initialization_options": {
+        "enabledFeatures": {
+          "diagnostics": false,
+          "formatting": true
+        },
+        "formatter": "standard"
+      }
+    }
+  },
+  // --- privacy
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  }
+}

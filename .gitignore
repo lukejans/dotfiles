@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# editor
+.ruby-lsp/
+
+# other
+github-copilot/

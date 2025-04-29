@@ -1,0 +1,36 @@
+#  .--.
+# | >_ |     lukejans
+# |    |  ghostty config
+# '^^^^'
+
+# --- theme
+theme = light:jans-light, dark:jans-dark
+
+# --- font
+font-family = Zed Plex Mono
+font-size = 12
+font-thicken = true
+font-thicken-strength = 200
+
+# --- compatibility
+shell-integration = detect
+shell-integration-features = no-cursor
+
+
+# --- cursor
+cursor-style = block
+cursor-style-blink = false
+adjust-cursor-thickness = 1
+
+# --- mouse
+mouse-hide-while-typing = true
+
+# --- window
+window-theme = system
+window-save-state = always
+window-padding-x = 4
+window-padding-y = 4
+
+# --- macOS specific
+macos-titlebar-style = transparent
+macos-option-as-alt = true
