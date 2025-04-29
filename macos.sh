@@ -20,17 +20,23 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # --- dock
 # enable auto-hide
-defaults write com.apple.dock "autohide" -bool "true"
+defaults write com.apple.dock autohide -bool "true"
 # change the dock size
-defaults write com.apple.dock "tilesize" -int "36"
+defaults write com.apple.dock tilesize -int "36"
 # change hide / show animation speed
-defaults write com.apple.dock "autohide-time-modifier" -float "0.45"
+defaults write com.apple.dock autohide-time-modifier -float "0.45"
 # don't show recent apps
-defaults write com.apple.dock "show-recents" -bool "false"
+defaults write com.apple.dock show-recents -bool "false"
 # change the animation to scale
-defaults write com.apple.dock "mineffect" -string "scale"
+defaults write com.apple.dock mineffect -string "scale"
 # only show active apps
-defaults write com.apple.dock "static-only" -bool "true"
+defaults write com.apple.dock static-only -bool "true"
+# speed up Mission Control animations
+defaults write com.apple.dock expose-animation-duration -float 0.1
+# enable grouping of applications in Mission Control
+defaults write com.apple.dock expose-group-apps -bool "true"
+# don't show indicator lights for open applications in the dock
+defaults write com.apple.dock show-process-indicators -bool false
 # hot corners (I hate hot corners)
 # top left screen corner -> do nothing
 defaults write com.apple.dock wvous-tl-corner -int 1
@@ -72,18 +78,57 @@ defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 defaults write NSGlobalDomain com.apple.springing.delay -float 0.15
 # keep folders on top when sorting by name
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
+# when performing a search, search the current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+# show the ~/Library folder
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+# show the /Volumes folder
+sudo chflags nohidden /Volumes
+
+# --- safari
+# privacy: don’t send search queries to Apple
+defaults write com.apple.Safari UniversalSearchEnabled -bool false
+defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+# remove useless icons from Safari’s bookmarks bar
+defaults write com.apple.Safari ProxiesInBookmarksBar "()"
+# enable the Develop menu and the Web Inspector in Safari
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+# enable continuous spellchecking
+defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
+# warn about fraudulent websites
+defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
+# disable plug-ins
+defaults write com.apple.Safari WebKitPluginsEnabled -bool false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2PluginsEnabled -bool false
+# block pop-up windows
+defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
+# enable “Do Not Track”
+defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
 
 # --- menubar
 # set flashing date time separators
 defaults write com.apple.menuextra.clock "FlashDateSeparators" -bool "true"
 # show passwords
+# not currently working on fresh installs! It seems like the app must be opened
+# at least once before this option is respected
 defaults write com.apple.Passwords "EnableMenuBarExtra" -bool "true"
 
 # --- mouse
-# set mouse movement speed
+# set movement speed
 defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
+# disable click to show desktop
+defaults write "com.apple.WindowManager" "EnableStandardClickToShowDesktop" -bool "false"
+
+# --- trackpad
 # enable three finger drag interactions
 defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool "true"
+#  enable tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # --- keyboard
 # enable full keyboard access for all controls (tab selection)
@@ -107,6 +152,49 @@ sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutio
 defaults write com.apple.screencapture "location" -string "${HOME}/Pictures"
 # save screenshots in PNG format
 defaults write com.apple.screencapture type -string "png"
+
+# --- spotlight
+# disable Spotlight indexing for any volume that gets mounted and has not yet
+# been indexed before.
+# Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
+sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+# change indexing order and disable some search results
+# Yosemite-specific search results (remove them if you are using macOS 10.9 or older):
+# 	MENU_DEFINITION
+# 	MENU_CONVERSION
+# 	MENU_EXPRESSION
+# 	MENU_SPOTLIGHT_SUGGESTIONS (send search queries to Apple)
+# 	MENU_WEBSEARCH             (send search queries to Apple)
+# 	MENU_OTHER
+defaults write com.apple.spotlight orderedItems -array \
+  '{"enabled" = 1;"name" = "APPLICATIONS";}' \
+  '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
+  '{"enabled" = 1;"name" = "DIRECTORIES";}' \
+  '{"enabled" = 1;"name" = "PDF";}' \
+  '{"enabled" = 1;"name" = "FONTS";}' \
+  '{"enabled" = 0;"name" = "DOCUMENTS";}' \
+  '{"enabled" = 0;"name" = "MESSAGES";}' \
+  '{"enabled" = 0;"name" = "CONTACT";}' \
+  '{"enabled" = 0;"name" = "EVENT_TODO";}' \
+  '{"enabled" = 0;"name" = "IMAGES";}' \
+  '{"enabled" = 0;"name" = "BOOKMARKS";}' \
+  '{"enabled" = 0;"name" = "MUSIC";}' \
+  '{"enabled" = 0;"name" = "MOVIES";}' \
+  '{"enabled" = 0;"name" = "PRESENTATIONS";}' \
+  '{"enabled" = 0;"name" = "SPREADSHEETS";}' \
+  '{"enabled" = 0;"name" = "SOURCE";}' \
+  '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+  '{"enabled" = 0;"name" = "MENU_OTHER";}' \
+  '{"enabled" = 0;"name" = "MENU_CONVERSION";}' \
+  '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
+  '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
+  '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+# load new settings before rebuilding the index
+killall mds >/dev/null 2>&1
+# make sure indexing is enabled for the main volume
+sudo mdutil -i on / >/dev/null
+# rebuild the index from scratch
+sudo mdutil -E / >/dev/null
 
 # --- messages
 # disable automatic emoji substitution

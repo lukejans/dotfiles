@@ -9,39 +9,39 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  // --- editor
-  "show_edit_predictions": true,
-  "cursor_shape": "block",
-  "extend_comment_on_newline": false,
-  "restore_on_startup": "last_workspace",
-  "relative_line_numbers": true,
-  "format_on_save": "on",
-  "formatter": "auto",
-  "tabs": {
-    "file_icons": true,
-    "git_status": true,
-    "show_diagnostics": "all"
-  },
-  "diagnostics": {
-    "include_warnings": true,
-    "inline": {
-      // "enabled": true
-    }
-  },
-  // --- ssh
-  "ssh_connections": [],
-  // --- text
-  "buffer_font_family": "Zed Plex Mono",
-  "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
-  "buffer_font_size": 12,
-  "ui_font_size": 14,
-  "tab_size": 2,
   // --- theme
   "theme": {
     "mode": "system",
     "light": "One Light",
     "dark": "One Dark"
   },
+  // --- editing
+  "cursor_shape": "block",
+  "tab_size": 2,
+  "ui_font_size": 14,
+  "buffer_font_size": 12,
+  "buffer_font_family": "Zed Plex Mono",
+  "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
+  "extend_comment_on_newline": false,
+  "restore_on_startup": "none",
+  "relative_line_numbers": true,
+  "diagnostics": {
+    "include_warnings": true
+  },
+  // --- ui
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "show_diagnostics": "all"
+  },
+  // --- file associations
+  "file_types": {
+    "Shell Script": [".env.*", "**/.zprofile"],
+    "Git Config": ["**/git/config"],
+    "Git Ignore": ["**/git/gitignore*"]
+  },
+  // --- ssh
+  "ssh_connections": [],
   // --- ai
   "assistant": {
     "default_model": {
@@ -54,10 +54,12 @@
     "edit_prediction_provider": "zed"
   },
   "edit_predictions": {
-    "disabled_globs": [],
+    "disabled_globs": ["**/.ssh/**"],
     "mode": "subtle",
     "enabled_in_assistant": false
   },
+  // --- privacy
+  "private_files": ["**/.env*", "**/.ssh/**"],
   // --- journal
   "journal": {
     "path": "~/Notes",
@@ -72,12 +74,11 @@
   // --- terminal
   "terminal": {
     "line_height": "standard",
-    "alternate_scroll": "on",
     "copy_on_select": true,
+    "option_as_meta": true,
     "font_features": {
       "calt": false
-    },
-    "option_as_meta": true
+    }
   },
   // --- language specific settings
   "languages": {
@@ -121,23 +122,18 @@
       "soft_wrap": "editor_width",
       "format_on_save": "prettier"
     },
-    // ruby
-    "Ruby": {
-      "language_servers": ["ruby-lsp", "!solargraph", "!rubocop"],
-      "formatter": "language_server"
-    },
-    // --- xml
+    // xml
     "XML": {
       "formatter": "prettier"
     },
-    // --- json
+    // json
     "JSON": {
       "formatter": "prettier"
     },
     "JSONC": {
       "formatter": "prettier"
     },
-    // --- java
+    // java
     "Java": {
       "formatter": "language_server",
       "code_actions_on_format": {
@@ -145,7 +141,7 @@
       }
     }
   },
-  // --- lsp ---
+  // --- lsp
   "lsp": {
     // js
     "eslint": {
@@ -157,40 +153,11 @@
     },
     // java
     "java": {
+      "initialization_options": {},
       "settings": {
         "java.jdt.ls.lombokSupport.enabled": true,
         "java.format.enabled": true,
         "java.saveActions.cleanup": true
-        // // clean up options:
-        // // https://github.com/redhat-developer/vscode-java/blob/main/document/_java.learnMoreAboutCleanUps.md#java-clean-ups
-        // "java.cleanup.actions": [
-        //   "organizeImports",
-        //   "qualifyMembers",
-        //   "qualifyStaticMembers",
-        //   "addOverride",
-        //   "addDeprecated",
-        //   "stringConcatToTextBlock",
-        //   "invertEquals",
-        //   "addFinalModifier",
-        //   "instanceofPatternMatch",
-        //   "lambdaExpressionFromAnonymousClass",
-        //   "switchExpression",
-        //   "tryWithResource",
-        //   "lambdaExpression",
-        //   "renameUnusedLocalVariables",
-        //   "useSwitchForInstanceofPattern"
-        // ]
-      },
-      "initialization_options": {}
-    },
-    // ruby
-    "ruby-lsp": {
-      "initialization_options": {
-        "enabledFeatures": {
-          "diagnostics": false,
-          "formatting": true
-        },
-        "formatter": "standard"
       }
     }
   },

@@ -5,12 +5,12 @@
 # |______|  functions.zsh
 
 # create a new directory and enter it
-function mkd() {
+mkd() {
   mkdir -p "$@" && cd "$_"
 }
 
 # fzf preview
-function fz() {
+fz() {
   fzf --style full \
     --border --padding 1,2 \
     --border-label ' Fzf Search ' \
@@ -36,7 +36,7 @@ function fz() {
 }
 
 # fzf preview and open a selected file in $EDITOR
-function fzo() {
+fzo() {
   local selected_file
   selected_file=$(fz)
   if [ -n "$selected_file" ]; then
@@ -45,7 +45,7 @@ function fzo() {
 }
 
 # yazi
-function y() {
+y() {
   local tmp
   tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
   yazi "$@" --cwd-file="$tmp"
@@ -56,7 +56,7 @@ function y() {
 }
 
 # git commit
-function gc() {
+gc() {
   if [ -z "$1" ]; then
     git commit
   else
@@ -65,12 +65,12 @@ function gc() {
 }
 
 # arduino uno compile
-function uno_compile() {
+uno_compile() {
   arduino-cli compile -v --fqbn arduino:avr:uno "$1"
 }
 
 # arduino uno upload
-function uno_upload() {
+uno_upload() {
   arduino-cli upload -v -p /dev/cu.usbmodem2101 --fqbn arduino:avr:uno "$1"
 }
 
@@ -93,10 +93,38 @@ nvm_upgrade() {
 
 # workaround for `fast-syntax-highlighting` freezing when running `$ whatis`
 # see: https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27#issuecomment-1267278072
-function whatis() {
+whatis() {
   if [[ -v THEFD ]]; then
     :
   else
     command whatis "$@"
   fi
+}
+
+# find new MacOS defaults settings
+# see: https://github.com/yannbertrand/macos-defaults/tree/main
+defaults_diff() {
+  echo -n -e "\033[1m? Insert diff name (to store it for future usage)\033[0m "
+  read name
+  name=${name:-default}
+  echo "Saving plist files to '$(pwd)/diffs/${name}' folder."
+
+  mkdir -p diffs/$name
+  defaults read >diffs/$name/old.plist
+  defaults -currentHost read >diffs/$name/host-old.plist
+
+  echo -e "\n\033[1;33m \033[0m Change settings and press any key to continue"
+
+  read -s -k 1
+  defaults read >diffs/$name/new.plist
+  defaults -currentHost read >diffs/$name/host-new.plist
+
+  echo -e "\033[1;32m->\033[0m Here is your diff\n\n"
+  git --no-pager diff --no-index diffs/$name/old.plist diffs/$name/new.plist
+  echo -e '\n\n\033[1;32m->\033[0m and here with the `-currentHost` option\n\n'
+  git --no-pager diff --no-index diffs/$name/host-old.plist diffs/$name/host-new.plist
+
+  echo -e "\n\n\033[1;32m->\033[0m Commands to print the diffs again"
+  echo -e "$ git --no-pager diff --no-index diffs/${name}/old.plist diffs/${name}/new.plist"
+  echo -e "$ git --no-pager diff --no-index diffs/${name}/host-old.plist diffs/${name}/host-new.plist"
 }
