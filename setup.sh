@@ -110,9 +110,10 @@ This script will:
   # ---
   # clone .dotfiles
   # ---
-  echo -e "${cg}${arrow}${r} Cloning dotfiles repository to \"$DOTFILES_DIR\"..."
   # file path of the dotfiles directory
   DOTFILES_DIR="$HOME/.dotfiles"
+
+  echo -e "${cg}${arrow}${r} Cloning dotfiles repository to \"$DOTFILES_DIR\"..."
 
   # check if .config directory exists already
   if [[ -d "$DOTFILES_DIR" ]]; then

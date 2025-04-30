@@ -81,7 +81,7 @@ defaults write com.apple.finder _FXSortFoldersFirst -bool true
 # when performing a search, search the current folder by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 # show the ~/Library folder
-chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+sudo chflags nohidden ~/Library
 # show the /Volumes folder
 sudo chflags nohidden /Volumes
 
