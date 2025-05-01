@@ -1,113 +1,97 @@
 [alias]
-  ; view commit log abbreviated SHA, description, and history graph
+  # view commit log abbreviated SHA, description, and history graph
 	l = log --graph --abbrev-commit --pretty=oneline
-	; same as above but with author name, commit message, and date
+	# same as above but with author name, commit message, and date
 	ll = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-	; View the current working tree status using the short format.
+	# View the current working tree status using the short format.
 	s = status -s
-	; Show the diff between the latest commit and the current state.
+	# Show the diff between the latest commit and the current state.
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-	; `git di $number` shows the diff between the state `$number` revisions ago and the current state.
+	# `git di $number` shows the diff between the state `$number` revisions ago and the current state.
 	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
-	; Pull in remote changes for the current repository and all its submodules.
+	# Pull in remote changes for the current repository and all its submodules.
 	p = pull --recurse-submodules
+	# undo the last commit
 	undo = reset --soft HEAD~1
-	; reword the last commit
+	# reword the last commit
 	reword = commit --amend
-	; add staged files to the last commit
+	# add staged files to the last commit
 	oops = commit --amend --no-edit
-  ; interactive rebase with the given number of latest commits.
+  # interactive rebase with the given number of latest commits.
 	ir = "!r() { git rebase -i HEAD~$1; }; r"
-	; list contributors with number of commits.
-	contributors = shortlog --summary --numbered
-	; commit changes
+	# list contributors with number of commits.
+	peeps = shortlog --summary --numbered
+	# commit changes
 	c = git commit
-	; commit all changes.
-	ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
-	; clone a repository including all submodules.
-	cr = clone --recursive
+	# add and commit all changes.
+	ac = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
 	# switch to a branch, creating it if necessary.
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
-	; find branches containing commit
+	# find branches containing commit
 	fb = "!f() { git branch -a --contains $1; }; f"
-	; find tags containing commit
+	# find tags containing commit
 	ft = "!f() { git describe --always --contains $1; }; f"
-	; find commits by source code
+	# find commits by source code
 	fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-	; find commits by commit message
+	# find commits by commit message
 	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
 [apply]
-	; detect whitespace errors when applying a patch.
+	# detect whitespace errors when applying a patch.
 	whitespace = fix
 
 [core]
-  ; global git ignore file
+	# global git ignore file
 	excludesFile = ~/.config/git/gitignore_global
-	; default editor to use
+	# default editor to use
 	editor = zed --wait
-	; treat spaces before tabs and all kinds of trailing whitespace as an error.
-	; [default] trailing-space: looks for spaces at the end of a line
-	; [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+	# treat spaces before tabs and all kinds of trailing whitespace as an error.
+	# [default] trailing-space: looks for spaces at the end of a line
+	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-	; make `git rebase` safer on macOS.
-	; more info: http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
+	# make `git rebase` safer on macOS.
+	# more info: http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
 	trustctime = false
-	; prevent showing files whose names contain non-ASCII symbols as unversioned.
-	; more info: http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+	# prevent showing files whose names contain non-ASCII symbols as unversioned.
+	# more info: http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
 	precomposeunicode = false
-	; speed up commands involving untracked files such as `git status`.
-	; more info: https://git-scm.com/docs/git-update-index#_untracked_cache
+	# speed up commands involving untracked files such as `git status`.
+	# more info: https://git-scm.com/docs/git-update-index#_untracked_cache
 	untrackedCache = true
 
 [color]
 	ui = auto
 
-[color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
-
-[color "diff"]
-	meta = yellow bold
-	frag = magenta bold # line info
-	old = red # deletions
-	new = green # additions
-
-[color "status"]
-	added = yellow
-	changed = green
-	untracked = red
-
 [commit]
-  ; more info: https://help.github.com/articles/signing-commits-using-gpg/
+  # more info: https://help.github.com/articles/signing-commits-using-gpg/
 	gpgsign = true
 
 [diff]
-	; detect copies as well as renames.
+	# detect copies as well as renames.
 	renames = copies
 
 [gpg]
 	format = ssh
 
 [help]
-	; auto correct and execute mistyped commands.
+	# auto correct and execute mistyped commands.
 	autocorrect = 1
 
 [init]
 	defaultBranch = main
 
 [merge]
-  ; fast forward merge
+  # fast forward merge
 	ff = only
-	; include summaries of merged commits in newly created merge commit messages
+	# include summaries of merged commits in newly created merge commit messages
 	log = true
 
 [push]
-  ; https://git-scm.com/docs/git-config#git-config-pushdefault
-	default = simple
-	; make `git push` push relevant annotated tags when pushing branches out.
+	# make `git push` push relevant annotated tags when pushing branches out.
 	followTags = true
+
+[url "git@github.com:"]
+  pushInsteadOf = https://github.com/
 
 [user]
 	name = Luke Janssen
