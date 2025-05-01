@@ -118,7 +118,7 @@ This script will:
   # check if .config directory exists already
   if [[ -d "$DOTFILES_DIR" ]]; then
     # create a backup of the existing .dotfiles directory
-    backup_dir=$HOME/.dotfiles$(date +%c).bak
+    backup_dir=$HOME/.dotfiles_$(date +%c).bak
     cp -RL "$DOTFILES_DIR" "$backup_dir"
     trash "$DOTFILES_DIR"
     echo -e "${cg}${check}${r} Backed up old \".dotfiles\" directory to \"$backup_dir\"."
@@ -144,7 +144,7 @@ This script will:
   # check if .config directory exists
   if [[ -d "$HOME/.config" ]]; then
     # backup existing .config directory
-    backup_dir=$HOME/.config$(date +%c).bak
+    backup_dir=$HOME/.config_$(date +%c).bak
     cp -RL "$HOME/.config" "$backup_dir"
     trash "$HOME/.config"
     echo -e "${cg}${check}${r} Backed up existing .config directory to \"$backup_dir\"."
@@ -161,7 +161,7 @@ This script will:
   for file in "$DOTFILES_DIR"/.config/zsh/*.z; do
     # backup existing zshell configuration files
     if [[ -f "$file" ]]; then
-      backup_file="$file$(date +%c).bak"
+      backup_file="${file}_$(date +%c).bak"
       cp -RL "$file" "$backup_file"
       echo "${cg}${check}${r} Backed up existing \"$(basename "$file")\" to \"$backup_file\"."
     fi
@@ -236,7 +236,7 @@ This script will:
   else
     echo "User fonts directory already exists."
   fi
-  cp "$DOTFILES_DIR/assets/fonts/*.ttf" "$HOME/Library/Fonts/"
+  cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
   echo -e "${cg}${check}${r} Fonts copied to user fonts directory."
 
   # ---

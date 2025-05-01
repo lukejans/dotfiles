@@ -55,20 +55,20 @@ defaults write com.apple.dock wvous-br-modifier -int 0
 # display full POSIX path as window title
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 # show file extensions
-defaults write NSGlobalDomain "AppleShowAllExtensions" -bool "true"
+defaults write NSGlobalDomain AppleShowAllExtensions -bool "true"
 # show the file path bar
-defaults write com.apple.finder "ShowPathbar" -bool "true"
+defaults write com.apple.finder ShowPathbar -bool "true"
 # show status bar
-defaults write com.apple.finder "ShowStatusBar" -bool "true"
+defaults write com.apple.finder ShowStatusBar -bool "true"
 # hide external disks / servers from showing on desktop
-defaults write com.apple.finder "ShowExternalHardDrivesOnDesktop" -bool "false"
-defaults write com.apple.finder "ShowHardDrivesOnDesktop" -bool "false"
-defaults write com.apple.finder "ShowMountedServersOnDesktop" -bool "false"
-defaults write com.apple.finder "ShowRemovableMediaOnDesktop" -bool "false"
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool "false"
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool "false"
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool "false"
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool "false"
 # set the file view to column
-defaults write com.apple.finder "FXPreferredViewStyle" -string "clmv"
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 # empty bin after 30 days
-defaults write com.apple.finder "FXRemoveOldTrashItems" -bool "true"
+defaults write com.apple.finder FXRemoveOldTrashItems -bool "true"
 # disable the warning before emptying the trash
 defaults write com.apple.finder WarnOnEmptyTrash -bool false
 # avoid creating .DS_Store files on network or USB volumes
@@ -85,46 +85,23 @@ sudo chflags nohidden ~/Library
 # show the /Volumes folder
 sudo chflags nohidden /Volumes
 
-# --- safari
-# privacy: don’t send search queries to Apple
-defaults write com.apple.Safari UniversalSearchEnabled -bool false
-defaults write com.apple.Safari SuppressSearchSuggestions -bool true
-# remove useless icons from Safari’s bookmarks bar
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-# enable the Develop menu and the Web Inspector in Safari
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-# enable continuous spellchecking
-defaults write com.apple.Safari WebContinuousSpellCheckingEnabled -bool true
-# warn about fraudulent websites
-defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
-# disable plug-ins
-defaults write com.apple.Safari WebKitPluginsEnabled -bool false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2PluginsEnabled -bool false
-# block pop-up windows
-defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
-# enable “Do Not Track”
-defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
-
 # --- menubar
 # set flashing date time separators
-defaults write com.apple.menuextra.clock "FlashDateSeparators" -bool "true"
+defaults write com.apple.menuextra.clock FlashDateSeparators -bool "true"
 # show passwords
 # not currently working on fresh installs! It seems like the app must be opened
 # at least once before this option is respected
-defaults write com.apple.Passwords "EnableMenuBarExtra" -bool "true"
+defaults write com.apple.Passwords EnableMenuBarExtra -bool "true"
 
 # --- mouse
 # set movement speed
 defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
 # disable click to show desktop
-defaults write "com.apple.WindowManager" "EnableStandardClickToShowDesktop" -bool "false"
+defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool "false"
 
 # --- trackpad
 # enable three finger drag interactions
-defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool "true"
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool "true"
 #  enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
@@ -149,15 +126,11 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 1
 # enable HiDPI display modes
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 # save screenshots to ~/Pictures
-defaults write com.apple.screencapture "location" -string "${HOME}/Pictures"
+defaults write com.apple.screencapture location -string "${HOME}/Pictures"
 # save screenshots in PNG format
 defaults write com.apple.screencapture type -string "png"
 
 # --- spotlight
-# disable Spotlight indexing for any volume that gets mounted and has not yet
-# been indexed before.
-# Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
-sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
 # change indexing order and disable some search results
 # Yosemite-specific search results (remove them if you are using macOS 10.9 or older):
 # 	MENU_DEFINITION
@@ -226,16 +199,3 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 defaults write com.apple.terminal SecureKeyboardEntry -bool true
 # disable the annoying line marks
 defaults write com.apple.Terminal ShowLineMarks -int 0
-
-# --- mail
-# disable send and reply animations in Mail.app
-defaults write com.apple.mail DisableReplyAnimations -bool true
-defaults write com.apple.mail DisableSendAnimations -bool true
-# copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
-defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
-# add the keyboard shortcut ⌘ + Enter to send an email in Mail.app
-defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
-# display emails in threaded mode, sorted by date (oldest at the top)
-defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
-defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "yes"
-defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
