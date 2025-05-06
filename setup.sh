@@ -43,6 +43,24 @@ This script will:
 "
 
   # ---
+  # helper functions
+  # ---
+  backup() {
+    # the first parameter is the path to the file or directory
+    # that needs to be backed up and the second is where you want
+    # that backup to be placed.
+    local backup name
+    name=$(basename "$1")
+    backup="${HOME}/${name}_$(date +%c).bak"
+
+    # make the backup
+    cp -RL "$1" "$backup"
+    trash "$1"
+
+    echo -e "${cg}${check}${r} Backed up \"$name\" to \"$backup\"."
+  }
+
+  # ---
   # confirm installation
   # ---
   echo -e "${cc}${qmark}${r} Continue ${cc}(y/N)${r} \c"
@@ -108,27 +126,60 @@ This script will:
   fi
 
   # ---
-  # clone .dotfiles
+  # clone and symlink configuration files
   # ---
   # file path of the dotfiles directory
   DOTFILES_DIR="$HOME/.dotfiles"
 
   echo -e "${cg}${arrow}${r} Cloning dotfiles repository to \"$DOTFILES_DIR\"..."
 
-  # check if .config directory exists already
+  # check if the .dotfiles directory exists already then create a backup
   if [[ -d "$DOTFILES_DIR" ]]; then
-    # create a backup of the existing .dotfiles directory
-    backup_dir=$HOME/.dotfiles_$(date +%c).bak
-    cp -RL "$DOTFILES_DIR" "$backup_dir"
-    trash "$DOTFILES_DIR"
-    echo -e "${cg}${check}${r} Backed up old \".dotfiles\" directory to \"$backup_dir\"."
+    backup "$DOTFILES_DIR"
   fi
+
   # install git so we can clone the dotfiles repo
   echo -e "${cg}${arrow}${r} Installing git to clone dotfiles repository..."
   brew install git
+
   # clone the repo
   git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
   echo -e "${cg}${check}${r} Dotfiles repository cloned."
+
+  # link the config directory
+  echo -e "${cg}${arrow}${r} Linking \".config\" directory..."
+
+  # check if .config directory exists then back it up if necessary
+  if [[ -d "$HOME/.config" ]]; then
+    backup "$HOME/.config"
+  fi
+
+  # create the link for the entire config directory
+  ln -sf "$DOTFILES_DIR/config" "$HOME/.config"
+  echo -e "${cg}${check}${r} Linked \"$HOME/.config\" directory to \"$HOME/.config\"."
+
+  # link shell configuration files
+  echo -e "${cg}${arrow}${r} Linking zsh configuration files..."
+
+  # find all shell configuration files which is any file that start with
+  # only a single dot inside of the shell and zsh directories.
+  for file in \
+    "$HOME"/.dotfiles/shell/zsh/.*[!.]* \
+    "$HOME"/.dotfiles/shell/sh/.*[!.]*; do
+
+    existing_file="$HOME/$(basename "$file")"
+
+    # back up existing configuration files
+    if [[ -f "$existing_file" ]]; then
+      backup "$existing_file"
+    fi
+
+    # link new shell file
+    ln -sf "$file" "$existing_file"
+    echo "Linked \"$file\" to \"$existing_file\"."
+  done
+
+  echo -e "${cg}${check}${r} Linked all shell configuration files."
 
   # ---
   # brew bundle
@@ -136,39 +187,6 @@ This script will:
   echo -e "${cg}${arrow}${r} Installing Homebrew packages from Brewfile..."
   brew bundle --verbose --file "$DOTFILES_DIR/Brewfile"
   echo -e "${cg}${check}${r} Homebrew packages installed."
-
-  # ---
-  # symlink config directory
-  # ---
-  echo -e "${cg}${arrow}${r} Linking \".config\" directory..."
-  # check if .config directory exists
-  if [[ -d "$HOME/.config" ]]; then
-    # backup existing .config directory
-    backup_dir=$HOME/.config_$(date +%c).bak
-    cp -RL "$HOME/.config" "$backup_dir"
-    trash "$HOME/.config"
-    echo -e "${cg}${check}${r} Backed up existing .config directory to \"$backup_dir\"."
-  fi
-  # create the link for the entire .config directory
-  ln -sf "$DOTFILES_DIR/.config" "$HOME/.config"
-  echo -e "${cg}${check}${r} Linked \"$HOME/.config\" directory to \"$HOME/.config\"."
-
-  # ---
-  # symlink zsh files
-  # ---
-  echo -e "${cg}${arrow}${r} Linking zsh configuration files..."
-  # backup existing files if they're not symlinks
-  for file in "$DOTFILES_DIR"/.config/zsh/*.z; do
-    # backup existing zshell configuration files
-    if [[ -f "$file" ]]; then
-      backup_file="${file}_$(date +%c).bak"
-      cp -RL "$file" "$backup_file"
-      echo "${cg}${check}${r} Backed up existing \"$(basename "$file")\" to \"$backup_file\"."
-    fi
-    # link newly cloned zshell file
-    ln -sf "$file" "$HOME/$(basename "$file")"
-  done
-  echo -e "${cg}${check}${r} Linked zsh configuration files."
 
   # ---
   # node
