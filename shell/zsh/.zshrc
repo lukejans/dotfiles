@@ -32,8 +32,8 @@ autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
 # --- custom aliases & functions
-source "${XDG_CONFIG_HOME}/zsh/aliases.zsh"
-source "${XDG_CONFIG_HOME}/zsh/functions.zsh"
+source "${XDG_CONFIG_HOME}/shell/zsh/aliases.zsh"
+source "${XDG_CONFIG_HOME}/shell/zsh/functions.zsh"
 
 # --- plugins
 # starship command prompt:
