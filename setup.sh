@@ -255,7 +255,7 @@ This script will:
   # ---
   # set preferences
   echo -e "${cg}${arrow}${r} Setting macOS system preferences..."
-  source "$DOTFILES_DIR/macos.sh"
+  bash "$DOTFILES_DIR/macos.sh"
   echo -e "${cg}${check}${r} macOS system preferences set."
 
   # add fonts to the font book
