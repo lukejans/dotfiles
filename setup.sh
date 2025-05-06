@@ -64,7 +64,7 @@ This script will:
     backup="${HOME}/${name}_$(date +%c).bak"
 
     # make the backup
-    cp -RL "$1" "$backup"
+    cp -RP "$1" "$backup"
     trash "$1"
 
     echo -e "Backed up ${cy}\"$name\"${r} to ${cy}\"$backup\"${r}."
@@ -161,7 +161,7 @@ This script will:
   for item in \
     "$HOME"/.dotfiles/shell/zsh/.*[!.]* \
     "$HOME"/.dotfiles/shell/sh/.*[!.]* \
-    "$HOME"/.dotfile/.config; do
+    "$HOME"/.dotfiles/.config; do
 
     # look in the home directory for the file. Note that this is here mostly for
     # backing up files that are not from previous dotfiles installations. If there
