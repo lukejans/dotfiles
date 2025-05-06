@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-# setup for MacOS
+# MacOS Setup Script
 #
-# -- lukejans setup.sh
+# description: This script sets up a macOS environment by installing
+#              software listed in the Brewfile, configuring system
+#              default settings, and linking dotfiles.
+#
+# author: luke janssen
+# date: may 6th 2025
 
 { # this ensures the entire script is downloaded #
 
@@ -18,7 +23,7 @@
   cr="\033[1;31m" # red
   cb="\033[1;34m" # blue
   cm="\033[1;35m" # purple/magenta
-  cc="\033[1;36m" # cyan (uncommented this)
+  cc="\033[1;36m" # cyan
   r="\033[0m"     # reset
   # symbols
   arrow='➜'
@@ -131,7 +136,7 @@ This script will:
   # file path of the dotfiles directory
   DOTFILES_DIR="$HOME/.dotfiles"
 
-  echo -e "${cg}${arrow}${r} Cloning dotfiles repository to \"$DOTFILES_DIR\"..."
+  echo -e "${cg}${arrow}${r} Cloning and linking the dotfiles repository to \"$DOTFILES_DIR\"..."
 
   # check if the .dotfiles directory exists already then create a backup
   if [[ -d "$DOTFILES_DIR" ]]; then
@@ -167,6 +172,10 @@ This script will:
     "$HOME"/.dotfiles/shell/zsh/.*[!.]* \
     "$HOME"/.dotfiles/shell/sh/.*[!.]*; do
 
+    # look in the home directory for the file. Note that this is here mostly for
+    # backing up files that are not from previous dotfiles installations. If there
+    # the file found was a previous dotfile installation we are essentially just
+    # duplicating a file because the link will be overwritten with the git clone.
     existing_file="$HOME/$(basename "$file")"
 
     # back up existing configuration files
@@ -193,8 +202,8 @@ This script will:
   # see: https://nodejs.org/en/download
   # ---
   echo -e "${cg}${arrow}${r} Setting up Node.js environment..."
-  # install nvm
-  # check and install nvm if needed
+
+  # install nvm if its not already installed
   if [[ ! -d "$HOME/.nvm" ]]; then
     echo -e "${cg}${arrow}${r} Installing nvm..."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
@@ -203,6 +212,7 @@ This script will:
   # load nvm without restarting the shell
   export NVM_DIR="$HOME/.nvm"
   \. "$NVM_DIR/nvm.sh"
+
   # make sure v22 is installed and the default node version
   echo -e "${cg}${arrow}${r} Checking for Node.js v22..."
   nvm install 22
@@ -214,6 +224,7 @@ This script will:
   echo -e "${cg}${arrow}${r} Enabling pnpm via corepack..."
   corepack enable
   corepack prepare pnpm@latest --activate
+
   # setup pnpm home directory if not set
   if [[ -z "${PNPM_HOME:-}" ]]; then
     echo -e "${cg}${arrow}${r} Setting up PNPM_HOME environment variable..."
