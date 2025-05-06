@@ -165,7 +165,7 @@ This script will:
     existing_item="$HOME/$(basename "$item")"
 
     # back up existing configuration files
-    if [[ -f "$existing_item" ]]; then
+    if [[ -e "$existing_item" ]]; then
       backup "$existing_item"
     fi
 
