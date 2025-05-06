@@ -50,11 +50,16 @@ This script will:
   # ---
   # helper functions
   # ---
+
+  # backup existing files, directories, or symlinks.
+  #
+  # $1 - path to a file, directory, or symlink that will be backed up
   backup() {
-    # the first parameter is the path to the file or directory
-    # that needs to be backed up and the second is where you want
-    # that backup to be placed.
-    local backup name
+    # path to a file, directory, or symlink that will be backed up
+    local backup
+    # the name of the file or directory to be backed up
+    local name
+
     name=$(basename "$1")
     backup="${HOME}/${name}_$(date +%c).bak"
 
