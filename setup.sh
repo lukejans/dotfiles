@@ -18,33 +18,33 @@
   set -euo pipefail
 
   # colors
-  cg="\033[1;32m" # green
-  cy="\033[1;33m" # yellow
-  cr="\033[1;31m" # red
-  cb="\033[1;34m" # blue
-  cm="\033[1;35m" # purple/magenta
-  cc="\033[1;36m" # cyan
-  r="\033[0m"     # reset
+  cr="\033[31m" # red
+  cg="\033[32m" # green
+  cy="\033[33m" # yellow
+  cb="\033[34m" # blue
+  cm="\033[35m" # magenta
+  cc="\033[36m" # cyan
+  r="\033[0m"   # reset
+  b="\033[1m"   # bold
   # symbols
-  arrow='➜'
-  check='✓'
-  cross='✗'
-  qmark='?'
+  arrow="\033[1;34m==>\033[0m" # bold blue arrow
+  check="\033[1;32m✓\033[0m"   # bold green check
+  cross="\033[1;31mx\033[0m"   # bold red cross
+  qmark="\033[1;36m?\033[0m"   # bold cyan question mark
 
   # print install banner
   echo -e "
-${cg}           .:'${r}
-${cg}     __ :'__${r}
-${cy}  .'\`__\`-'__\`\`.${r}
-${cr} :__________.-'${r}  Running lukejans'
-${cm} :_________:${r}        macOS setup
-${cm}  :_________\`-;${r}
-${cb}   \`.__.-.__.'${r}
+${cg}${b}          .:'${r}
+${cg}${b}     __ :'__${r}
+${cy}${b}  .'\`__\`-'__\`\`.${r}
+${cr}${b} :__________.-'${r}  Running lukejans'
+${cm}${b} :_________:${r}        macOS setup
+${cm}${b}  :_________\`-;${r}
+${cb}${b}   \`.__.-.__.'${r}
 
 This script will:
-  - install additional software
-  - install lukejans' dotfiles
-  - setup your shell environment
+  - install packages from homebrew
+  - setup configuration files
 "
 
   # ---
@@ -62,18 +62,18 @@ This script will:
     cp -RL "$1" "$backup"
     trash "$1"
 
-    echo -e "${cg}${check}${r} Backed up \"$name\" to \"$backup\"."
+    echo -e "Backed up ${cy}\"$name\"${r} to ${cy}\"$backup\"${r}."
   }
 
   # ---
   # confirm installation
   # ---
-  echo -e "${cc}${qmark}${r} Continue ${cc}(y/N)${r} \c"
+  echo -e "${qmark} Continue ${cc}${b}(y/N)${r} \c"
   read -n 1 -r </dev/tty
   echo
   if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     # abort install
-    echo -e "${cr}${cross}${r} Installation aborted."
+    echo -e "${cross} Installation aborted."
     exit 0
   fi
 
@@ -97,7 +97,7 @@ This script will:
   # ---
   # xcode command line tools
   # ---
-  echo -e "${cg}${arrow}${r} Checking if Xcode command line tools are installed..."
+  echo -e "${arrow} Checking if Xcode command line tools are installed..."
   if ! xcode-select -p &>/dev/null; then
     echo "Xcode not found. You'll be prompted to install it..."
     xcode-select --install
@@ -105,27 +105,26 @@ This script will:
     until xcode-select -p &>/dev/null; do
       sleep 5
     done
-    echo -e "${cg}${check}${r} Xcode command line tools successfully installed."
+    echo -e "${check} Xcode command line tools successfully installed."
   else
-    echo -e "${cg}${check}${r} Xcode installation found."
+    echo -e "Xcode installation found."
   fi
 
   # ---
   # homebrew
   # ---
-  echo -e "${cg}${arrow}${r} Checking for a homebrew installation..."
+  echo -e "${arrow} Checking for a homebrew installation..."
   if ! command -v brew &>/dev/null; then
     echo "Homebrew not found."
-    echo "Installing homebrew..."
-    # the brew install command
+
+    # the homebrew install command
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     # add homebrew to PATH for the current session
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    echo -e "${cg}${check}${r} Homebrew installation complete."
+    echo "Homebrew installation complete."
   else
-    echo -e "${cg}${check}${r} Homebrew installation found."
-    echo -e "${cg}${arrow}${r} Updating Homebrew..."
+    echo "Homebrew installation found."
     # brew is installed so make sure it's up to date
     brew update && brew upgrade && brew cleanup
   fi
@@ -136,76 +135,62 @@ This script will:
   # file path of the dotfiles directory
   DOTFILES_DIR="$HOME/.dotfiles"
 
-  echo -e "${cg}${arrow}${r} Cloning and linking the dotfiles repository to \"$DOTFILES_DIR\"..."
+  echo -e "${arrow} Cloning the dotfiles repository to \"$DOTFILES_DIR\"..."
+
+  # if git is not installed, install it so we can clone the dotfiles repo
+  if ! command -v git &>/dev/null; then
+    echo "Installing git to clone dotfiles repository..."
+    brew install git
+  fi
 
   # check if the .dotfiles directory exists already then create a backup
   if [[ -d "$DOTFILES_DIR" ]]; then
     backup "$DOTFILES_DIR"
   fi
 
-  # install git so we can clone the dotfiles repo
-  echo -e "${cg}${arrow}${r} Installing git to clone dotfiles repository..."
-  brew install git
-
   # clone the repo
   git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
-  echo -e "${cg}${check}${r} Dotfiles repository cloned."
-
-  # link the config directory
-  echo -e "${cg}${arrow}${r} Linking \".config\" directory..."
-
-  # check if .config directory exists then back it up if necessary
-  if [[ -d "$HOME/.config" ]]; then
-    backup "$HOME/.config"
-  fi
-
-  # create the link for the entire config directory
-  ln -sf "$DOTFILES_DIR/config" "$HOME/.config"
-  echo -e "${cg}${check}${r} Linked \"$HOME/.config\" directory to \"$HOME/.config\"."
-
-  # link shell configuration files
-  echo -e "${cg}${arrow}${r} Linking zsh configuration files..."
 
   # find all shell configuration files which is any file that start with
   # only a single dot inside of the shell and zsh directories.
-  for file in \
+  for item in \
     "$HOME"/.dotfiles/shell/zsh/.*[!.]* \
-    "$HOME"/.dotfiles/shell/sh/.*[!.]*; do
+    "$HOME"/.dotfiles/shell/sh/.*[!.]* \
+    "$HOME"/.dotfile/.config; do
 
     # look in the home directory for the file. Note that this is here mostly for
     # backing up files that are not from previous dotfiles installations. If there
     # the file found was a previous dotfile installation we are essentially just
     # duplicating a file because the link will be overwritten with the git clone.
-    existing_file="$HOME/$(basename "$file")"
+    existing_item="$HOME/$(basename "$item")"
 
     # back up existing configuration files
-    if [[ -f "$existing_file" ]]; then
-      backup "$existing_file"
+    if [[ -f "$existing_item" ]]; then
+      backup "$existing_item"
     fi
 
     # link new shell file
-    ln -sf "$file" "$existing_file"
-    echo "Linked \"$file\" to \"$existing_file\"."
+    ln -sf "$item" "$existing_item"
+    echo -e "Linked ${cy}\"$item\"${r} to ${cy}\"$existing_item\"${r}."
   done
 
-  echo -e "${cg}${check}${r} Linked all shell configuration files."
+  echo -e "${check} Cloned and linked all configuration files."
 
   # ---
   # brew bundle
   # ---
-  echo -e "${cg}${arrow}${r} Installing Homebrew packages from Brewfile..."
+  echo -e "${arrow} Installing Homebrew packages from Brewfile..."
   brew bundle --verbose --file "$DOTFILES_DIR/Brewfile"
-  echo -e "${cg}${check}${r} Homebrew packages installed."
 
   # ---
   # node
   # see: https://nodejs.org/en/download
   # ---
-  echo -e "${cg}${arrow}${r} Setting up Node.js environment..."
+  echo -e "${arrow} Setting up Node.js environment..."
 
   # install nvm if its not already installed
   if [[ ! -d "$HOME/.nvm" ]]; then
-    echo -e "${cg}${arrow}${r} Installing nvm..."
+    echo -e "${arrow} Installing nvm..."
     export NVM_DIR="$HOME/.nvm" && (
       git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
       cd "$NVM_DIR"
@@ -216,20 +201,20 @@ This script will:
   \. "$NVM_DIR/nvm.sh"
 
   # make sure v22 is installed and the default node version
-  echo -e "${cg}${arrow}${r} Checking for Node.js v22..."
+  echo -e "${arrow} Checking for Node.js v22..."
   nvm install 22
-  echo -e "${cg}${arrow}${r} Setting Node.js v22 as default..."
+  echo -e "${arrow} Setting Node.js v22 as default..."
   nvm alias default 22
   nvm use 22
 
   # enable pnpm via corepack
-  echo -e "${cg}${arrow}${r} Enabling pnpm via corepack..."
+  echo -e "${arrow} Enabling pnpm via corepack..."
   corepack enable
   corepack prepare pnpm@latest --activate
 
   # setup pnpm home directory if not set
   if [[ -z "${PNPM_HOME:-}" ]]; then
-    echo -e "${cg}${arrow}${r} Setting up PNPM_HOME environment variable..."
+    echo -e "${arrow} Setting up PNPM_HOME environment variable..."
     export PNPM_HOME="/Users/lukejans/Library/pnpm"
     case ":$PATH:" in
     *":$PNPM_HOME:"*) ;;
@@ -240,26 +225,26 @@ This script will:
   fi
 
   # install global packages with pnpm
-  echo -e "${cg}${arrow}${r} Installing global Node.js packages..."
+  echo -e "${arrow} Installing global Node.js packages..."
   pnpm add --global "live-server"
   pnpm add --global "prettier"
   pnpm add --global "eslint"
 
   echo "Node.js environment:"
-  echo -e "  - ${cg}${check}${r} nvm: $(nvm -v)"
-  echo -e "  - ${cg}${check}${r} node: $(node -v)"
-  echo -e "  - ${cg}${check}${r} pnpm: $(pnpm -v)"
+  echo -e "  - ${check} nvm: $(nvm -v)"
+  echo -e "  - ${check} node: $(node -v)"
+  echo -e "  - ${check} pnpm: $(pnpm -v)"
 
   # ---
   # macOS
   # ---
   # set preferences
-  echo -e "${cg}${arrow}${r} Setting macOS system preferences..."
+  echo -e "${arrow} Setting macOS system preferences..."
   bash "$DOTFILES_DIR/macos.sh"
-  echo -e "${cg}${check}${r} macOS system preferences set."
+  echo -e "macOS system preferences set."
 
   # add fonts to the font book
-  echo -e "${cg}${arrow}${r} Adding fonts to the font book..."
+  echo -e "${arrow} Adding fonts to the font book..."
   if [ ! -d "$HOME/Library/Fonts" ]; then
     echo "No fonts directory found."
     mkdir -p "$HOME/Library/Fonts"
@@ -267,8 +252,10 @@ This script will:
   else
     echo "User fonts directory already exists."
   fi
+
+  # copy fonts to the user fonts directory
   cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
-  echo -e "${cg}${check}${r} Fonts copied to user fonts directory."
+  echo -e "Fonts copied to user fonts directory."
 
   # ---
   # installation end
@@ -279,25 +266,25 @@ This script will:
   # ---
   # restart system
   # ---
-  echo -e "\n${cc}Installation complete!${r}"
-  echo -e "  - ${cy}setup time${r}: ${install_time}s"
-  echo -e "  - ${cc}todo${r}: add java versions to jenv"
-  echo -e "  - ${cr}warn${r}: system restart required"
-  echo -e "${cc}${qmark}${r} Restart your computer now ${cc}(y/N)${r} \c"
+  echo -e "\n${cg}Installation complete!${r}"
+  echo -e "  - time: ${install_time}s"
+  echo -e "  - todo: add java versions to jenv"
+  echo -e "  - warn: system restart required"
+  echo -e "${qmark} Restart your computer now ${cc}${b}(y/N)${r} \c"
   read -n 1 -r </dev/tty
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     # visual countdown
     for i in {5..1}; do
-      echo -ne "\r${cm}${arrow}${r}Restarting in $i..."
+      echo -ne "\r${arrow}Restarting in $i..."
       sleep 1
     done
     echo "\rGoodBye!"
     # execute restart
     sudo shutdown -r now
   else
-    echo -e "${cc}${cross}${r} Restart cancelled!"
-    echo -e "Please restart manually at your convenience\!\n "
+    echo -e "${cross} Restart cancelled!"
+    echo -e "Please restart manually at your convenience!\n"
   fi
 
 } # this ensures the entire script is downloaded #
