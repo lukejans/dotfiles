@@ -206,11 +206,13 @@ This script will:
   # install nvm if its not already installed
   if [[ ! -d "$HOME/.nvm" ]]; then
     echo -e "${cg}${arrow}${r} Installing nvm..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+    export NVM_DIR="$HOME/.nvm" && (
+      git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+      cd "$NVM_DIR"
+      git checkout "$(git describe --abbrev=0 --tags --match 'v[0-9]*' "$(git rev-list --tags --max-count=1)")"
+    )
   fi
-
-  # load nvm without restarting the shell
-  export NVM_DIR="$HOME/.nvm"
+  # make sure nvm is loaded without restarting the shell
   \. "$NVM_DIR/nvm.sh"
 
   # make sure v22 is installed and the default node version
