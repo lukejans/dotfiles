@@ -223,7 +223,7 @@ This script will:
   # setup pnpm home directory if not set
   if [[ -z "${PNPM_HOME:-}" ]]; then
     echo -e "${arrow} Setting up PNPM_HOME environment variable..."
-    export PNPM_HOME="/Users/lukejans/Library/pnpm"
+    export PNPM_HOME="$HOME/Library/pnpm"
     case ":$PATH:" in
     *":$PNPM_HOME:"*) ;;
     *) export PATH="$PNPM_HOME:$PATH" ;;
