@@ -128,6 +128,9 @@ This script will:
     # add homebrew to PATH for the current session
     eval "$(/opt/homebrew/bin/brew shellenv)"
     echo "Homebrew installation complete."
+
+    # turn homebrew analytics off
+    brew analytics off
   else
     echo "Homebrew installation found."
     # brew is installed so make sure it's up to date
