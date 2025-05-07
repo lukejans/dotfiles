@@ -90,10 +90,6 @@ sudo chflags nohidden /Volumes
 # --- menubar
 # set flashing date time separators
 defaults write com.apple.menuextra.clock FlashDateSeparators -bool "true"
-# show passwords
-# not currently working on fresh installs! It seems like the app must be opened
-# at least once before this option is respected
-defaults write com.apple.Passwords EnableMenuBarExtra -bool "true"
 
 # --- mouse
 # set movement speed
@@ -102,9 +98,7 @@ defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
 defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool "false"
 
 # --- trackpad
-# enable three finger drag interactions
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool "true"
-#  enable tap to click for this user and for the login screen
+# enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
@@ -135,22 +129,6 @@ defaults write com.apple.screencapture type -string "png"
 # --- messages
 # disable automatic emoji substitution
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
-
-# --- app store
-# enable the WebKit developer tools
-defaults write com.apple.appstore WebKitDeveloperExtras -bool true
-# enable the automatic update check
-defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
-# check for software updates daily, not just once per week
-defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
-# download newly available updates in background
-defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
-# install system data files & security updates
-defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
-# turn on app auto-update
-defaults write com.apple.commerce AutoUpdate -bool true
-# allow the App Store to reboot machine on macOS updates
-defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
 
 # --- time machine
 # prevent time machine from prompting to use new hard drives as backup volume
