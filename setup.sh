@@ -17,6 +17,12 @@
   # exit on error, unset variables, and pipe failures
   set -euo pipefail
 
+  # ---
+  # constants
+  # ---
+  declare -r node_version=22
+  declare -r dotfiles_dir="$HOME/.dotfiles"
+
   # colors
   cr="\033[31m" # red
   cg="\033[32m" # green
@@ -140,10 +146,7 @@ This script will:
   # ---
   # clone and symlink configuration files
   # ---
-  # file path of the dotfiles directory
-  DOTFILES_DIR="$HOME/.dotfiles"
-
-  echo -e "${arrow} Cloning the dotfiles repository to \"$DOTFILES_DIR\"..."
+  echo -e "${arrow} Cloning the dotfiles repository to \"$dotfiles_dir\"..."
 
   # if git is not installed, install it so we can clone the dotfiles repo
   if ! command -v git &>/dev/null; then
@@ -152,12 +155,12 @@ This script will:
   fi
 
   # check if the .dotfiles directory exists already then create a backup
-  if [[ -d "$DOTFILES_DIR" ]]; then
-    backup "$DOTFILES_DIR"
+  if [[ -d "$dotfiles_dir" ]]; then
+    backup "$dotfiles_dir"
   fi
 
   # clone the repo
-  git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
+  git clone https://github.com/lukejans/dotfiles.git "$dotfiles_dir"
 
   # find all shell configuration files which is any file that start with
   # only a single dot inside of the shell and zsh directories.
@@ -188,7 +191,7 @@ This script will:
   # brew bundle
   # ---
   echo -e "${arrow} Installing Homebrew packages from Brewfile..."
-  brew bundle --verbose --file "$DOTFILES_DIR/Brewfile"
+  brew bundle --verbose --file "$dotfiles_dir/Brewfile"
 
   # ---
   # node
@@ -209,11 +212,11 @@ This script will:
   \. "$NVM_DIR/nvm.sh"
 
   # make sure v22 is installed and the default node version
-  echo -e "${arrow} Checking for Node.js v22..."
-  nvm install 22
-  echo -e "${arrow} Setting Node.js v22 as default..."
-  nvm alias default 22
-  nvm use 22
+  echo -e "${arrow} Checking for Node.js v${node_version}..."
+  nvm install $node_version
+  echo -e "${arrow} Setting Node.js v${node_version} as default..."
+  nvm alias default $node_version
+  nvm use $node_version
 
   # enable pnpm via corepack
   echo -e "${arrow} Enabling pnpm via corepack..."
@@ -248,7 +251,7 @@ This script will:
   # ---
   # set preferences
   echo -e "${arrow} Setting macOS system preferences..."
-  bash "$DOTFILES_DIR/macos.sh"
+  bash "$dotfiles_dir/macos.sh"
   echo -e "macOS system preferences set."
 
   # add fonts to the font book
@@ -262,7 +265,7 @@ This script will:
   fi
 
   # copy fonts to the user fonts directory
-  cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
+  cp "$dotfiles_dir"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
   echo -e "Fonts copied to user fonts directory."
 
   # ---
