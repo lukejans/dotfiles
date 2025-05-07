@@ -4,6 +4,7 @@ dictionaries = [
 ]
 words = [
     "autoboxing",
+    "bak",
     "bvps",
     "chmod",
     "codebook",
@@ -45,6 +46,7 @@ words = [
     "mohawkcollege",
     "mousedown",
     "mousemove",
+    "neofetch",
     "nums",
     "nvm",
     "nvmrc",
