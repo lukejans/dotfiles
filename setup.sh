@@ -107,6 +107,18 @@ Requirements:
     printf "Backed up %b'%s'%b to %b'%s'%b." "$cy" "$name" "$ra" "$cy" "$backup" "$ra"
   }
 
+  print_info() {
+    printf "%b %s\n" "$arrow" "$1"
+  }
+
+  print_success() {
+    printf "%b %s\n" "$check" "$1"
+  }
+
+  print_error() {
+    printf "%b %s\n" "$cross" "$1" >&2
+  }
+
   # ---
   # confirm installation
   # ---
