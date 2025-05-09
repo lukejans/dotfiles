@@ -39,17 +39,26 @@
 
   # print install banner
   echo -e "
-${cg}${b}          .:'${r}
-${cg}${b}     __ :'__${r}
-${cy}${b}  .'\`__\`-'__\`\`.${r}
-${cr}${b} :__________.-'${r}  Running lukejans'
-${cm}${b} :_________:${r}        macOS setup
-${cm}${b}  :_________\`-;${r}
-${cb}${b}   \`.__.-.__.'${r}
+${cg}         .:'${ra}
+${cg}     __ :'__${ra}
+${cy}  .'\`__\`-'__\`\`.${ra}
+${cr} :__________.-'${ra}  Running lukejans'
+${cm} :_________:${ra}        MacOS setup
+${cm}  :_________\`-;${ra}
+${cb}   \`.__.-.__.'${ra}
 
 This script will:
-  - install packages from homebrew
-  - setup configuration files
+  - Install Xcode command line tools
+  - Install Homebrew & programs listed inside of Brewfile
+  - Clone This repo to '~/.dotfiles'
+  - Symlink config files to the user home directory
+  - Setup a Node.js environment with nvm and pnpm
+  - Set some MacOS system settings / preferences
+  - Setup a Java environment
+
+Requirements:
+  - stable internet connection
+  - sudo privileges
 "
 
   # ---
