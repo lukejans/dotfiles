@@ -297,7 +297,7 @@ Requirements:
   # ---
   # set preferences
   print_info "Setting MacOS system preferences..."
-  bash "$dotfiles_dir/scripts/macos.sh"
+  bash "$dotfiles_dir/macos.sh"
   printf "MacOS system preferences set.\n"
 
   # add fonts to the font book
