@@ -122,12 +122,9 @@ Requirements:
   # ---
   # confirm installation
   # ---
-  echo -e "${qmark} Continue ${cc}${b}(y/N)${r} \c"
-  read -n 1 -r </dev/tty
-  echo
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+  if ! get_confirmation "Continue"; then
     # abort install
-    echo -e "${cross} Installation aborted."
+    print_error "Installation aborted."
     exit 0
   fi
 
@@ -320,14 +317,11 @@ Requirements:
   # ---
   # restart system
   # ---
-  echo -e "\n${cg}Installation complete!${r}"
-  echo -e "  - time: ${install_time}s"
-  echo -e "  - todo: add java versions to jenv"
-  echo -e "  - warn: system restart required"
-  echo -e "${qmark} Restart your computer now ${cc}${b}(y/N)${r} \c"
-  read -n 1 -r </dev/tty
-  echo
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
+  printf "%bInstallation complete!%b" "$cg" "$ra"
+  printf "  - todo: add java versions to jenv"
+  printf "  - warn: system restart required"
+
+  if get_confirmation "Restart your computer now"; then
     # visual countdown
     for i in {5..1}; do
       echo -ne "\r${arrow}Restarting in $i..."
