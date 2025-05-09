@@ -2,12 +2,12 @@
 
 # MacOS Setup Script
 #
-# description: This script sets up a macOS environment by installing
+# description: this script sets up a MacOS environment by installing
 #              software listed in the Brewfile, configuring system
 #              default settings, and linking dotfiles.
 #
 # author: luke janssen
-# date: may 6th 2025
+# date: may 9th, 2025
 
 { # this ensures the entire script is downloaded #
 
