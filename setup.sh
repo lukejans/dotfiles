@@ -2,12 +2,12 @@
 
 # MacOS Setup Script
 #
-# description: This script sets up a macOS environment by installing
+# description: this script sets up a MacOS environment by installing
 #              software listed in the Brewfile, configuring system
 #              default settings, and linking dotfiles.
 #
 # author: luke janssen
-# date: may 6th 2025
+# date: may 9th, 2025
 
 { # this ensures the entire script is downloaded #
 
@@ -24,33 +24,41 @@
   declare -r dotfiles_dir="$HOME/.dotfiles"
 
   # colors
-  cr="\033[31m" # red
-  cg="\033[32m" # green
-  cy="\033[33m" # yellow
-  cb="\033[34m" # blue
-  cm="\033[35m" # magenta
-  cc="\033[36m" # cyan
-  r="\033[0m"   # reset
-  b="\033[1m"   # bold
+  cr="\033[31;1m" # bold red
+  cg="\033[32;1m" # bold green
+  cy="\033[33;1m" # bold yellow
+  cb="\033[34;1m" # bold blue
+  cm="\033[35;1m" # bold magenta
+  cc="\033[36;1m" # bold cyan
+  ra="\033[0m"    # reset bold and colors
+  rb="\033[0;1m"  # make bold, reset colors
   # symbols
-  arrow="\033[1;34m==>\033[0m" # bold blue arrow
-  check="\033[1;32m✓\033[0m"   # bold green check
-  cross="\033[1;31mx\033[0m"   # bold red cross
-  qmark="\033[1;36m?\033[0m"   # bold cyan question mark
+  arrow="${cb}==>${rb}"
+  check="${cg}✓${rb}"
+  cross="${cr}x${rb}"
 
   # print install banner
   echo -e "
-${cg}${b}          .:'${r}
-${cg}${b}     __ :'__${r}
-${cy}${b}  .'\`__\`-'__\`\`.${r}
-${cr}${b} :__________.-'${r}  Running lukejans'
-${cm}${b} :_________:${r}        macOS setup
-${cm}${b}  :_________\`-;${r}
-${cb}${b}   \`.__.-.__.'${r}
+${cg}         .:'${ra}
+${cg}     __ :'__${ra}
+${cy}  .'\`__\`-'__\`\`.${ra}
+${cr} :__________.-'${ra}  Running lukejans'
+${cm} :_________:${ra}        MacOS setup
+${cm}  :_________\`-;${ra}
+${cb}   \`.__.-.__.'${ra}
 
 This script will:
-  - install packages from homebrew
-  - setup configuration files
+  - Install Xcode command line tools
+  - Install Homebrew & programs listed inside of Brewfile
+  - Clone This repo to '~/.dotfiles'
+  - Symlink config files to the user home directory
+  - Setup a Node.js environment with nvm and pnpm
+  - Set some MacOS system settings / preferences
+  - Setup a Java environment
+
+Requirements:
+  - stable internet connection
+  - sudo privileges
 "
 
   # ---
