@@ -170,8 +170,11 @@ Requirements:
     eval "$(/opt/homebrew/bin/brew shellenv)"
     echo "Homebrew installation complete."
 
-    # turn homebrew analytics off
-    brew analytics off
+    # turn homebrew analytics off on fresh installs
+    if brew analytics state | grep -q "disabled"; then
+      printf "Disabling brew analytics...\n"
+      brew analytics off
+    fi
   else
     echo "Homebrew installation found."
     # brew is installed so make sure it's up to date
