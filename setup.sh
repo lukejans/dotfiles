@@ -141,11 +141,6 @@ Requirements:
   done 2>/dev/null &
 
   # ---
-  # installation start
-  # ---
-  start_time=$(date +%s)
-
-  # ---
   # xcode command line tools
   # ---
   echo -e "${arrow} Checking if Xcode command line tools are installed..."
@@ -306,13 +301,7 @@ Requirements:
 
   # copy fonts to the user fonts directory
   cp "$dotfiles_dir"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
-  echo -e "Fonts copied to user fonts directory."
-
-  # ---
-  # installation end
-  # ---
-  end_time=$(date +%s)
-  install_time=$((end_time - start_time))
+  print_success "Fonts copied to user fonts directory."
 
   # ---
   # restart system
