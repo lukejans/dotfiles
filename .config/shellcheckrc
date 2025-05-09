@@ -1,0 +1,11 @@
+# Shellcheck configuration
+
+# disable specific checks (comma‑separated list of codes)
+disable=SC1094
+
+# informs shellcheck where to search for sourced files.
+source-path=/Users/lukejans/.nvm
+source-path=/opt/homebrew
+
+# enable following of external sources
+external-sources=true
