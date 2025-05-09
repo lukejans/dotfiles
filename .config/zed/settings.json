@@ -51,7 +51,7 @@
     "version": "2"
   },
   "features": {
-    "edit_prediction_provider": "zed"
+    "edit_prediction_provider": "copilot"
   },
   "edit_predictions": {
     "disabled_globs": ["**/.ssh/**"],
