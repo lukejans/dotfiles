@@ -104,7 +104,7 @@ Requirements:
       trash "$1"
     fi
 
-    printf "Backed up %b'%s'%b to %b'%s'%b." "$cy" "$name" "$ra" "$cy" "$backup" "$ra"
+    printf "Backed up %b'%s'%b to %b'%s'%b.\n" "$cy" "$name" "$ra" "$cy" "$backup" "$ra"
   }
 
   print_info() {
@@ -143,7 +143,7 @@ Requirements:
   # ---
   # xcode command line tools
   # ---
-  print_info "Checking if Xcode command line tools are installed..."
+  print_info "Checking if xcode command line tools are installed..."
 
   if ! xcode-select -p &>/dev/null; then
     printf "No xcode installation was found.\n"
