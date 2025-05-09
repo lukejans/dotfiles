@@ -45,13 +45,13 @@
   // --- ai
   "agent": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3-7-sonnet"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-thinking-latest"
     },
     "version": "2"
   },
   "features": {
-    "edit_prediction_provider": "copilot"
+    "edit_prediction_provider": "zed"
   },
   "edit_predictions": {
     "disabled_globs": ["**/.ssh/**"],
