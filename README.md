@@ -25,8 +25,8 @@
 curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/setup.sh | bash
 ```
 
-> [!Warning] > **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
->
+> [!WARNING]
+> **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
 > - This script should only be run on Apple Silicon Macs.
 > - That is a highly opinionated setup.
 > - Old configuration files will be backed up to `$HOME`.
