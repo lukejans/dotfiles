@@ -321,14 +321,14 @@ Requirements:
   # ---
   # restart system
   # ---
-  printf "%bInstallation complete!%b" "$cg" "$ra"
-  printf "  - todo: add java versions to jenv"
-  printf "  - warn: system restart required"
+  printf "%bInstallation complete!%b\n" "$cg" "$ra"
+  printf "  - todo: add java versions to jenv\n"
+  printf "  - warn: system restart required\n"
 
   if get_confirmation "Restart your computer now"; then
     # visual countdown
     for i in {5..1}; do
-      printf "\r%b Restarting in %s..." "$arrow" "$i"
+      printf "\r%b Restarting in %s...\n" "$arrow" "$i"
       sleep 1
     done
     printf "\rGoodBye!\n"
