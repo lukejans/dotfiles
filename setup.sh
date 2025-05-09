@@ -65,7 +65,7 @@ Requirements:
   # helper functions
   # ---
 
-  # backup existing files, directories, or symlinks.
+  # get confirmation from the user
   #
   # $1 - prompt / question to display to the user
   get_confirmation() {
@@ -91,19 +91,20 @@ Requirements:
   #
   # $1 - the path to a file or directory
   backup() {
-    # path to a file, directory, or symlink that will be backed up
-    local backup
     # the name of the file or directory to be backed up
     local name
-
     name=$(basename "$1")
+    # path to a file or directory that will be backed up
+    local backup
     backup="${HOME}/${name}_$(date +%c).bak"
 
     # make the backup
-    cp -RP "$1" "$backup"
-    trash "$1"
+    if [[ -e $1 ]]; then
+      cp -RP "$1" "$backup"
+      trash "$1"
+    fi
 
-    echo -e "Backed up ${cy}\"$name\"${r} to ${cy}\"$backup\"${r}."
+    printf "Backed up %b'%s'%b to %b'%s'%b." "$cy" "$name" "$ra" "$cy" "$backup" "$ra"
   }
 
   # ---
