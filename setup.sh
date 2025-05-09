@@ -24,19 +24,18 @@
   declare -r dotfiles_dir="$HOME/.dotfiles"
 
   # colors
-  cr="\033[31m" # red
-  cg="\033[32m" # green
-  cy="\033[33m" # yellow
-  cb="\033[34m" # blue
-  cm="\033[35m" # magenta
-  cc="\033[36m" # cyan
-  r="\033[0m"   # reset
-  b="\033[1m"   # bold
+  cr="\033[31;1m" # bold red
+  cg="\033[32;1m" # bold green
+  cy="\033[33;1m" # bold yellow
+  cb="\033[34;1m" # bold blue
+  cm="\033[35;1m" # bold magenta
+  cc="\033[36;1m" # bold cyan
+  ra="\033[0m"    # reset bold and colors
+  rb="\033[0;1m"  # make bold, reset colors
   # symbols
-  arrow="\033[1;34m==>\033[0m" # bold blue arrow
-  check="\033[1;32m✓\033[0m"   # bold green check
-  cross="\033[1;31mx\033[0m"   # bold red cross
-  qmark="\033[1;36m?\033[0m"   # bold cyan question mark
+  arrow="${cb}==>${rb}"
+  check="${cg}✓${rb}"
+  cross="${cr}x${rb}"
 
   # print install banner
   echo -e "
