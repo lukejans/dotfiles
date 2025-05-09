@@ -19,8 +19,6 @@ osascript -e 'tell application "System Preferences" to quit'
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 # automatically quit printer app once the print jobs complete
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
-# disable the “Are you sure you want to open this application?” dialog
-defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # --- dock
 # enable auto-hide
@@ -41,7 +39,7 @@ defaults write com.apple.dock expose-animation-duration -float 0.1
 defaults write com.apple.dock expose-group-apps -bool "true"
 # don't show indicator lights for open applications in the dock
 defaults write com.apple.dock show-process-indicators -bool false
-# hot corners (I hate hot corners)
+# disable all hot corners
 # top left screen corner -> do nothing
 defaults write com.apple.dock wvous-tl-corner -int 1
 defaults write com.apple.dock wvous-tl-modifier -int 0
