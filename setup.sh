@@ -286,9 +286,7 @@ Requirements:
 
   # install global packages with pnpm
   printf "Installing global Node.js packages..."
-  pnpm add --global "live-server"
-  pnpm add --global "prettier"
-  pnpm add --global "eslint"
+  pnpm add --global "live-server" "prettier" "eslint"
 
   print_success "Node.js environment successfully setup."
 
