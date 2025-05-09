@@ -86,6 +86,9 @@
 	# include summaries of merged commits in newly created merge commit messages
 	log = true
 
+[pull]
+	rebase = true
+
 [push]
 	# make `git push` push relevant annotated tags when pushing branches out.
 	followTags = true
