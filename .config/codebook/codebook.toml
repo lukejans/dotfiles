@@ -60,6 +60,7 @@ words = [
     "rustc",
     "savehist",
     "sed",
+    "shellcheck",
     "shellenv",
     "stackexchange",
     "starship",
