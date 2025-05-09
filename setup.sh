@@ -143,32 +143,41 @@ Requirements:
   # ---
   # xcode command line tools
   # ---
-  echo -e "${arrow} Checking if Xcode command line tools are installed..."
+  print_info "Checking if Xcode command line tools are installed..."
+
   if ! xcode-select -p &>/dev/null; then
-    echo "Xcode not found. You'll be prompted to install it..."
+    printf "No xcode installation was found.\n"
+    printf "Confirm the install request in the popup...\n"
+
+    # install xcode
     xcode-select --install
+
     # loop until the installer has actually put the tools on disk
     until xcode-select -p &>/dev/null; do
       sleep 5
     done
-    echo -e "${check} Xcode command line tools successfully installed."
+
+    print_success "Successfully installed xcode command line tools."
   else
-    echo -e "Xcode installation found."
+    printf "An xcode installation found was found.\n"
   fi
 
   # ---
   # homebrew
   # ---
-  echo -e "${arrow} Checking for a homebrew installation..."
+  print_info "Checking for a homebrew installation..."
+
   if ! command -v brew &>/dev/null; then
-    echo "Homebrew not found."
+    printf "Homebrew not found.\n"
 
     # the homebrew install command
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+    printf "Homebrew installation complete.\n"
+    printf "Running. %b\$(/opt/homebrew/bin/brew shellenv)%b to setup Homebrew.\n" "$cc" "$ra"
+
     # add homebrew to PATH for the current session
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    echo "Homebrew installation complete."
 
     # turn homebrew analytics off on fresh installs
     if brew analytics state | grep -q "disabled"; then
@@ -176,20 +185,22 @@ Requirements:
       brew analytics off
     fi
   else
-    echo "Homebrew installation found."
+    printf "Homebrew installation found.\n"
     # brew is installed so make sure it's up to date
-    brew update && brew upgrade && brew cleanup
+    brew update && brew upgrade && brew cleanup && brew autoremove
   fi
 
   # ---
   # clone and symlink configuration files
   # ---
-  echo -e "${arrow} Cloning the dotfiles repository to \"$dotfiles_dir\"..."
+  print_info "Cloning the dotfiles repository..."
 
   # if git is not installed, install it so we can clone the dotfiles repo
   if ! command -v git &>/dev/null; then
-    echo "Installing git to clone dotfiles repository..."
+    printf "No git installation found.\n"
     brew install git
+  else
+    printf "Git installation found.\nUsing %b%s%b\n" "$cc" "$(which git)" "$ra"
   fi
 
   # check if the .dotfiles directory exists already then create a backup
@@ -220,26 +231,26 @@ Requirements:
 
     # link new shell file
     ln -sf "$item" "$existing_item"
-    echo -e "Linked ${cy}\"$item\"${r} to ${cy}\"$existing_item\"${r}."
+    printf "Linked %b'%s'%b to %b'%s'%b." "$cy" "$item" "$ra" "$cy" "$existing_item" "$ra"
   done
 
-  echo -e "${check} Cloned and linked all configuration files."
+  print_success "Cloned and linked all configuration files."
 
   # ---
   # brew bundle
   # ---
-  echo -e "${arrow} Installing Homebrew packages from Brewfile..."
-  brew bundle --verbose --file "$dotfiles_dir/Brewfile"
+  print_info "Installing Homebrew packages from Brewfile..."
+  brew bundle --file "$dotfiles_dir/Brewfile"
 
   # ---
   # node
   # see: https://nodejs.org/en/download
   # ---
-  echo -e "${arrow} Setting up Node.js environment..."
+  print_info "Setting up Node.js environment..."
 
   # install nvm if its not already installed
   if [[ ! -d "$HOME/.nvm" ]]; then
-    echo -e "${arrow} Installing nvm..."
+    printf "Installing nvm...\n"
     export NVM_DIR="$HOME/.nvm" && (
       git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
       cd "$NVM_DIR"
@@ -250,56 +261,53 @@ Requirements:
   \. "$NVM_DIR/nvm.sh"
 
   # make sure v22 is installed and the default node version
-  echo -e "${arrow} Checking for Node.js v${node_version}..."
+  printf "Installing node v%s...\n" "$node_version"
   nvm install $node_version
-  echo -e "${arrow} Setting Node.js v${node_version} as default..."
+  printf "Setting Node.js v%s as default...\n" "$node_version"
   nvm alias default $node_version
   nvm use $node_version
 
   # enable pnpm via corepack
-  echo -e "${arrow} Enabling pnpm via corepack..."
+  printf "Enabling pnpm via corepack..."
   corepack enable
   corepack prepare pnpm@latest --activate
 
   # setup pnpm home directory if not set
   if [[ -z "${PNPM_HOME:-}" ]]; then
-    echo -e "${arrow} Setting up PNPM_HOME environment variable..."
+    printf "Setting up PNPM_HOME environment variable...\n"
     export PNPM_HOME="$HOME/Library/pnpm"
     case ":$PATH:" in
     *":$PNPM_HOME:"*) ;;
     *) export PATH="$PNPM_HOME:$PATH" ;;
     esac
   else
-    echo "PNPM_HOME is already configured."
+    printf "PNPM_HOME is already configured.\n"
   fi
 
   # install global packages with pnpm
-  echo -e "${arrow} Installing global Node.js packages..."
+  printf "Installing global Node.js packages..."
   pnpm add --global "live-server"
   pnpm add --global "prettier"
   pnpm add --global "eslint"
 
-  echo "Node.js environment:"
-  echo -e "  - ${check} nvm: $(nvm -v)"
-  echo -e "  - ${check} node: $(node -v)"
-  echo -e "  - ${check} pnpm: $(pnpm -v)"
+  print_success "Node.js environment successfully setup."
 
   # ---
   # macOS
   # ---
   # set preferences
-  echo -e "${arrow} Setting macOS system preferences..."
-  bash "$dotfiles_dir/macos.sh"
-  echo -e "macOS system preferences set."
+  print_info "Setting MacOS system preferences..."
+  bash "$dotfiles_dir/scripts/macos.sh"
+  printf "MacOS system preferences set.\n"
 
   # add fonts to the font book
-  echo -e "${arrow} Adding fonts to the font book..."
+  print_info "Adding fonts to the font book..."
   if [ ! -d "$HOME/Library/Fonts" ]; then
-    echo "No fonts directory found."
+    printf "No fonts directory found.\n"
     mkdir -p "$HOME/Library/Fonts"
-    echo "Created user fonts directory."
+    printf "Created user fonts directory.\n"
   else
-    echo "User fonts directory already exists."
+    printf "User fonts directory already exists.\n"
   fi
 
   # copy fonts to the user fonts directory
@@ -316,15 +324,16 @@ Requirements:
   if get_confirmation "Restart your computer now"; then
     # visual countdown
     for i in {5..1}; do
-      echo -ne "\r${arrow}Restarting in $i..."
+      printf "\r%b Restarting in %s..." "$arrow" "$i"
       sleep 1
     done
-    echo "\rGoodBye!"
+    printf "\rGoodBye!\n"
+    sleep 0.25
     # execute restart
     sudo shutdown -r now
   else
-    echo -e "${cross} Restart cancelled!"
-    echo -e "Please restart manually at your convenience!\n"
+    print_error "Restart cancelled!"
+    printf "Please restart manually at your convenience!\n"
   fi
 
 } # this ensures the entire script is downloaded #
