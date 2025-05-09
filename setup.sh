@@ -38,14 +38,14 @@
   cross="${cr}x${rb}"
 
   # print install banner
-  echo -e "
-${cg}         .:'${ra}
-${cg}     __ :'__${ra}
-${cy}  .'\`__\`-'__\`\`.${ra}
-${cr} :__________.-'${ra}  Running lukejans'
-${cm} :_________:${ra}        MacOS setup
-${cm}  :_________\`-;${ra}
-${cb}   \`.__.-.__.'${ra}
+  printf "
+%b         .:'%b
+%b     __ :'__%b
+%b  .'\`__\`-'__\`\`.%b
+%b :__________.-'%b  Running lukejans'
+%b :_________:%b        MacOS setup
+%b  :_________\`-;%b
+%b   \`.__.-.__.'%b
 
 This script will:
   - Install Xcode command line tools
@@ -59,7 +59,7 @@ This script will:
 Requirements:
   - stable internet connection
   - sudo privileges
-"
+" "$cg" "$ra" "$cg" "$ra" "$cy" "$ra" "$cr" "$ra" "$cm" "$ra" "$cm" "$ra" "$cb" "$ra"
 
   # ---
   # helper functions
