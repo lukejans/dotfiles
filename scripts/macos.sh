@@ -7,8 +7,6 @@
 # :_________:     macos.sh defaults
 #  :_________`-;
 #   `.__.-.__.'
-#
-# see: https://github.com/yannbertrand/macos-defaults
 
 # close any open System Preferences panes, to prevent them from
 # overriding settings we’re about to change
@@ -110,17 +108,17 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 # --- screen
 # set wallpaper to mac-bg1.jpg
-sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$HOME/.dotfiles/assets/images/mac-bg1.jpg\""
+sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${HOME}/.dotfiles/desktop/images/mac-bg1.jpg\""
 # require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 # enable subpixel font rendering on non-Apple LCDs
-# reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
 defaults write NSGlobalDomain AppleFontSmoothing -int 1
 # enable HiDPI display modes
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 # save screenshots to ~/Pictures
-defaults write com.apple.screencapture location -string "${HOME}/Pictures"
+mkdir -p "${HOME}/Pictures/screen-captures"
+defaults write com.apple.screencapture location -string "${HOME}/Pictures/screen-captures"
 # save screenshots in PNG format
 defaults write com.apple.screencapture type -string "png"
 
@@ -134,7 +132,6 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # --- terminal
 # enable Secure Keyboard Entry in Terminal.app
-# see: https://security.stackexchange.com/a/47786/8918
 defaults write com.apple.terminal SecureKeyboardEntry -bool true
 # disable the annoying line marks
 defaults write com.apple.Terminal ShowLineMarks -int 0

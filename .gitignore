@@ -4,7 +4,20 @@
 # editor
 .config/zed/conversations
 .config/zed/prompts
+.config/zed/themes
 .ruby-lsp/
-
-# other
 github-copilot/
+
+
+# used for testing scripts
+testing/
+
+# used for installation state
+.state/
+
+# CONFIG KEEP #
+.config/gh/
+.config/btop/
+.config/htop/
+.config/git/config.local
+.config/swiftpm/

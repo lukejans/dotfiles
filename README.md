@@ -1,6 +1,6 @@
 # dotfiles
 
-> My MacOS setup
+> Configuration files and scripts for setting up a MacOS development environment.
 
 ```txt
         .:'       lukejans@ostrich-m3
@@ -22,13 +22,11 @@
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/scripts/bootstrap.sh | bash
 ```
 
-> [!WARNING]
-> **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
-> - This script should only be run on Apple Silicon Macs.
-> - That is a highly opinionated setup.
-> - Old configuration files will be backed up to `$HOME`.
-> - [`setup.sh`](./setup.sh) was only tested on MacOS Sequoia.
-> - See [`Brewfile`](./Brewfile) for a list of programs that will be installed.
+> [!note]
+>
+> - The setup script was only built to run on Apple Silicon Macs (aarch64).
+> - I've only tested [`bootstrap.sh`](./scripts/bootstrap.sh) on macOS Sequoia 15.4.1.
+> - All configuration files this script intends to overwrite will be backed up to `$HOME`.

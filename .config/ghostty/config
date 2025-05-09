@@ -8,14 +8,14 @@ theme = light:jans-light, dark:jans-dark
 
 # --- font
 font-family = Zed Plex Mono
-font-size = 12
+font-family = Zed Mono
+font-size = 14
 font-thicken = true
 font-thicken-strength = 200
 
 # --- compatibility
 shell-integration = detect
-shell-integration-features = no-cursor
-
+shell-integration-features = no-cursor, sudo, title
 
 # --- cursor
 cursor-style = block

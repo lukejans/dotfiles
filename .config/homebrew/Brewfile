@@ -1,63 +1,57 @@
-# .oOOoO.
-# |=====|_    lukejans
-# |||||||_)   Brewfile
-# |||||||
-# `--=--'
-
-# repo taps
 tap "beeftornado/rmtree"
-tap "bell-sw/liberica"
 tap "danielgatis/imgcat"
 tap "homebrew/command-not-found"
 tap "homebrew/test-bot"
-
-# cli tools
+brew "openssl@3"
 brew "arduino-cli"
+brew "autoconf"
 brew "bat"
 brew "bottom"
 brew "btop"
+brew "cmake"
+brew "cmake-docs"
+brew "gmp"
 brew "coreutils"
 brew "fastfetch"
-brew "sqlite"
 brew "ffmpeg"
 brew "fzf"
 brew "gh"
 brew "git"
+brew "readline"
+brew "sqlite"
 brew "git-filter-repo"
-brew "iftop"
-brew "jenv"
+brew "htop"
 brew "jq"
+brew "libyaml"
+brew "mas"
+brew "mise"
 brew "nano"
-brew "nmap"
-brew "openjdk"
 brew "php"
 brew "poppler"
 brew "qemu"
 brew "shellcheck"
 brew "shfmt"
 brew "sponge"
-brew "starship"
 brew "tlrc"
 brew "tmux"
 brew "tpm"
 brew "watch"
+brew "watchman"
 brew "yazi"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
 brew "zsh-fast-syntax-highlighting"
-
-# fonts
+brew "zsh-history-substring-search"
+cask "appcleaner"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-zed-mono"
-
-# apps
 cask "ghostty"
-cask "inkscape"
 cask "karabiner-elements"
-cask "liberica-jdk21-full"
 cask "postman"
 cask "raspberry-pi-imager"
 cask "utm"
 cask "zed"
-cask "zen-browser"
+cask "zen"
+mas "Equinox", id: 1591510203
+mas "Xcode", id: 497799835
