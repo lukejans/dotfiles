@@ -67,7 +67,29 @@ Requirements:
 
   # backup existing files, directories, or symlinks.
   #
-  # $1 - path to a file, directory, or symlink that will be backed up
+  # $1 - prompt / question to display to the user
+  get_confirmation() {
+    # prompt the user for a response
+    printf "%b?%b %s %b(y/N)%b: " "$cc" "$ra" "$1" "$cc" "$ra"
+
+    # capture the users response from
+    read -n 1 -r response </dev/tty
+    echo
+
+    # check if the confirmation was positive by using a regex
+    # that looks for a single "y" or "Y" character.
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+      # user confirmed
+      return 0
+    else
+      # user denied
+      return 1
+    fi
+  }
+
+  # backup existing files or directories
+  #
+  # $1 - the path to a file or directory
   backup() {
     # path to a file, directory, or symlink that will be backed up
     local backup
