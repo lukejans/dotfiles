@@ -11,7 +11,7 @@ tap "danielgatis/imgcat"
 tap "homebrew/command-not-found"
 tap "homebrew/test-bot"
 
-# cli tools
+# tooling
 brew "arduino-cli"
 brew "bat"
 brew "bottom"
