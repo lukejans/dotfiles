@@ -123,56 +123,45 @@ Requirements:
   }
 
   # ---
-  # xcode command line tools
-  # ---
-  setup_xcode_command_line_tools() {
-    print_info "Checking if xcode command line tools are installed..."
-
-    if ! xcode-select -p &>/dev/null; then
-      printf "No xcode installation was found.\n"
-      printf "Confirm the install request in the popup...\n"
-
-      # install xcode
-      xcode-select --install
-
-      # loop until the installer has actually put the tools on disk
-      until xcode-select -p &>/dev/null; do
-        sleep 5
-      done
-
-      print_success "Successfully installed xcode command line tools."
-    else
-      printf "An xcode installation found was found.\n"
-    fi
-  }
-
-  # ---
   # homebrew
+  # note: homebrew will install xcode command line tools if needed
   # ---
   setup_homebrew() {
     print_info "Checking for a homebrew installation..."
 
     if ! command -v brew &>/dev/null; then
       printf "Homebrew not found.\n"
+      print_info "Installing Homebrew (this will also install Xcode Command Line Tools if needed)..."
 
       # the homebrew install command
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-      printf "Homebrew installation complete.\n"
-      printf "Running. %b\$(/opt/homebrew/bin/brew shellenv)%b to setup Homebrew.\n" "$cc" "$ra"
+      printf "Verifying Homebrew installation...\n"
 
-      # add homebrew to PATH for the current session
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-
-      # turn homebrew analytics off on fresh installs
-      if brew analytics state | grep -q "disabled"; then
-        printf "Disabling brew analytics...\n"
-        brew analytics off
+      # make sure the brew command is available
+      if ! command -v brew &>/dev/null; then
+        # set the path for this session if brew exists but isn't in PATH yet
+        if [[ -f "/opt/homebrew/bin/brew" ]]; then
+          # add homebrew to $PATH for the current session
+          printf "Adding %b\$(/opt/homebrew/bin/brew shellenv)%b to \$PATH.\n" "$cc" "$ra"
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+        else
+          print_error "Homebrew installation failed or wasn't added to PATH"
+          return 1
+        fi
       fi
+
+      print_success "Homebrew installation complete."
     else
       printf "Homebrew installation found.\n"
       # brew is installed so make sure it's up to date
       brew update && brew upgrade && brew cleanup && brew autoremove
+    fi
+
+    # turn homebrew analytics off
+    if brew analytics state | grep -q "disabled"; then
+      printf "Disabling brew analytics...\n"
+      brew analytics off
     fi
   }
 
@@ -348,7 +337,6 @@ Requirements:
     done &>/dev/null &
 
     # run installation steps
-    setup_xcode_command_line_tools
     setup_homebrew
     clone_and_symlink_dotfiles
     install_brew_packages
