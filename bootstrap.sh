@@ -24,7 +24,6 @@
   # ---
   # constants
   # ---
-  export XDG_CONFIG_HOME="$HOME/.config"
   declare -r DOTFILES_DIR="$HOME/.dotfiles"
 
   # colors
