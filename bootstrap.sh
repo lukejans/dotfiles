@@ -230,7 +230,8 @@ Requirements:
   # ---
   install_brew_packages() {
     print_info "Installing Homebrew packages from Brewfile..."
-    brew bundle --file "$DOTFILES_DIR/Brewfile"
+    # all the brew packages
+    brew bundle install --global
     print_success "Homebrew packages installed successfully."
   }
 
