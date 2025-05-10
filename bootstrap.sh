@@ -220,6 +220,11 @@ Requirements:
     print_info "Installing Homebrew packages from Brewfile..."
     # install all packages if system dependencies are not up to date
     brew bundle check --global || brew bundle install --global
+
+    # display a summary of installed packages
+    print_info "Summarizing installed packages..."
+    brew list --versions | sort
+
     print_success "Homebrew packages installed successfully."
   }
 
