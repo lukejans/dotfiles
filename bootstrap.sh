@@ -230,8 +230,8 @@ Requirements:
   # ---
   install_brew_packages() {
     print_info "Installing Homebrew packages from Brewfile..."
-    # all the brew packages
-    brew bundle install --global
+    # install all packages if system dependencies are not up to date
+    brew bundle check --global || brew bundle install --global
     print_success "Homebrew packages installed successfully."
   }
 

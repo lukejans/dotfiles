@@ -1,28 +1,19 @@
-# .oOOoO.
-# |=====|_    lukejans
-# |||||||_)   Brewfile
-# |||||||
-# `--=--'
-
-# repo taps
 tap "beeftornado/rmtree"
 tap "bell-sw/liberica"
 tap "danielgatis/imgcat"
 tap "homebrew/command-not-found"
 tap "homebrew/test-bot"
-
-# tooling
 brew "arduino-cli"
 brew "bat"
 brew "bottom"
 brew "btop"
 brew "coreutils"
 brew "fastfetch"
-brew "sqlite"
 brew "ffmpeg"
 brew "fzf"
 brew "gh"
 brew "git"
+brew "sqlite"
 brew "git-filter-repo"
 brew "iftop"
 brew "jenv"
@@ -46,12 +37,8 @@ brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-completions"
 brew "zsh-fast-syntax-highlighting"
-
-# fonts
 cask "font-jetbrains-mono-nerd-font"
 cask "font-zed-mono"
-
-# apps
 cask "ghostty"
 cask "inkscape"
 cask "karabiner-elements"
