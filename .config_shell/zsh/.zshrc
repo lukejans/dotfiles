@@ -26,6 +26,9 @@ if type brew &>/dev/null; then
   #   - brew installed
   #   - see: https://github.com/zsh-users/zsh-completions
   FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+  #   - caveats:
+  chmod go-w '/opt/homebrew/share' &>/dev/null
+  chmod -R go-w '/opt/homebrew/share/zsh' &>/dev/null
 fi
 autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
