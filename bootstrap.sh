@@ -24,8 +24,8 @@
   # ---
   # constants
   # ---
-  declare -r node_version=22
-  declare -r dotfiles_dir="$HOME/.dotfiles"
+  export XDG_CONFIG_HOME="$HOME/.config"
+  declare -r DOTFILES_DIR="$HOME/.dotfiles"
 
   # colors
   cr="\033[31;1m" # bold red
@@ -212,12 +212,12 @@ Requirements:
   fi
 
   # check if the .dotfiles directory exists already then create a backup
-  if [[ -d "$dotfiles_dir" ]]; then
-    backup "$dotfiles_dir"
+  if [[ -d "$DOTFILES_DIR" ]]; then
+    backup "$DOTFILES_DIR"
   fi
 
   # clone the repo
-  git clone https://github.com/lukejans/dotfiles.git "$dotfiles_dir"
+  git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
 
   # find all shell configuration files which is any file that start with
   # only a single dot inside of the shell and zsh directories.
@@ -248,7 +248,7 @@ Requirements:
   # brew bundle
   # ---
   print_info "Installing Homebrew packages from Brewfile..."
-  brew bundle --file "$dotfiles_dir/Brewfile"
+  brew bundle --file "$DOTFILES_DIR/Brewfile"
 
   # ---
   # node
