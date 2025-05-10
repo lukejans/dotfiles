@@ -124,31 +124,6 @@ Requirements:
   }
 
   # ---
-  # confirm installation
-  # ---
-  if ! get_confirmation "Continue"; then
-    # abort install
-    print_error "Installation aborted."
-    exit 0
-  fi
-
-  # ---
-  # sudo
-  # ---
-  # validate sudo access
-  sudo -v
-  # keep sudo alive
-  while true; do
-    # refresh sudo timestamp
-    sudo -n true
-    # wait 60 seconds before the next loop
-    sleep 60
-    # exit if the script is done running
-    kill -0 "$$" || exit
-    # discard all output and run as a background process
-  done &>/dev/null &
-
-  # ---
   # xcode command line tools
   # ---
   setup_xcode_command_line_tools() {
@@ -322,7 +297,6 @@ Requirements:
     print_success "Node.js environment successfully setup."
     return 0
   }
-  setup_node_environment
 
   # ---
   # macOS
@@ -347,27 +321,60 @@ Requirements:
     cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
     print_success "Fonts copied to user fonts directory."
   }
-  setup_macos
 
   # ---
-  # restart system
+  # main function
   # ---
-  printf "%bInstallation complete!%b\n" "$cg" "$ra"
-  printf "  - warn: system restart required\n"
+  main() {
+    # confirm installation
+    if ! get_confirmation "Continue"; then
+      # abort install
+      print_error "Installation aborted."
+      exit 0
+    fi
 
-  if get_confirmation "Restart your computer now"; then
-    # visual countdown
-    for i in {5..1}; do
-      printf "\r%b Restarting in %s...\n" "$arrow" "$i"
-      sleep 1
-    done
-    printf "\rGoodBye!\n"
-    sleep 0.25
-    # execute restart
-    sudo shutdown -r now
-  else
-    print_error "Restart cancelled!"
-    printf "Please restart manually at your convenience!\n"
-  fi
+    # validate sudo access
+    sudo -v
+    # keep sudo alive
+    while true; do
+      # refresh sudo timestamp
+      sudo -n true
+      # wait 60 seconds before the next loop
+      sleep 60
+      # exit if the script is done running
+      kill -0 "$$" || exit
+      # discard all output and run as a background process
+    done &>/dev/null &
+
+    # run installation steps
+    setup_xcode_command_line_tools
+    setup_homebrew
+    clone_and_symlink_dotfiles
+    install_brew_packages
+    setup_node_environment
+    setup_macos
+
+    # restart system
+    printf "%bInstallation complete!%b\n" "$cg" "$ra"
+    printf "  - warn: system restart required\n"
+
+    if get_confirmation "Restart your computer now"; then
+      # visual countdown
+      for i in {5..1}; do
+        printf "\r%b Restarting in %s...\n" "$arrow" "$i"
+        sleep 1
+      done
+      printf "\rGoodBye!\n"
+      sleep 0.25
+      # execute restart
+      sudo shutdown -r now
+    else
+      print_error "Restart cancelled!"
+      printf "Please restart manually at your convenience!\n"
+    fi
+  }
+
+  # run the main function
+  main
 
 } # this ensures the entire script is downloaded before execution #
