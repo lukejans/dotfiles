@@ -1,11 +1,15 @@
-# Shellcheck configuration
+#      /\
+#     {.-}
+#    ;_.-'\     shellcheck
+#   {    _.}_     config
+#    \.-' /  `,
+#     \  |    /
+#      \ |  ,/
+#       \|_/
 
-# disable specific checks (comma‑separated list of codes)
-disable=SC1094
-
-# informs shellcheck where to search for sourced files.
-source-path=/Users/lukejans/.nvm
-source-path=/opt/homebrew
+# disable specific checks
 
 # enable following of external sources
 external-sources=true
+
+# informs shellcheck where to search for external sources.
