@@ -318,6 +318,29 @@ Requirements:
   }
 
   # ---
+  # restart system
+  # ---
+  restart_system() {
+    printf "%bInstallation complete!%b\n" "$cg" "$ra"
+    printf "  - warn: system restart required\n"
+
+    if get_confirmation "Restart your computer now"; then
+      # visual countdown
+      for i in {5..1}; do
+        printf "\r%b Restarting in %s...\n" "$arrow" "$i"
+        sleep 1
+      done
+      printf "\rGoodBye!\n"
+      sleep 0.25
+      # execute restart
+      sudo shutdown -r now
+    else
+      print_error "Restart cancelled!"
+      printf "Please restart manually at your convenience!\n"
+    fi
+  }
+
+  # ---
   # main function
   # ---
   main() {
@@ -347,25 +370,7 @@ Requirements:
     install_brew_packages
     setup_node_environment
     setup_macos
-
-    # restart system
-    printf "%bInstallation complete!%b\n" "$cg" "$ra"
-    printf "  - warn: system restart required\n"
-
-    if get_confirmation "Restart your computer now"; then
-      # visual countdown
-      for i in {5..1}; do
-        printf "\r%b Restarting in %s...\n" "$arrow" "$i"
-        sleep 1
-      done
-      printf "\rGoodBye!\n"
-      sleep 0.25
-      # execute restart
-      sudo shutdown -r now
-    else
-      print_error "Restart cancelled!"
-      printf "Please restart manually at your convenience!\n"
-    fi
+    restart_system
   }
 
   # run the main function
