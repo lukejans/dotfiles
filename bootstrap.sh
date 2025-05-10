@@ -159,7 +159,7 @@ Requirements:
     fi
 
     # turn homebrew analytics off
-    if brew analytics state | grep -q "disabled"; then
+    if ! brew analytics state | grep -q "disabled"; then
       printf "Disabling brew analytics...\n"
       brew analytics off
     fi
