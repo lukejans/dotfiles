@@ -307,24 +307,27 @@ Requirements:
   # ---
   # macOS
   # ---
-  # set preferences
-  print_info "Setting MacOS system preferences..."
-  bash "$dotfiles_dir/macos.sh"
-  printf "MacOS system preferences set.\n"
+  setup_macos() {
+    # set defaults and system preferences
+    print_info "Setting MacOS system preferences..."
+    sudo bash "$DOTFILES_DIR/macos.sh"
+    printf "MacOS system preferences set.\n"
 
-  # add fonts to the font book
-  print_info "Adding fonts to the font book..."
-  if [ ! -d "$HOME/Library/Fonts" ]; then
-    printf "No fonts directory found.\n"
-    mkdir -p "$HOME/Library/Fonts"
-    printf "Created user fonts directory.\n"
-  else
-    printf "User fonts directory already exists.\n"
-  fi
+    # add fonts to the font book
+    print_info "Adding fonts to the font book..."
+    if [ ! -d "$HOME/Library/Fonts" ]; then
+      printf "No fonts directory found.\n"
+      mkdir -p "$HOME/Library/Fonts"
+      printf "Created user fonts directory.\n"
+    else
+      printf "User fonts directory already exists.\n"
+    fi
 
-  # copy fonts to the user fonts directory
-  cp "$dotfiles_dir"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
-  print_success "Fonts copied to user fonts directory."
+    # copy fonts to the user fonts directory
+    cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
+    print_success "Fonts copied to user fonts directory."
+  }
+  setup_macos
 
   # ---
   # restart system
