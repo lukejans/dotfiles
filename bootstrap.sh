@@ -275,6 +275,7 @@ Requirements:
     nvm use "$node_version"
 
     # setup pnpm via corepack
+    #   - see: https://pnpm.io
     printf "Enabling %bpnpm%b via corepack...\n" "$cg" "$ra"
     corepack enable
     corepack prepare pnpm@latest --activate

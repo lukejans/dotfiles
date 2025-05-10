@@ -3,7 +3,9 @@
 # |______|   .zshrc
 
 # --- set interactive options
+# don't add duplicate commands to the history
 setopt HIST_IGNORE_DUPS
+# make the history append to the file during session
 setopt INC_APPEND_HISTORY
 
 # --- set interactive env variables
@@ -23,9 +25,6 @@ if type brew &>/dev/null; then
   # additional zsh completions:
   #   - brew installed
   #   - see: https://github.com/zsh-users/zsh-completions
-  #   - caveats:
-  #       $ chmod go-w '/opt/homebrew/share'
-  #       $ chmod -R go-w '/opt/homebrew/share/zsh'
   FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
 fi
 autoload -Uz compinit # enable completions system
@@ -77,10 +76,9 @@ source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 #   - note: consider lazy loading nvm as its the heaviest part
 #           of the configuration.
 export NVM_DIR="$HOME/.nvm"
-# load nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-# load nvm shell completions
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
 # deeper shell integration
 autoload -U add-zsh-hook
 load-nvmrc() {
@@ -103,6 +101,7 @@ load-nvmrc() {
 }
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
+
 # pnpm: performant node package manager
 #   - corepack enabled
 #   - see: https://pnpm.io
