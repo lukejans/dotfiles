@@ -151,104 +151,113 @@ Requirements:
   # ---
   # xcode command line tools
   # ---
-  print_info "Checking if xcode command line tools are installed..."
+  setup_xcode_command_line_tools() {
+    print_info "Checking if xcode command line tools are installed..."
 
-  if ! xcode-select -p &>/dev/null; then
-    printf "No xcode installation was found.\n"
-    printf "Confirm the install request in the popup...\n"
+    if ! xcode-select -p &>/dev/null; then
+      printf "No xcode installation was found.\n"
+      printf "Confirm the install request in the popup...\n"
 
-    # install xcode
-    xcode-select --install
+      # install xcode
+      xcode-select --install
 
-    # loop until the installer has actually put the tools on disk
-    until xcode-select -p &>/dev/null; do
-      sleep 5
-    done
+      # loop until the installer has actually put the tools on disk
+      until xcode-select -p &>/dev/null; do
+        sleep 5
+      done
 
-    print_success "Successfully installed xcode command line tools."
-  else
-    printf "An xcode installation found was found.\n"
-  fi
+      print_success "Successfully installed xcode command line tools."
+    else
+      printf "An xcode installation found was found.\n"
+    fi
+  }
 
   # ---
   # homebrew
   # ---
-  print_info "Checking for a homebrew installation..."
+  setup_homebrew() {
+    print_info "Checking for a homebrew installation..."
 
-  if ! command -v brew &>/dev/null; then
-    printf "Homebrew not found.\n"
+    if ! command -v brew &>/dev/null; then
+      printf "Homebrew not found.\n"
 
-    # the homebrew install command
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      # the homebrew install command
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    printf "Homebrew installation complete.\n"
-    printf "Running. %b\$(/opt/homebrew/bin/brew shellenv)%b to setup Homebrew.\n" "$cc" "$ra"
+      printf "Homebrew installation complete.\n"
+      printf "Running. %b\$(/opt/homebrew/bin/brew shellenv)%b to setup Homebrew.\n" "$cc" "$ra"
 
-    # add homebrew to PATH for the current session
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+      # add homebrew to PATH for the current session
+      eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    # turn homebrew analytics off on fresh installs
-    if brew analytics state | grep -q "disabled"; then
-      printf "Disabling brew analytics...\n"
-      brew analytics off
+      # turn homebrew analytics off on fresh installs
+      if brew analytics state | grep -q "disabled"; then
+        printf "Disabling brew analytics...\n"
+        brew analytics off
+      fi
+    else
+      printf "Homebrew installation found.\n"
+      # brew is installed so make sure it's up to date
+      brew update && brew upgrade && brew cleanup && brew autoremove
     fi
-  else
-    printf "Homebrew installation found.\n"
-    # brew is installed so make sure it's up to date
-    brew update && brew upgrade && brew cleanup && brew autoremove
-  fi
+  }
 
   # ---
   # clone and symlink configuration files
   # ---
-  print_info "Cloning the dotfiles repository..."
+  clone_and_symlink_dotfiles() {
+    print_info "Cloning the dotfiles repository..."
 
-  # if git is not installed, install it so we can clone the dotfiles repo
-  if ! command -v git &>/dev/null; then
-    printf "No git installation found.\n"
-    brew install git
-  else
-    printf "Git installation found.\nUsing %b%s%b\n" "$cc" "$(which git)" "$ra"
-  fi
-
-  # check if the .dotfiles directory exists already then create a backup
-  if [[ -d "$DOTFILES_DIR" ]]; then
-    backup "$DOTFILES_DIR"
-  fi
-
-  # clone the repo
-  git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
-
-  # find all shell configuration files which is any file that start with
-  # only a single dot inside of the shell and zsh directories.
-  for item in \
-    "$HOME"/.dotfiles/.config_shell/zsh/.*[!.]* \
-    "$HOME"/.dotfiles/.config_shell/sh/.*[!.]* \
-    "$HOME"/.dotfiles/.config; do
-
-    # look in the home directory for the file. Note that this is here mostly for
-    # backing up files that are not from previous dotfiles installations. If there
-    # the file found was a previous dotfile installation we are essentially just
-    # duplicating a file because the link will be overwritten with the git clone.
-    existing_item="$HOME/$(basename "$item")"
-
-    # back up existing configuration files
-    if [[ -e "$existing_item" ]]; then
-      backup "$existing_item"
+    # if git is not installed, install it so we can clone the dotfiles repo
+    if ! command -v git &>/dev/null; then
+      printf "No git installation found.\n"
+      brew install git
+    else
+      printf "Git installation found.\nUsing %b%s%b\n" "$cc" "$(which git)" "$ra"
     fi
 
-    # link new shell file
-    ln -sf "$item" "$existing_item"
-    printf "Linked %b'%s'%b to %b'%s'%b." "$cy" "$item" "$ra" "$cy" "$existing_item" "$ra"
-  done
+    # check if the .dotfiles directory exists already then create a backup
+    if [[ -d "$DOTFILES_DIR" ]]; then
+      backup "$DOTFILES_DIR"
+    fi
 
-  print_success "Cloned and linked all configuration files."
+    # clone the repo
+    git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
+
+    # find all shell configuration files which is any file that start with
+    # only a single dot inside of the shell and zsh directories.
+    for item in \
+      "$HOME"/.dotfiles/.config_shell/zsh/.*[!.]* \
+      "$HOME"/.dotfiles/.config_shell/sh/.*[!.]* \
+      "$HOME"/.dotfiles/.config; do
+
+      # look in the home directory for the file. Note that this is here mostly for
+      # backing up files that are not from previous dotfiles installations. If there
+      # the file found was a previous dotfile installation we are essentially just
+      # duplicating a file because the link will be overwritten with the git clone.
+      existing_item="$HOME/$(basename "$item")"
+
+      # back up existing configuration files
+      if [[ -e "$existing_item" ]]; then
+        backup "$existing_item"
+      fi
+
+      # link new shell file
+      ln -sf "$item" "$existing_item"
+      printf "Linked %b'%s'%b to %b'%s'%b.\n" "$cy" "$item" "$ra" "$cy" "$existing_item" "$ra"
+    done
+
+    print_success "Cloned and linked all configuration files."
+  }
 
   # ---
   # brew bundle
   # ---
-  print_info "Installing Homebrew packages from Brewfile..."
-  brew bundle --file "$DOTFILES_DIR/Brewfile"
+  install_brew_packages() {
+    print_info "Installing Homebrew packages from Brewfile..."
+    brew bundle --file "$DOTFILES_DIR/Brewfile"
+    print_success "Homebrew packages installed successfully."
+  }
 
   # ---
   # node
