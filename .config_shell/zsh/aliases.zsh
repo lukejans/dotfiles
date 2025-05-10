@@ -10,10 +10,9 @@ alias dt="cd ~/Desktop"
 alias pp="cd ~/Code/projects/personal"
 
 # ls
+alias ls='ls -FG'
 alias ll='ls -lFG'
-# list all except "." and ".."
 alias la='ls -lAFG'
-# list directories
 alias lsd="ll | grep --color=never '^d'"
 
 # git
