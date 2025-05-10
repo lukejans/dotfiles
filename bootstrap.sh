@@ -116,7 +116,7 @@ Requirements:
   }
 
   print_success() {
-    printf "%b %s\n" "$check" "$1"
+    printf "%b %b\n" "$check" "$1"
   }
 
   print_error() {
