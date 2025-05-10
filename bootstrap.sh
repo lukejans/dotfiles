@@ -254,55 +254,66 @@ Requirements:
   # node
   # see: https://nodejs.org/en/download
   # ---
-  print_info "Setting up Node.js environment..."
+  setup_node_environment() {
+    # configure the node environment setup here
+    local node_version="22"
+    local global_packages=("live-server" "prettier" "eslint")
+    export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" # if this is changed updated .zshrc
 
-  # install nvm if its not already installed
-  if [[ ! -d "$HOME/.nvm" ]]; then
-    printf "Installing nvm...\n"
-    export NVM_DIR="$HOME/.nvm" && (
-      git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-      cd "$NVM_DIR"
-      git checkout "$(git describe --abbrev=0 --tags --match 'v[0-9]*' "$(git rev-list --tags --max-count=1)")"
-    )
-  fi
+    print_info "Setting up a node.js environment..."
 
-  # make sure the $NVM_DIR env variable is set
-  if [[ -z "${NVM_DIR:-}" ]]; then
-    export NVM_DIR="$HOME/.nvm"
-  fi
+    # install and configure nvm
+    if [[ ! -d "$NVM_DIR" ]]; then
+      printf "Installing %bnvm%b...\n" "$cg" "$ra"
 
-  # make sure nvm is loaded without restarting the shell
-  \. "$NVM_DIR/nvm.sh"
+      # use a sub-shell with the git installation method for nvm.
+      # see: https://github.com/nvm-sh/nvm?tab=readme-ov-file#git-install
+      (
+        git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+        cd "$NVM_DIR"
+        git checkout "$(git describe --abbrev=0 --tags --match 'v[0-9]*' "$(git rev-list --tags --max-count=1)")"
+      )
 
-  # make sure v22 is installed and the default node version
-  printf "Installing node v%s...\n" "$node_version"
-  nvm install $node_version
-  printf "Setting Node.js v%s as default...\n" "$node_version"
-  nvm alias default $node_version
-  nvm use $node_version
+      # load nvm
+      \. "$NVM_DIR/nvm.sh"
 
-  # enable pnpm via corepack
-  printf "Enabling pnpm via corepack..."
-  corepack enable
-  corepack prepare pnpm@latest --activate
+      print_success "${cg}nvm${ra} installed successfully."
+    else
+      printf "%bnvm%b is already installed at %b%s%b\n" "$cg" "$ra" "$cy" "$HOME/.nvm" "$ra"
+    fi
 
-  # setup pnpm home directory if not set
-  if [[ -z "${PNPM_HOME:-}" ]]; then
-    printf "Setting up PNPM_HOME environment variable...\n"
-    export PNPM_HOME="$HOME/Library/pnpm"
-    case ":$PATH:" in
-    *":$PNPM_HOME:"*) ;;
-    *) export PATH="$PNPM_HOME:$PATH" ;;
-    esac
-  else
-    printf "PNPM_HOME is already configured.\n"
-  fi
+    # install node with nvm
+    printf "Installing %bnode%b v%s...\n" "$cg" "$ra" "$node_version"
+    nvm install "$node_version"
 
-  # install global packages with pnpm
-  printf "Installing global Node.js packages..."
-  pnpm add --global "live-server" "prettier" "eslint"
+    printf "Setting %bnode%b v%s as default...\n" "$cg" "$ra" "$node_version"
+    nvm alias default "$node_version"
+    nvm use "$node_version"
 
-  print_success "Node.js environment successfully setup."
+    # setup pnpm via corepack
+    printf "Enabling %bpnpm%b via corepack...\n" "$cg" "$ra"
+    corepack enable
+    corepack prepare pnpm@latest --activate
+
+    # setup pnpm home directory if not set
+    if [[ -z "${PNPM_HOME:-}" ]]; then
+      printf "Setting up PNPM_HOME environment variable...\n"
+      # only add pnpm to the path if its not already present in $PATH
+      if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
+        export PATH="$PNPM_HOME:$PATH"
+      fi
+    else
+      printf "PNPM_HOME is already configured.\n"
+    fi
+
+    # install global packages
+    printf "Installing global %bnode%b packages...\n" "$cg" "$ra"
+    pnpm add --global "${global_packages[@]}"
+
+    print_success "Node.js environment successfully setup."
+    return 0
+  }
+  setup_node_environment
 
   # ---
   # macOS
