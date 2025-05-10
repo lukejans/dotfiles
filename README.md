@@ -1,6 +1,6 @@
 # dotfiles
 
-> My MacOS setup
+> Configuration files and scripts for setting up a MacOS development environment.
 
 ```txt
         .:'       lukejans@ostrich-m3
@@ -19,18 +19,41 @@
                   Locale: en_US.UTF-8
 ```
 
+This is a dotfiles repository that contains configuration files and scripts for setting up a MacOS development environment. This script is built to be run on a fresh MacOS installation but it can also be run to sync up your existing configuration files and dependencies.
+
 ## Install
+
+To bootstrap your MacOS development environment, execute the [`bootstrap.sh`](./bootstrap.sh) script by running the following command:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh | bash
 ```
 
-> [!WARNING]
+The script is sensible enough to just run but if you would like to change the default behavior or inspect it, just redirect the output to a file like so:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh > bootstrap.sh
+```
+
+In the script every main installation function has variables at the top of its body where you can change basic installation instructions such as installing node v18 instead of v22.
+
+> [!note]
 >
-> **Run at your own risk! I do not take responsibility for any data loss or other issues related to using this install script.**
->
-> - This script should only be run on Apple Silicon Macs.
-> - That is a highly opinionated setup.
-> - Old configuration files will be backed up to `$HOME`.
-> - [`setup.sh`](./setup.sh) was only tested on MacOS Sequoia.
-> - See [`Brewfile`](./Brewfile) for a list of programs that will be installed.
+> - The bootstrap script should only be run on Apple Silicon Macs and was only tested on macOS Sequoia 15.4.1 arm64.
+> - All configuration files you were previously using that this script intends to overwrite will be backed up to `$HOME`.
+
+## Homebrew
+
+```txt
+ .oOOoO.
+ |=====|_      lukejans
+ |||||||_)  homebrew setup
+ |||||||
+ `--=--'
+```
+
+See [`Brewfile`](./.config/homebrew/Brewfile) for a list of programs that will be installed by `bootstrap.sh`. This file was created by running the following command:
+
+```sh
+$ brew bundle dump --global --force
+```
