@@ -9,7 +9,11 @@
 # author: luke janssen
 # date: may 9th, 2025
 
-{ # this ensures the entire script is downloaded #
+# TODO:
+#   - java environment with jenv
+#   - find a way to handle brew caveats
+
+{ # this ensures the entire script is downloaded before execution #
 
   # ---
   # setup
@@ -322,7 +326,6 @@ Requirements:
   # restart system
   # ---
   printf "%bInstallation complete!%b\n" "$cg" "$ra"
-  printf "  - todo: add java versions to jenv\n"
   printf "  - warn: system restart required\n"
 
   if get_confirmation "Restart your computer now"; then
