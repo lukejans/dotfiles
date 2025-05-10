@@ -55,5 +55,5 @@ In the script every main installation function has variables at the top of its b
 See [`Brewfile`](./.config/homebrew/Brewfile) for a list of programs that will be installed by `bootstrap.sh`. This file was created by running the following command:
 
 ```sh
-$ brew bundle dump --global --force
+brew bundle dump --global --force
 ```
