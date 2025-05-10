@@ -105,12 +105,11 @@ load-nvmrc
 # pnpm: performant node package manager
 #   - corepack enabled
 #   - see: https://pnpm.io
-#   - note: the guide on node.js downloads page was followed
-export PNPM_HOME="/Users/lukejans/Library/pnpm"
-case ":$PATH:" in
-*":$PNPM_HOME:"*) ;;
-*) export PATH="$PNPM_HOME:$PATH" ;;
-esac
+export PNPM_HOME="$HOME/Library/pnpm"
+
+if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
+  export PATH="$PNPM_HOME:$PATH"
+fi
 
 # --- java
 # -> openjdk (brew installed)
