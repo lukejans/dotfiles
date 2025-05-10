@@ -139,10 +139,14 @@ Requirements:
   sudo -v
   # keep sudo alive
   while true; do
+    # refresh sudo timestamp
     sudo -n true
+    # wait 60 seconds before the next loop
     sleep 60
+    # exit if the script is done running
     kill -0 "$$" || exit
-  done 2>/dev/null &
+    # discard all output and run as a background process
+  done &>/dev/null &
 
   # ---
   # xcode command line tools
@@ -343,4 +347,4 @@ Requirements:
     printf "Please restart manually at your convenience!\n"
   fi
 
-} # this ensures the entire script is downloaded #
+} # this ensures the entire script is downloaded before execution #
