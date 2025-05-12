@@ -125,11 +125,3 @@ fi
 #     openjdk64-23.0.1 -> OpenJDK 23
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
-
-# --- c
-# add homebrew include directory to header search path
-CPATH="$(brew --prefix)/include${CPATH+:$CPATH}"
-export CPATH
-# add homebrew library directory to library search path (for linking)
-LIBRARY_PATH="$(brew --prefix)/lib${LIBRARY_PATH+:$LIBRARY_PATH}"
-export LIBRARY_PATH
