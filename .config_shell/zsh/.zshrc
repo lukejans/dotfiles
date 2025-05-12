@@ -56,6 +56,7 @@ source "$HOME/.dotfiles/.config_shell/zsh/functions.zsh"
 eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+eval "$(mise activate zsh)"
 
 # --- zsh plugins
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
