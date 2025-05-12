@@ -13,6 +13,21 @@ export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000000
 export SAVEHIST=10000000
 
+# bat
+export BAT_CONFIG_DIR="$XDG_CONFIG_HOME/bat"
+export BAT_CONFIG_PATH="$BAT_CONFIG_DIR/bat.conf"
+# use bat as the man pager for colorized man pages
+export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
+
+# tmux
+export TMUX_DIR="$XDG_CONFIG_HOME/tmux"
+export TMUX_CONF="$TMUX_DIR/tmux.conf"
+export TMUX_CONF_LOCAL="$TMUX_DIR/tmux.conf.local"
+
+# starship
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+export STARSHIP_CACHE="$HOME/.cache/starship"
+
 # --- tab completions
 if type brew &>/dev/null; then
   # homebrew builtin completions:
@@ -37,39 +52,13 @@ compinit              # initialize all completions on $FPATH
 source "$HOME/.dotfiles/.config_shell/zsh/aliases.zsh"
 source "$HOME/.dotfiles/.config_shell/zsh/functions.zsh"
 
-# --- plugins
-# starship command prompt:
-#   - brew installed
-#   - see: https://github.com/starship/starship
-export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-export STARSHIP_CACHE="$HOME/.cache/starship"
+# --- load plugins
 eval "$(starship init zsh)"
-# fzf:
-#   - brew installed
-#   - see: https://github.com/junegunn/fzf
 eval "$(fzf --zsh)"
-# zoxide:
-#   - brew installed
-#   - see: https://github.com/ajeetdsouza/zoxide
 eval "$(zoxide init --cmd cd zsh)"
-# bat (interactive tool settings)
-export BAT_CONFIG_DIR="$XDG_CONFIG_HOME/bat"
-export BAT_CONFIG_PATH="$BAT_CONFIG_DIR/bat.conf"
-# use bat as the man pager for colorized man pages
-export MANPAGER="sh -c 'sed -u -e \"s/\\x1B\[[0-9;]*m//g; s/.\\x08//g\" | bat -p -lman'"
-# tmux
-export TMUX_DIR="$XDG_CONFIG_HOME/tmux"
-export TMUX_CONF="$TMUX_DIR/tmux.conf"
-export TMUX_CONF_LOCAL="$TMUX_DIR/tmux.conf.local"
 
 # --- zsh plugins
-# fast-syntax-highlighting
-#   - brew installed
-#   - see: https://github.com/zdharma-continuum/fast-syntax-highlighting
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-# zsh-autosuggestions:
-#   - brew installed
-#   - see: https://github.com/zsh-users/zsh-autosuggestions
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # --- node
