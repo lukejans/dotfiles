@@ -62,56 +62,11 @@ eval "$(mise activate zsh)"
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
-# --- node
-# nvm: node version manager
-#   - git installed
-#   - see: https://github.com/nvm-sh/nvm
-#   - note: consider lazy loading nvm as its the heaviest part
-#           of the configuration.
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-# deeper shell integration
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local nvmrc_path
-  nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version
-    nvmrc_node_version=$(nvm version "$(cat "$nvmrc_path")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
-      nvm use
-    fi
-  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
-
 # pnpm: performant node package manager
 #   - corepack enabled
 #   - see: https://pnpm.io
-export PNPM_HOME="$HOME/Library/pnpm"
+# export PNPM_HOME="$HOME/Library/pnpm"
 
-if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
-  export PATH="$PNPM_HOME:$PATH"
-fi
-
-# --- java
-# -> openjdk (brew installed)
-# -> java (macOS pre-bundled)
-# -> liberica (brew tap)
-# jenv: (java version manager)
-#   see: https://github.com/jenv/jenv
-#   installs:
-#     openjdk64-21.0.7 -> Liberica JDK 21
-#     openjdk64-23.0.1 -> OpenJDK 23
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
+# if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
+#   export PATH="$PNPM_HOME:$PATH"
+# fi
