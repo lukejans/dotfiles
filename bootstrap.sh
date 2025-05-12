@@ -232,71 +232,6 @@ Requirements:
   }
 
   # ---
-  # node
-  # see: https://nodejs.org/en/download
-  # ---
-  setup_node_environment() {
-    # configure the node environment setup here
-    local node_version="22"
-    local global_packages=("live-server" "prettier" "eslint")
-    export NVM_DIR="${NVM_DIR:-$HOME/.nvm}" # if this is changed updated .zshrc
-
-    print_info "Setting up a node.js environment..."
-
-    # install and configure nvm
-    if [[ ! -d "$NVM_DIR" ]]; then
-      printf "Installing %bnvm%b...\n" "$cg" "$ra"
-
-      # use a sub-shell with the git installation method for nvm.
-      # see: https://github.com/nvm-sh/nvm?tab=readme-ov-file#git-install
-      (
-        git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
-        cd "$NVM_DIR"
-        git checkout "$(git describe --abbrev=0 --tags --match 'v[0-9]*' "$(git rev-list --tags --max-count=1)")"
-      )
-
-      # load nvm
-      \. "$NVM_DIR/nvm.sh"
-
-      print_success "${cg}nvm${ra} installed successfully."
-    else
-      printf "%bnvm%b is already installed at %b%s%b\n" "$cg" "$ra" "$cy" "$HOME/.nvm" "$ra"
-    fi
-
-    # install node with nvm
-    printf "Installing %bnode%b v%s...\n" "$cg" "$ra" "$node_version"
-    nvm install "$node_version"
-
-    printf "Setting %bnode%b v%s as default...\n" "$cg" "$ra" "$node_version"
-    nvm alias default "$node_version"
-    nvm use "$node_version"
-
-    # setup pnpm via corepack
-    #   - see: https://pnpm.io
-    printf "Enabling %bpnpm%b via corepack...\n" "$cg" "$ra"
-    corepack enable
-    corepack prepare pnpm@latest --activate
-
-    # setup pnpm home directory if not set
-    if [[ -z "${PNPM_HOME:-}" ]]; then
-      printf "Setting up PNPM_HOME environment variable...\n"
-      # only add pnpm to the path if its not already present in $PATH
-      if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
-        export PATH="$PNPM_HOME:$PATH"
-      fi
-    else
-      printf "PNPM_HOME is already configured.\n"
-    fi
-
-    # install global packages
-    printf "Installing global %bnode%b packages...\n" "$cg" "$ra"
-    pnpm add --global "${global_packages[@]}"
-
-    print_success "Node.js environment successfully setup."
-    return 0
-  }
-
-  # ---
   # macOS
   # ---
   setup_macos() {
@@ -371,7 +306,6 @@ Requirements:
     setup_homebrew
     clone_and_symlink_dotfiles
     install_brew_packages
-    setup_node_environment
     setup_macos
     restart_system
   }
