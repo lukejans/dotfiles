@@ -36,7 +36,7 @@
   },
   // --- file associations
   "file_types": {
-    "Shell Script": [".env.*", "**/.zprofile"],
+    "Shell Script": [".env.*", "**/.zprofile", "**/completions/_*"],
     "Git Config": ["**/git/config"],
     "Git Ignore": ["**/git/gitignore*"]
   },
