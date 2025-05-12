@@ -163,6 +163,9 @@ Requirements:
       printf "Disabling brew analytics...\n"
       brew analytics off
     fi
+
+    # make sure we don't get "zsh compinit: insecure directories” warnings
+    chmod -R go-w "$(brew --prefix)/share"
   }
 
   # ---
