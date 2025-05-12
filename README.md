@@ -19,8 +19,6 @@
                   Locale: en_US.UTF-8
 ```
 
-This is a dotfiles repository that contains configuration files and scripts for setting up a MacOS development environment. This script is built to be run on a fresh MacOS installation but it can also be run to sync up your existing configuration files and dependencies.
-
 ## Install
 
 To bootstrap your MacOS development environment, execute the [`bootstrap.sh`](./bootstrap.sh) script by running the following command:
@@ -29,17 +27,10 @@ To bootstrap your MacOS development environment, execute the [`bootstrap.sh`](./
 curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh | bash
 ```
 
-The script is sensible enough to just run but if you would like to change the default behavior or inspect it, just redirect the output to a file like so:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh > bootstrap.sh
-```
-
-In the script every main installation function has variables at the top of its body where you can change basic installation instructions such as installing node v18 instead of v22.
-
 > [!note]
 >
-> - The bootstrap script should only be run on Apple Silicon Macs and was only tested on macOS Sequoia 15.4.1 arm64.
+> - Only run on Apple Silicon Macs (aarch64).
+> - I've only tested [`bootstrap.sh`](./bootstrap.sh) on macOS Sequoia 15.4.1.
 > - All configuration files you were previously using that this script intends to overwrite will be backed up to `$HOME`.
 
 ## Homebrew
@@ -56,4 +47,20 @@ See [`Brewfile`](./.config/homebrew/Brewfile) for a list of programs that will b
 
 ```sh
 brew bundle dump --global --force
+```
+
+## Version Management
+
+```txt
+// ""--.._
+||  (_)  _ "-._       lukejans
+||    _ (_)    '-.  mise-en-place
+||   (_)   __..-'
+ \\__..--""
+```
+
+This setup uses [mise](https://mise.jdx.dev/) for version management. Note that I'm still planning a way to automate the install of all mise tools, but you can still run the following after the install script runs and you restart your system:
+
+```sh
+cd $HOME && mise install
 ```
