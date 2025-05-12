@@ -8,6 +8,8 @@ words = [
     "bvps",
     "chmod",
     "codebook",
+    "compdef",
+    "compinit",
     "corepack",
     "cpath",
     "cppflags",
