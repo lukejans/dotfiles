@@ -29,22 +29,16 @@ export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 export STARSHIP_CACHE="$HOME/.cache/starship"
 
 # --- tab completions
+# completions that homebrew manages
 if type brew &>/dev/null; then
   # homebrew builtin completions:
-  # this checks if homebrew is present before adding its
-  # completions to FPATH.
-  #   - packaged with homebrew
-  #   - see: https://docs.brew.sh/Shell-Completion
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-  # additional zsh completions:
-  #   - brew installed
-  #   - see: https://github.com/zsh-users/zsh-completions
+  # additional completions (zsh-users):
   FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
-  #   - caveats:
-  chmod go-w '/opt/homebrew/share' &>/dev/null
-  chmod -R go-w '/opt/homebrew/share/zsh' &>/dev/null
 fi
+# personal completions
+FPATH="${HOME}/.dotfiles/completions:${FPATH}"
+# setup zsh completions
 autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
@@ -63,10 +57,8 @@ source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # pnpm: performant node package manager
-#   - corepack enabled
-#   - see: https://pnpm.io
-# export PNPM_HOME="$HOME/Library/pnpm"
-
-# if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
-#   export PATH="$PNPM_HOME:$PATH"
-# fi
+export PNPM_HOME="$HOME/Library/pnpm"
+# add pnpm to path if its not already there
+if [[ ":$PATH:" != *":$PNPM_HOME:"* ]]; then
+  export PATH="$PNPM_HOME:$PATH"
+fi
