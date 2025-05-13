@@ -132,13 +132,6 @@
     },
     "JSONC": {
       "formatter": "prettier"
-    },
-    // java
-    "Java": {
-      "formatter": "language_server",
-      "code_actions_on_format": {
-        "source.organizeImports": true
-      }
     }
   },
   // --- lsp
@@ -152,12 +145,72 @@
       }
     },
     // java
-    "java": {
-      "initialization_options": {},
-      "settings": {
-        "java.jdt.ls.lombokSupport.enabled": true,
-        "java.format.enabled": true,
-        "java.saveActions.cleanup": true
+    "jdtls": {
+      "initialization_options": {
+        "settings": {
+          "java": {
+            "errors": {
+              "incompleteClasspath": {
+                "severity": "warning"
+              }
+            },
+            "configuration": {
+              "updateBuildConfiguration": "interactive",
+              "maven": {
+                "userSettings": null
+              }
+            },
+            "trace": {
+              "server": "verbose"
+            },
+            "import": {
+              "gradle": {
+                "enabled": true
+              },
+              "maven": {
+                "enabled": true
+              },
+              "exclusions": [
+                "**/node_modules/**",
+                "**/.metadata/**",
+                "**/archetype-resources/**",
+                "**/META-INF/maven/**",
+                "/**/test/**"
+              ]
+            },
+            "jdt": {
+              "ls": {
+                "lombokSupport": {
+                  "enabled": true
+                }
+              }
+            },
+            "referencesCodeLens": {
+              "enabled": false
+            },
+            "signatureHelp": {
+              "enabled": false
+            },
+            "implementationsCodeLens": {
+              "enabled": false
+            },
+            "format": {
+              "enabled": true
+            },
+            "saveActions": {
+              "organizeImports": false
+            },
+            "contentProvider": {
+              "preferred": null
+            },
+            "autobuild": {
+              "enabled": false
+            },
+            "completion": {
+              "importOrder": ["java", "javax", "com", "org"]
+            }
+          }
+        }
       }
     }
   },
