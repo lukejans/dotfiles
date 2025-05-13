@@ -251,7 +251,7 @@ Requirements:
     fi
 
     # copy fonts to the user fonts directory
-    cp "${DOTFILES_DIR}"/assets/fonts/*.ttf "${HOME}"/Library/Fonts/
+    cp "${DOTFILES_DIR}"/desktop-assets/fonts/*.ttf "${HOME}"/Library/Fonts/
     print_success "Fonts copied to user fonts directory."
   }
 
