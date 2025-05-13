@@ -1,3 +1,6 @@
 [tools]
 java = "23"
-node = "22"
+node = "lts"
+
+[settings]
+idiomatic_version_file_enable_tools = ["java"]
