@@ -7,8 +7,6 @@
 # :_________:     macos.sh defaults
 #  :_________`-;
 #   `.__.-.__.'
-#
-# see: https://github.com/yannbertrand/macos-defaults
 
 # close any open System Preferences panes, to prevent them from
 # overriding settings we’re about to change
@@ -120,6 +118,7 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 1
 # enable HiDPI display modes
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 # save screenshots to ~/Pictures
+mkdir -p "${HOME}/Pictures/screen-captures"
 defaults write com.apple.screencapture location -string "${HOME}/Pictures"
 # save screenshots in PNG format
 defaults write com.apple.screencapture type -string "png"
