@@ -132,6 +132,10 @@
     },
     "JSONC": {
       "formatter": "prettier"
+    },
+    // java
+    "Java": {
+      "formatter": "language_server"
     }
   },
   // --- lsp
@@ -198,7 +202,7 @@
               "enabled": true
             },
             "saveActions": {
-              "organizeImports": false
+              "organizeImports": true
             },
             "contentProvider": {
               "preferred": null
