@@ -1,3 +1,4 @@
+# shellcheck shell=zsh
 #  ______
 # | $_   |  lukejans
 # |______| .zprofile

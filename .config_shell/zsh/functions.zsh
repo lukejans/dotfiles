@@ -6,7 +6,7 @@
 
 # create a new directory and enter it
 mkd() {
-  mkdir -p "$@" && cd "$_"
+  mkdir -p "${@}" && cd "${_}"
 }
 
 # fzf preview
@@ -39,8 +39,8 @@ fz() {
 fzo() {
   local selected_file
   selected_file=$(fz)
-  if [ -n "$selected_file" ]; then
-    $EDITOR "$selected_file"
+  if [ -n "${selected_file}" ]; then
+    ${EDITOR} "${selected_file}"
   fi
 }
 
@@ -48,21 +48,21 @@ fzo() {
 y() {
   local tmp
   tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-  yazi "$@" --cwd-file="$tmp"
-  if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-    builtin cd -- "$cwd" || exit
+  yazi "${@}" --cwd-file="${tmp}"
+  if cwd="$(command cat -- "${tmp}")" && [ -n "${cwd}" ] && [ "${cwd}" != "${PWD}" ]; then
+    builtin cd -- "${cwd}" || exit
   fi
-  rm -f -- "$tmp"
+  rm -f -- "${tmp}"
 }
 
 # arduino uno compile
 uno_compile() {
-  arduino-cli compile -v --fqbn arduino:avr:uno "$1"
+  arduino-cli compile -v --fqbn arduino:avr:uno "${1}"
 }
 
 # arduino uno upload
 uno_upload() {
-  arduino-cli upload -v -p /dev/cu.usbmodem2101 --fqbn arduino:avr:uno "$1"
+  arduino-cli upload -v -p /dev/cu.usbmodem2101 --fqbn arduino:avr:uno "${1}"
 }
 
 # workaround for `fast-syntax-highlighting` freezing when running `$ whatis`
@@ -71,6 +71,6 @@ whatis() {
   if [[ -v THEFD ]]; then
     :
   else
-    command whatis "$@"
+    command whatis "${@}"
   fi
 }

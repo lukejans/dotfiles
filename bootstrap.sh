@@ -24,7 +24,7 @@
   # ---
   # constants
   # ---
-  declare -r DOTFILES_DIR="$HOME/.dotfiles"
+  declare -r DOTFILES_DIR="${HOME}/.dotfiles"
 
   # colors
   cr="\033[31;1m" # bold red
@@ -62,7 +62,7 @@ This script will:
 Requirements:
   - stable internet connection
   - sudo privileges
-" "$cg" "$ra" "$cg" "$ra" "$cy" "$ra" "$cr" "$ra" "$cm" "$ra" "$cm" "$ra" "$cb" "$ra"
+" "${cg}" "${ra}" "${cg}" "${ra}" "${cy}" "${ra}" "${cr}" "${ra}" "${cm}" "${ra}" "${cm}" "${ra}" "${cb}" "${ra}"
 
   # ---
   # helper functions
@@ -73,7 +73,7 @@ Requirements:
   # $1 - prompt / question to display to the user
   get_confirmation() {
     # prompt the user for a response
-    printf "%b?%b %s %b(y/N)%b: " "$cc" "$ra" "$1" "$cc" "$ra"
+    printf "%b?%b %s %b(y/N)%b: " "${cc}" "${ra}" "${1}" "${cc}" "${ra}"
 
     # capture the users response from
     read -n 1 -r response </dev/tty
@@ -81,7 +81,7 @@ Requirements:
 
     # check if the confirmation was positive by using a regex
     # that looks for a single "y" or "Y" character.
-    if [[ "$response" =~ ^[Yy]$ ]]; then
+    if [[ "${response}" =~ ^[Yy]$ ]]; then
       # user confirmed
       return 0
     else
@@ -96,30 +96,30 @@ Requirements:
   backup() {
     # the name of the file or directory to be backed up
     local name
-    name=$(basename "$1")
+    name=$(basename "${1}")
     # path to a file or directory that will be backed up
     local backup
     backup="${HOME}/${name}_$(date +%c).bak"
 
     # make the backup
-    if [[ -e $1 ]]; then
-      cp -RP "$1" "$backup"
-      trash "$1"
+    if [[ -e ${1} ]]; then
+      cp -RP "${1}" "${backup}"
+      trash "${1}"
     fi
 
-    printf "Backed up %b'%s'%b to %b'%s'%b.\n" "$cy" "$name" "$ra" "$cy" "$backup" "$ra"
+    printf "Backed up %b'%s'%b to %b'%s'%b.\n" "${cy}" "${name}" "${ra}" "${cy}" "${backup}" "${ra}"
   }
 
   print_info() {
-    printf "%b %s\n" "$arrow" "$1"
+    printf "%b %s\n" "${arrow}" "${1}"
   }
 
   print_success() {
-    printf "%b %b\n" "$check" "$1"
+    printf "%b %b\n" "${check}" "${1}"
   }
 
   print_error() {
-    printf "%b %s\n" "$cross" "$1" >&2
+    printf "%b %s\n" "${cross}" "${1}" >&2
   }
 
   # ---
@@ -143,7 +143,7 @@ Requirements:
         # set the path for this session if brew exists but isn't in PATH yet
         if [[ -f "/opt/homebrew/bin/brew" ]]; then
           # add homebrew to $PATH for the current session
-          printf "Adding %b\$(/opt/homebrew/bin/brew shellenv)%b to \$PATH.\n" "$cc" "$ra"
+          printf "Adding %b\$(/opt/homebrew/bin/brew shellenv)%b to \$PATH.\n" "${cc}" "${ra}"
           eval "$(/opt/homebrew/bin/brew shellenv)"
         else
           print_error "Homebrew installation failed or wasn't added to PATH"
@@ -179,38 +179,38 @@ Requirements:
       printf "No git installation found.\n"
       brew install git
     else
-      printf "Git installation found.\nUsing %b%s%b\n" "$cc" "$(which git)" "$ra"
+      printf "Git installation found.\nUsing %b%s%b\n" "${cc}" "$(which git)" "${ra}"
     fi
 
     # check if the .dotfiles directory exists already then create a backup
-    if [[ -d "$DOTFILES_DIR" ]]; then
-      backup "$DOTFILES_DIR"
+    if [[ -d "${DOTFILES_DIR}" ]]; then
+      backup "${DOTFILES_DIR}"
     fi
 
     # clone the repo
-    git clone https://github.com/lukejans/dotfiles.git "$DOTFILES_DIR"
+    git clone https://github.com/lukejans/dotfiles.git "${DOTFILES_DIR}"
 
     # find all shell configuration files which is any file that start with
     # only a single dot inside of the shell and zsh directories.
     for item in \
-      "$HOME"/.dotfiles/.config_shell/zsh/.*[!.]* \
-      "$HOME"/.dotfiles/.config_shell/sh/.*[!.]* \
-      "$HOME"/.dotfiles/.config; do
+      "${HOME}"/.dotfiles/.config_shell/zsh/.*[!.]* \
+      "${HOME}"/.dotfiles/.config_shell/sh/.*[!.]* \
+      "${HOME}"/.dotfiles/.config; do
 
       # look in the home directory for the file. Note that this is here mostly for
       # backing up files that are not from previous dotfiles installations. If there
       # the file found was a previous dotfile installation we are essentially just
       # duplicating a file because the link will be overwritten with the git clone.
-      existing_item="$HOME/$(basename "$item")"
+      existing_item="${HOME}/$(basename "${item}")"
 
       # back up existing configuration files
-      if [[ -e "$existing_item" ]]; then
-        backup "$existing_item"
+      if [[ -e "${existing_item}" ]]; then
+        backup "${existing_item}"
       fi
 
       # link new shell file
-      ln -sf "$item" "$existing_item"
-      printf "Linked %b'%s'%b to %b'%s'%b.\n" "$cy" "$item" "$ra" "$cy" "$existing_item" "$ra"
+      ln -sf "${item}" "${existing_item}"
+      printf "Linked %b'%s'%b to %b'%s'%b.\n" "${cy}" "${item}" "${ra}" "${cy}" "${existing_item}" "${ra}"
     done
 
     print_success "Cloned and linked all configuration files."
@@ -237,21 +237,21 @@ Requirements:
   setup_macos() {
     # set defaults and system preferences
     print_info "Setting MacOS system preferences..."
-    sudo bash "$DOTFILES_DIR/macos.sh"
+    sudo bash "${DOTFILES_DIR}/macos.sh"
     printf "MacOS system preferences set.\n"
 
     # add fonts to the font book
     print_info "Adding fonts to the font book..."
-    if [ ! -d "$HOME/Library/Fonts" ]; then
+    if [ ! -d "${HOME}/Library/Fonts" ]; then
       printf "No fonts directory found.\n"
-      mkdir -p "$HOME/Library/Fonts"
+      mkdir -p "${HOME}/Library/Fonts"
       printf "Created user fonts directory.\n"
     else
       printf "User fonts directory already exists.\n"
     fi
 
     # copy fonts to the user fonts directory
-    cp "$DOTFILES_DIR"/assets/fonts/*.ttf "$HOME"/Library/Fonts/
+    cp "${DOTFILES_DIR}"/assets/fonts/*.ttf "${HOME}"/Library/Fonts/
     print_success "Fonts copied to user fonts directory."
   }
 
@@ -259,13 +259,13 @@ Requirements:
   # restart system
   # ---
   restart_system() {
-    printf "%bInstallation complete!%b\n" "$cg" "$ra"
+    printf "%bInstallation complete!%b\n" "${cg}" "${ra}"
     printf "  - warn: system restart required\n"
 
     if get_confirmation "Restart your computer now"; then
       # visual countdown
       for i in {5..1}; do
-        printf "\r%b Restarting in %s...\n" "$arrow" "$i"
+        printf "\r%b Restarting in %s...\n" "${arrow}" "${i}"
         sleep 1
       done
       printf "\rGoodBye!\n"

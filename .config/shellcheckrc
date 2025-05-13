@@ -13,3 +13,6 @@
 external-sources=true
 
 # informs shellcheck where to search for external sources.
+
+# enforce use of ${} braces around variable references
+enable=require-variable-braces
