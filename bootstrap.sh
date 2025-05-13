@@ -256,6 +256,36 @@ Requirements:
   }
 
   # ---
+  # zen browser setup
+  # ---
+  zen_browser_setup() {
+    # this function will setup the zen browser custom css
+    print_info "setting up zen browser custom css"
+
+    local ZEN_DIR="${HOME}/Library/Application Support/zen"
+    local ZEN_CSS="${DOTFILES_DIR}/zen-browser/userChrome.css"
+
+    # make sure zen is actually installed
+    if [[ -d "${ZEN_DIR}" ]]; then
+
+      # look for the (release) profile inside the zen profiles
+      for profile in "${ZEN_DIR}/Profiles/"*; do
+        # link the css file to the (release) profile
+        if [[ -d "${profile}" && "$(basename "${profile}")" == *"(release)"* ]]; then
+          printf "Linking %s to the zen (release) profile\n" "$(basename "${ZEN_CSS}")"
+          # make sure the chrome directory exists before linking
+          mkdir -p "${profile}/chrome"
+          ln -sf "${ZEN_CSS}" "${profile}/chrome/userChrome.css"
+          break
+        fi
+      done
+    else
+      # zen browser may not be installed or setup properly
+      printf "Zen browser is not installed so %s was not symlinked\n" "$(basename "${ZEN_CSS}")"
+    fi
+  }
+
+  # ---
   # restart system
   # ---
   restart_system() {
@@ -307,6 +337,7 @@ Requirements:
     clone_and_symlink_dotfiles
     install_brew_packages
     setup_macos
+    zen_browser_setup
     restart_system
   }
 

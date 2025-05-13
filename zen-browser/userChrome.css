@@ -1,5 +1,9 @@
 #userContext-label,
 #userContext-indicator,
 #userContext-icons {
+  /*
+  this css just removes the horrific looking
+  container from the address bars and tabs.
+  */
   display: none !important;
 }
