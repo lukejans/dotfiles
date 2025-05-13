@@ -13,3 +13,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 if ! ssh-add -l &>/dev/null; then
   ssh-add --apple-load-keychain &>/dev/null
 fi
+
+# --- mise
+# this sets up non-interactive sessions
+eval "$(mise activate zsh --shims)"
