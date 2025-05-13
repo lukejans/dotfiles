@@ -18,7 +18,8 @@ alias lsd="ll | grep --color=never '^d'"
 # git
 alias gs='git status'
 alias gp='git pull'
-alias ga='git add .'
+alias ga='git add'
+alias gc='git commit'
 
 # cat - note that bat can safely override cat as it can
 #       detect when its being used non-interactively and

@@ -55,15 +55,6 @@ y() {
   rm -f -- "$tmp"
 }
 
-# git commit
-gc() {
-  if [ -z "$1" ]; then
-    git commit
-  else
-    git commit -m "$1"
-  fi
-}
-
 # arduino uno compile
 uno_compile() {
   arduino-cli compile -v --fqbn arduino:avr:uno "$1"
