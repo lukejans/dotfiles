@@ -60,6 +60,7 @@ words = [
     "pnpm",
     "renderers",
     "rustc",
+    "rustfmt",
     "savehist",
     "sed",
     "shellcheck",
