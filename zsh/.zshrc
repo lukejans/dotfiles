@@ -44,8 +44,8 @@ autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
 # --- custom aliases & functions
-source "${HOME}/.dotfiles/.config_shell/zsh/aliases.zsh"
-source "${HOME}/.dotfiles/.config_shell/zsh/functions.zsh"
+source "${HOME}/.dotfiles/zsh/aliases.zsh"
+source "${HOME}/.dotfiles/zsh/functions.zsh"
 
 # --- load plugins
 eval "$(starship init zsh)"

@@ -193,8 +193,8 @@ Requirements:
     # find all shell configuration files which is any file that start with
     # only a single dot inside of the shell and zsh directories.
     for item in \
-      "${HOME}"/.dotfiles/.config_shell/zsh/.*[!.]* \
-      "${HOME}"/.dotfiles/.config_shell/sh/.*[!.]* \
+      "${HOME}"/.dotfiles/zsh/.*[!.]* \
+      "${HOME}"/.dotfiles/sh/.*[!.]* \
       "${HOME}"/.dotfiles/.config; do
 
       # look in the home directory for the file. Note that this is here mostly for
