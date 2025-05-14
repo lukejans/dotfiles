@@ -21,16 +21,16 @@
 
 ## Install
 
-To bootstrap your MacOS development environment, execute the [`bootstrap.sh`](./bootstrap.sh) script by running the following command:
+To bootstrap your MacOS development environment, execute the [`bootstrap.sh`](./scripts/bootstrap.sh) script by running the following command:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/scripts/bootstrap.sh | bash
 ```
 
 > [!note]
 >
 > - The setup script was only built to run on Apple Silicon Macs (aarch64).
-> - I've only tested [`bootstrap.sh`](./bootstrap.sh) on macOS Sequoia 15.4.1.
+> - I've only tested [`bootstrap.sh`](./scripts/bootstrap.sh) on macOS Sequoia 15.4.1.
 > - All configuration files you were previously using that this script intends to overwrite will be backed up to `$HOME`.
 
 ## Version Management

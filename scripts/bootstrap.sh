@@ -250,7 +250,7 @@ Requirements:
   setup_macos() {
     # set defaults and system preferences
     print_info "Setting MacOS system preferences..."
-    sudo bash "${DOTFILES_DIR}/macos.sh"
+    sudo bash "${DOTFILES_DIR}/scripts/macos.sh"
     printf "MacOS system preferences set.\n"
 
     # add fonts to the font book
