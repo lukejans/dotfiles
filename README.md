@@ -29,11 +29,19 @@ curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh
 
 > [!note]
 >
-> - Only run on Apple Silicon Macs (aarch64).
+> - The setup script was only built to run on Apple Silicon Macs (aarch64).
 > - I've only tested [`bootstrap.sh`](./bootstrap.sh) on macOS Sequoia 15.4.1.
 > - All configuration files you were previously using that this script intends to overwrite will be backed up to `$HOME`.
 
-## Homebrew
+## Version Management
+
+This setup uses [mise](https://mise.jdx.dev/) for version management. To see a list of tools that will be installed by `mise` see its global configuration file [`config.toml`](./.config/mise/config.toml)
+
+```sh
+cd $HOME && mise install
+```
+
+## System Package Manager
 
 ```txt
  .oOOoO.
@@ -47,20 +55,4 @@ See [`Brewfile`](./.config/homebrew/Brewfile) for a list of programs that will b
 
 ```sh
 brew bundle dump --global --force
-```
-
-## Version Management
-
-```txt
-// ""--.._
-||  (_)  _ "-._       lukejans
-||    _ (_)    '-.  mise-en-place
-||   (_)   __..-'
- \\__..--""
-```
-
-This setup uses [mise](https://mise.jdx.dev/) for version management. Note that I'm still planning a way to automate the install of all mise tools, but you can still run the following after the install script runs and you restart your system:
-
-```sh
-cd $HOME && mise install
 ```
