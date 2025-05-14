@@ -232,6 +232,19 @@ Requirements:
   }
 
   # ---
+  # mise toolchain setup
+  # ---
+  install_mise_packages() {
+    print_info "Installing mise packages..."
+    # install all packages if system dependencies are not up to date
+    (
+      cd "${HOME}"
+      mise install
+    )
+    print_success "mise packages installed successfully."
+  }
+
+  # ---
   # macOS
   # ---
   setup_macos() {
@@ -291,6 +304,8 @@ Requirements:
   restart_system() {
     printf "%bInstallation complete!%b\n" "${cg}" "${ra}"
     printf "  - warn: system restart required\n"
+    printf "  - todo: setup ssh keys\n"
+    printf "  - todo: create a ~/.config/git/config.local\n"
 
     if get_confirmation "Restart your computer now"; then
       # visual countdown
@@ -336,6 +351,7 @@ Requirements:
     setup_homebrew
     clone_and_symlink_dotfiles
     install_brew_packages
+    install_mise_packages
     setup_macos
     zen_browser_setup
     restart_system
