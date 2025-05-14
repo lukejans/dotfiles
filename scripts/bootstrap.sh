@@ -264,7 +264,7 @@ Requirements:
     fi
 
     # copy fonts to the user fonts directory
-    cp "${DOTFILES_DIR}"/desktop-assets/fonts/*.ttf "${HOME}"/Library/Fonts/
+    cp "${DOTFILES_DIR}"/desktop/fonts/*.ttf "${HOME}"/Library/Fonts/
     print_success "Fonts copied to user fonts directory."
   }
 
@@ -276,7 +276,7 @@ Requirements:
     print_info "setting up zen browser custom css"
 
     local ZEN_DIR="${HOME}/Library/Application Support/zen"
-    local ZEN_CSS="${DOTFILES_DIR}/zen-browser/userChrome.css"
+    local ZEN_CSS="${DOTFILES_DIR}/desktop/zen-browser/userChrome.css"
 
     # make sure zen is actually installed
     if [[ -d "${ZEN_DIR}" ]]; then

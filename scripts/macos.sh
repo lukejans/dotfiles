@@ -108,7 +108,7 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 # --- screen
 # set wallpaper to mac-bg1.jpg
-sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${HOME}/.dotfiles/desktop-assets/images/mac-bg1.jpg\""
+sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${HOME}/.dotfiles/desktop/images/mac-bg1.jpg\""
 # require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
