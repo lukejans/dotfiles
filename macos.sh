@@ -113,7 +113,6 @@ sudo osascript -e "tell application \"System Events\" to set picture of every de
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 # enable subpixel font rendering on non-Apple LCDs
-# reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
 defaults write NSGlobalDomain AppleFontSmoothing -int 1
 # enable HiDPI display modes
 sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
@@ -133,7 +132,6 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # --- terminal
 # enable Secure Keyboard Entry in Terminal.app
-# see: https://security.stackexchange.com/a/47786/8918
 defaults write com.apple.terminal SecureKeyboardEntry -bool true
 # disable the annoying line marks
 defaults write com.apple.Terminal ShowLineMarks -int 0
