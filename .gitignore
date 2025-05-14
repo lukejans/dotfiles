@@ -4,8 +4,14 @@
 # editor
 .config/zed/conversations
 .config/zed/prompts
+.config/zed/themes
 .ruby-lsp/
 github-copilot/
+
+# command line tools
+.config/gh/
+.config/btop/
+.config/git/config.local
 
 # used for testing scripts
 testing/

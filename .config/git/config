@@ -3,13 +3,15 @@
 	l = log --graph --abbrev-commit --pretty=oneline
 	# same as above but with author name, commit message, and date
 	ll = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-	# View the current working tree status using the short format.
+	# list contributors with number of commits.
+	peeps = shortlog --summary --numbered
+	# view the current working tree status using the short format.
 	s = status -s
-	# Show the diff between the latest commit and the current state.
+	# show the diff between the latest commit and the current state.
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 	# `git di $number` shows the diff between the state `$number` revisions ago and the current state.
 	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
-	# Pull in remote changes for the current repository and all its submodules.
+	# pull in remote changes for the current repository and all its submodules.
 	p = pull --recurse-submodules
 	# undo the last commit
 	undo = reset --soft HEAD~1
@@ -19,10 +21,6 @@
 	oops = commit --amend --no-edit
   # interactive rebase with the given number of latest commits.
 	ir = "!r() { git rebase -i HEAD~$1; }; r"
-	# list contributors with number of commits.
-	peeps = shortlog --summary --numbered
-	# commit changes
-	c = git commit
 	# add and commit all changes.
 	ac = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
 	# switch to a branch, creating it if necessary.
@@ -41,41 +39,29 @@
 	whitespace = fix
 
 [core]
-	# global git ignore file
-	excludesFile = ~/.config/git/gitignore_global
 	# default editor to use
 	editor = zed --wait
-	# treat spaces before tabs and all kinds of trailing whitespace as an error.
-	# [default] trailing-space: looks for spaces at the end of a line
-	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+	# global git ignore file
+	excludesFile = ~/.config/git/gitignore_global
+	# treat whitespace as an error
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-	# make `git rebase` safer on macOS.
-	# more info: http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/
-	trustctime = false
-	# prevent showing files whose names contain non-ASCII symbols as unversioned.
-	# more info: http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
-	precomposeunicode = false
-	# speed up commands involving untracked files such as `git status`.
-	# more info: https://git-scm.com/docs/git-update-index#_untracked_cache
+	# speed up commands involving untracked files
 	untrackedCache = true
+	# macOS git fixes
+	trustctime = false
+	precomposeunicode = false
 
 [color]
 	ui = auto
 
 [commit]
-  # more info: https://help.github.com/articles/signing-commits-using-gpg/
 	gpgsign = true
 
 [diff]
-	# detect copies as well as renames.
 	renames = copies
 
 [gpg]
 	format = ssh
-
-[help]
-	# auto correct and execute mistyped commands.
-	autocorrect = 1
 
 [init]
 	defaultBranch = main
@@ -96,7 +82,5 @@
 [url "git@github.com:"]
   pushInsteadOf = https://github.com/
 
-[user]
-	name = Luke Janssen
-	email = 91230392+lukejans@users.noreply.github.com
-	signingkey = /Users/lukejans/.ssh/github_signing_ed25519.pub
+[include]
+  path = ~/.config/git/config.local
