@@ -269,9 +269,9 @@ Requirements:
   }
 
   # ---
-  # zen browser setup
+  # zen browser
   # ---
-  zen_browser_setup() {
+  setup_zen_browser() {
     # this function will setup the zen browser custom css
     print_info "setting up zen browser custom css"
 
@@ -353,7 +353,7 @@ Requirements:
     install_brew_packages
     install_mise_packages
     setup_macos
-    zen_browser_setup
+    setup_zen_browser
     restart_system
   }
 
