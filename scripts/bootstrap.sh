@@ -122,7 +122,7 @@ Requirements:
   #
   # stdout: informational message
   print_info() {
-    printf "%b %s\n" "${arrow}" "${1}"
+    printf "%b %s%b\n" "${arrow}" "${1}" "${ra}"
   }
 
   # print a success message with a check mark
@@ -131,7 +131,7 @@ Requirements:
   #
   # stdout: success message
   print_success() {
-    printf "%b %b\n" "${check}" "${1}"
+    printf "%b %b%b\n" "${check}" "${1}" "${ra}"
   }
 
   # print an error message with a cross
@@ -140,7 +140,7 @@ Requirements:
   #
   # stderr: error message
   print_error() {
-    printf "%b %s\n" "${cross}" "${1}" >&2
+    printf "%b %s%b\n" "${cross}" "${1}" "${ra}" >&2
   }
 
   # ---
