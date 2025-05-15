@@ -57,10 +57,3 @@ eval "$(mise activate zsh)"
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-
-# pnpm: performant node package manager
-export PNPM_HOME="${HOME}/Library/pnpm"
-# add pnpm to path if its not already there
-if [[ ":${PATH}:" != *":${PNPM_HOME}:"* ]]; then
-  export PATH="${PNPM_HOME}:${PATH}"
-fi

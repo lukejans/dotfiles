@@ -18,3 +18,13 @@ fi
 # --- mise
 # this sets up non-interactive sessions
 eval "$(mise activate zsh --shims)"
+
+# --- pnpm
+export PNPM_HOME="${HOME}/Library/pnpm"
+# add pnpm to path if its not already there
+if [[ ":${PATH}:" != *":${PNPM_HOME}:"* ]]; then
+  export PATH="${PNPM_HOME}:${PATH}"
+fi
+
+# --- personal bin
+export PATH="${HOME}/.local/bin:${PATH}"
