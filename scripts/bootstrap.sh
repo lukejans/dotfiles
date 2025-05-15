@@ -21,6 +21,7 @@
   # constants
   # ---
   declare -r DOTFILES_DIR="${HOME}/.dotfiles"
+  export XDG_CONFIG_HOME="${HOME}/.config"
 
   # colors
   cr="\033[31;1m" # bold red
