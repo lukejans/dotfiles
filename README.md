@@ -29,4 +29,4 @@ curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/scripts/boot
 >
 > - The setup script was only built to run on Apple Silicon Macs (aarch64).
 > - I've only tested [`bootstrap.sh`](./scripts/bootstrap.sh) on macOS Sequoia 15.4.1.
-> - All configuration files you were previously using that this script intends to overwrite will be backed up to `$HOME`.
+> - All configuration files this script intends to overwrite will be backed up to `$HOME`.
