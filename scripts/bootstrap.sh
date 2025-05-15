@@ -2,12 +2,12 @@
 
 # MacOS Setup Script
 #
-# description: this script sets up a MacOS environment by installing
-#              software listed in the Brewfile, configuring system
-#              default settings, and linking dotfiles.
+# description: this script sets up a MacOS development environment by
+#              installing software and tools listed in the Brewfile,
+#              configuring system default settings, and linking dotfiles.
 #
 # author: luke janssen
-# date: may 9th, 2025
+# date: may 15th, 2025
 
 { # this ensures the entire script is downloaded before execution #
 
@@ -42,19 +42,10 @@
 %b         .:'%b
 %b     __ :'__%b
 %b  .'\`__\`-'__\`\`.%b
-%b :__________.-'%b  Running lukejans'
-%b :_________:%b        MacOS setup
+%b :__________.-'%b  Running bootstrap.sh'
+%b :_________:%b
 %b  :_________\`-;%b
 %b   \`.__.-.__.'%b
-
-This script will:
-  - Install Xcode command line tools
-  - Install Homebrew & programs listed inside of Brewfile
-  - Clone This repo to '~/.dotfiles'
-  - Symlink config files to the user home directory
-  - Setup a Node.js environment with nvm and pnpm
-  - Set some MacOS system settings / preferences
-  - Setup a Java environment
 
 Requirements:
   - stable internet connection
@@ -361,6 +352,16 @@ Requirements:
   # main function
   # ---
   main() {
+    # a minimal install will only clone and link dotfiles then
+    # install and update packages.
+    local do_minimal_install=false
+
+    # ask the user if they want to do a full install
+    if ! get_confirmation "Do you want to do a full install"; then
+      # if the user doesn't want a full install do a minimal install
+      do_minimal_install=true
+    fi
+
     # confirm installation
     if ! get_confirmation "Continue"; then
       # abort install
@@ -382,12 +383,15 @@ Requirements:
     done &>/dev/null &
 
     # run installation steps
+
     setup_homebrew
     clone_and_symlink_dotfiles
     install_brew_packages
     install_mise_packages
-    setup_macos
-    setup_zen_browser
+    ${do_minimal_install} || {
+      setup_macos
+      setup_zen_browser
+    }
     restart_system
   }
 
