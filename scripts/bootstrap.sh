@@ -100,7 +100,7 @@ Requirements:
     name=$(basename "${1}")
     # path to a file or directory that will be backed up
     local backup
-    backup="${HOME}/${name}_$(date +%c).bak"
+    backup="${HOME}/${name}_$(date +%Y%m%d_%H%M%S).bak"
 
     # make the backup
     if [[ -e ${1} ]]; then
@@ -108,7 +108,11 @@ Requirements:
       trash "${1}"
     fi
 
-    printf "Backed up %b'%s'%b to %b'%s'%b.\n" "${cy}" "${name}" "${ra}" "${cy}" "${backup}" "${ra}"
+    # print information about the backup process to stderr
+    printf "Backed up %b'%s'%b to %b'%s'%b.\n" "${cy}" "${name}" "${ra}" "${cy}" "${backup}" "${ra}" >&2
+
+    # output the backup path to stdout
+    echo "${backup}"
   }
 
   # print an informational message with an arrow
@@ -195,14 +199,26 @@ Requirements:
       # change in the future but this seemed to make the most sense due to
       # the "$DOTFILES_DIR" potentially not being a git dir and also might
       # have uncommitted changes.
-      backup "${DOTFILES_DIR}"
-
-      # sync files from the old dotfiles clone that aren't being tracked
-      rsync -ahP --ignore-existing --exclude=.git "${DOTFILES_DIR}/" "${HOME}/"
+      local dotfiles_backup
+      dotfiles_backup=$(backup "${DOTFILES_DIR}")
     fi
 
     # clone the repo
     git clone https://github.com/lukejans/dotfiles.git "${DOTFILES_DIR}"
+
+    # sync files from the old dotfiles clone that aren't being tracked.
+    # rsync was used instead of git pull to be less invasive with auto
+    # committing a users changes and instead they can reference the backup
+    # to get their old changes. This will also ensure that any untracked
+    # files in the old repo are present in the new clone.
+    if [[ -n "${dotfiles_backup:-}" ]]; then
+      # if we have a backup of the old dotfiles, sync from there to preserve custom files
+      rsync -ahP --ignore-existing --exclude=.git "${dotfiles_backup}/" "${DOTFILES_DIR}/"
+      printf "Synced custom files from backup %b'%s'%b to %b'%s'%b.\n" "${cy}" "${dotfiles_backup}" "${ra}" "${cy}" "${DOTFILES_DIR}" "${ra}"
+    fi
+
+    # sync dotfiles to home directory
+    rsync -ahP --ignore-existing --exclude=.git "${DOTFILES_DIR}/" "${HOME}/"
 
     # find all shell configuration files which is any file that start with
     # only a single dot inside of the shell and zsh directories.
@@ -224,7 +240,7 @@ Requirements:
           rm "${existing_item}"
         else
           # the file is not a symlink so make a backup
-          backup "${existing_item}"
+          backup "${existing_item}" >/dev/null
         fi
       fi
 
