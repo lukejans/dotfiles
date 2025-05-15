@@ -135,17 +135,8 @@ Requirements:
       printf "Verifying Homebrew installation...\n"
 
       # make sure the brew command is available
-      if ! command -v brew &>/dev/null; then
-        # set the path for this session if brew exists but isn't in PATH yet
-        if [[ -f "/opt/homebrew/bin/brew" ]]; then
-          # add homebrew to $PATH for the current session
-          printf "Adding %b\$(/opt/homebrew/bin/brew shellenv)%b to \$PATH.\n" "${cc}" "${ra}"
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-        else
-          print_error "Homebrew installation failed or wasn't added to PATH"
-          return 1
-        fi
-      fi
+      printf "Adding %b\$(/opt/homebrew/bin/brew shellenv)%b to \$PATH.\n" "${cc}" "${ra}"
+      eval "$(/opt/homebrew/bin/brew shellenv)"
 
       print_success "Homebrew installation complete."
     else
