@@ -217,9 +217,6 @@ Requirements:
       printf "Synced custom files from backup %b'%s'%b to %b'%s'%b.\n" "${cy}" "${dotfiles_backup}" "${ra}" "${cy}" "${DOTFILES_DIR}" "${ra}"
     fi
 
-    # sync dotfiles to home directory
-    rsync -ahP --ignore-existing --exclude=.git "${DOTFILES_DIR}/" "${HOME}/"
-
     # find all shell configuration files which is any file that start with
     # only a single dot inside of the shell and zsh directories.
     for item in \
