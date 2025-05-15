@@ -67,6 +67,8 @@ Requirements:
   # get confirmation from the user
   #
   # $1 - prompt / question to display to the user
+  #
+  # returns: 0 if confirmed, 1 if denied
   get_confirmation() {
     # prompt the user for a response
     printf "%b?%b %s %b(y/N)%b: " "${cc}" "${ra}" "${1}" "${cc}" "${ra}"
@@ -89,6 +91,9 @@ Requirements:
   # backup existing files or directories
   #
   # $1 - the path to a file or directory
+  #
+  # stdout: path to the backup file via stdout
+  # stderr: information about the backup process
   backup() {
     # the name of the file or directory to be backed up
     local name
@@ -106,14 +111,29 @@ Requirements:
     printf "Backed up %b'%s'%b to %b'%s'%b.\n" "${cy}" "${name}" "${ra}" "${cy}" "${backup}" "${ra}"
   }
 
+  # print an informational message with an arrow
+  #
+  # $1 - message to display
+  #
+  # stdout: informational message
   print_info() {
     printf "%b %s\n" "${arrow}" "${1}"
   }
 
+  # print a success message with a check mark
+  #
+  # $1 - message to display
+  #
+  # stdout: success message
   print_success() {
     printf "%b %b\n" "${check}" "${1}"
   }
 
+  # print an error message with a cross
+  #
+  # $1 - message to display
+  #
+  # stderr: error message
   print_error() {
     printf "%b %s\n" "${cross}" "${1}" >&2
   }
