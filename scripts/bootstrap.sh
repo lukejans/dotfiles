@@ -9,10 +9,6 @@
 # author: luke janssen
 # date: may 9th, 2025
 
-# TODO:
-#   - java environment with jenv
-#   - find a way to handle brew caveats
-
 { # this ensures the entire script is downloaded before execution #
 
   # ---
@@ -197,15 +193,21 @@ Requirements:
       "${HOME}"/.dotfiles/sh/.*[!.]* \
       "${HOME}"/.dotfiles/.config; do
 
-      # look in the home directory for the file. Note that this is here mostly for
-      # backing up files that are not from previous dotfiles installations. If there
-      # the file found was a previous dotfile installation we are essentially just
-      # duplicating a file because the link will be overwritten with the git clone.
+      # by existing item I really mean a file that might be in the home
+      # directory with the same name as the item being linked.
       existing_item="${HOME}/$(basename "${item}")"
 
       # back up existing configuration files
       if [[ -e "${existing_item}" ]]; then
-        backup "${existing_item}"
+        # if the file found is a symlink just delete the link because the
+        # file is either from a previous link from this repo or from a users
+        # setup in which we will just leave it alone.
+        if [[ -L "${existing_item}" ]]; then
+          rm "${existing_item}"
+        else
+          # the file is not a symlink so make a backup
+          backup "${existing_item}"
+        fi
       fi
 
       # link new shell file
