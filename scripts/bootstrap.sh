@@ -180,7 +180,14 @@ Requirements:
 
     # check if the .dotfiles directory exists already then create a backup
     if [[ -d "${DOTFILES_DIR}" ]]; then
+      # backup the existing dotfiles repo before a fresh clone. This might
+      # change in the future but this seemed to make the most sense due to
+      # the "$DOTFILES_DIR" potentially not being a git dir and also might
+      # have uncommitted changes.
       backup "${DOTFILES_DIR}"
+
+      # sync files from the old dotfiles clone that aren't being tracked
+      rsync -ahP --ignore-existing --exclude=.git "${DOTFILES_DIR}/" "${HOME}/"
     fi
 
     # clone the repo
