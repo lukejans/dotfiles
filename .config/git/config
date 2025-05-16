@@ -1,5 +1,5 @@
 [alias]
-  # view commit log abbreviated SHA, description, and history graph
+    # view commit log abbreviated SHA, description, and history graph
 	l = log --graph --abbrev-commit --pretty=oneline
 	# same as above but with author name, commit message, and date
 	ll = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
@@ -67,7 +67,7 @@
 	defaultBranch = main
 
 [merge]
-  # fast forward merge
+    # fast forward merge
 	ff = only
 	# include summaries of merged commits in newly created merge commit messages
 	log = true
@@ -80,7 +80,7 @@
 	followTags = true
 
 [url "git@github.com:"]
-  pushInsteadOf = https://github.com/
+    pushInsteadOf = https://github.com/
 
 [include]
-  path = ~/.config/git/config.local
+    path = ~/.config/git/config.local

@@ -32,10 +32,10 @@ export STARSHIP_CACHE="${HOME}/.cache/starship"
 # --- tab completions
 # completions that homebrew manages
 if type brew &>/dev/null; then
-  # homebrew builtin completions:
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  # additional completions (zsh-users):
-  FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+    # homebrew builtin completions:
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+    # additional completions (zsh-users):
+    FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
 fi
 # personal completions
 FPATH="${HOME}/.dotfiles/zsh/completions:${FPATH}"

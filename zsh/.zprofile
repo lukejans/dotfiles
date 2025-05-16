@@ -12,7 +12,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # load all identities used in the keychain to the ssh-agent
 # and only add the identities if they aren't already loaded
 if ! ssh-add -l &>/dev/null; then
-  ssh-add --apple-load-keychain &>/dev/null
+    ssh-add --apple-load-keychain &>/dev/null
 fi
 
 # --- mise
@@ -23,7 +23,7 @@ eval "$(mise activate zsh --shims)"
 export PNPM_HOME="${HOME}/Library/pnpm"
 # add pnpm to path if its not already there
 if [[ ":${PATH}:" != *":${PNPM_HOME}:"* ]]; then
-  export PATH="${PNPM_HOME}:${PATH}"
+    export PATH="${PNPM_HOME}:${PATH}"
 fi
 
 # --- personal bin

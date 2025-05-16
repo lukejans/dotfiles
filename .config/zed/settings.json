@@ -9,218 +9,223 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  // --- theme
-  "theme": {
-    "mode": "system",
-    "light": "One Light",
-    "dark": "One Dark"
-  },
-  // --- editing
-  "cursor_shape": "block",
-  "tab_size": 2,
-  "ui_font_size": 14,
-  "buffer_font_size": 12,
-  "buffer_font_family": "Zed Plex Mono",
-  "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
-  "extend_comment_on_newline": false,
-  "restore_on_startup": "none",
-  "relative_line_numbers": true,
-  "diagnostics": {
-    "include_warnings": true
-  },
-  // --- ui
-  "tabs": {
-    "file_icons": true,
-    "git_status": true,
-    "show_diagnostics": "all"
-  },
-  // --- file associations
-  "file_types": {
-    "Shell Script": [".env.*", "**/.zprofile", "**/completions/_*"],
-    "Git Config": ["**/git/config*"],
-    "Git Ignore": ["**/git/gitignore*"]
-  },
-  // --- ssh
-  "ssh_connections": [],
-  // --- ai
-  "agent": {
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3.7-sonnet"
+    // --- theme
+    "theme": {
+        "mode": "system",
+        "light": "One Light",
+        "dark": "One Dark"
     },
-    "version": "2"
-  },
-  "features": {
-    "edit_prediction_provider": "zed"
-  },
-  "edit_predictions": {
-    "disabled_globs": ["**/.ssh/**"],
-    "mode": "subtle",
-    "enabled_in_text_threads": false
-  },
-  // --- privacy
-  "private_files": ["**/.env*", "**/.ssh/**"],
-  // --- journal
-  "journal": {
-    "path": "~/Notes",
-    "hour_format": "hour24"
-  },
-  // --- git
-  "git": {
-    "inline_blame": {
-      "show_commit_summary": true
-    }
-  },
-  // --- terminal
-  "terminal": {
-    "line_height": "standard",
-    "copy_on_select": true,
-    "option_as_meta": true,
-    "font_features": {
-      "calt": false
-    }
-  },
-  // --- language specific settings
-  "languages": {
-    // sh
-    "Shell Script": {
-      "formatter": {
-        "external": {
-          "command": "shfmt",
-          "arguments": ["--filename", "{buffer_path}", "--indent", "2"]
+    // --- editing
+    "cursor_shape": "block",
+    "tab_size": 4,
+    "ui_font_size": 14,
+    "buffer_font_size": 12,
+    "buffer_font_family": "Zed Plex Mono",
+    "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
+    "extend_comment_on_newline": false,
+    "restore_on_startup": "none",
+    "relative_line_numbers": true,
+    "diagnostics": {
+        "include_warnings": true
+    },
+    // --- ui
+    "tabs": {
+        "file_icons": true,
+        "git_status": true,
+        "show_diagnostics": "all"
+    },
+    // --- file associations
+    "file_types": {
+        "Shell Script": [".env.*", "**/.zprofile", "**/completions/_*"],
+        "Git Config": ["**/git/config*"],
+        "Git Ignore": ["**/git/gitignore*"]
+    },
+    // --- ssh
+    "ssh_connections": [],
+    // --- ai
+    "agent": {
+        "default_model": {
+            "provider": "copilot_chat",
+            "model": "gemini-2.5-pro"
+        },
+        "version": "2"
+    },
+    "features": {
+        "edit_prediction_provider": "zed"
+    },
+    "edit_predictions": {
+        "disabled_globs": ["**/.ssh/**"],
+        "mode": "subtle",
+        "enabled_in_text_threads": false
+    },
+    // --- privacy
+    "private_files": ["**/.env*", "**/.ssh/**"],
+    // --- journal
+    "journal": {
+        "path": "~/Notes",
+        "hour_format": "hour24"
+    },
+    // --- git
+    "git": {
+        "inline_blame": {
+            "show_commit_summary": true
         }
-      }
     },
-    // js
-    "JavaScript": {
-      "formatter": {
-        "external": {
-          "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
+    // --- terminal
+    "terminal": {
+        "line_height": "standard",
+        "copy_on_select": true,
+        "option_as_meta": true,
+        "font_features": {
+            "calt": false
         }
-      },
-      "code_actions_on_format": {
-        "source.fixAll.eslint": true,
-        "source.organizeImports": true
-      }
     },
-    // html
-    "HTML": {
-      "formatter": {
-        "language_server": {
-          "name": "superhtml"
-        }
-      }
-    },
-    // css
-    "CSS": {
-      "formatter": "prettier"
-    },
-    // md
-    "Markdown": {
-      "show_edit_predictions": true,
-      "soft_wrap": "editor_width",
-      "format_on_save": "prettier"
-    },
-    // xml
-    "XML": {
-      "formatter": "prettier"
-    },
-    // json
-    "JSON": {
-      "formatter": "prettier"
-    },
-    "JSONC": {
-      "formatter": "prettier"
-    },
-    // java
-    "Java": {
-      "formatter": "language_server"
-    }
-  },
-  // --- lsp
-  "lsp": {
-    // js
-    "eslint": {
-      "settings": {
-        "codeActionOnSave": {
-          "rules": ["import/order"]
-        }
-      }
-    },
-    // java
-    "jdtls": {
-      "initialization_options": {
-        "settings": {
-          "java": {
-            "errors": {
-              "incompleteClasspath": {
-                "severity": "warning"
-              }
-            },
-            "configuration": {
-              "updateBuildConfiguration": "interactive",
-              "maven": {
-                "userSettings": null
-              }
-            },
-            "trace": {
-              "server": "verbose"
-            },
-            "import": {
-              "gradle": {
-                "enabled": true
-              },
-              "maven": {
-                "enabled": true
-              },
-              "exclusions": [
-                "**/node_modules/**",
-                "**/.metadata/**",
-                "**/archetype-resources/**",
-                "**/META-INF/maven/**",
-                "/**/test/**"
-              ]
-            },
-            "jdt": {
-              "ls": {
-                "lombokSupport": {
-                  "enabled": true
+    // --- language specific settings
+    "languages": {
+        // sh
+        "Shell Script": {
+            "formatter": {
+                "external": {
+                    "command": "shfmt",
+                    "arguments": [
+                        "--filename",
+                        "{buffer_path}",
+                        "--indent",
+                        "4"
+                    ]
                 }
-              }
-            },
-            "referencesCodeLens": {
-              "enabled": false
-            },
-            "signatureHelp": {
-              "enabled": false
-            },
-            "implementationsCodeLens": {
-              "enabled": false
-            },
-            "format": {
-              "enabled": true
-            },
-            "saveActions": {
-              "organizeImports": true
-            },
-            "contentProvider": {
-              "preferred": null
-            },
-            "autobuild": {
-              "enabled": false
-            },
-            "completion": {
-              "importOrder": ["java", "javax", "com", "org"]
             }
-          }
+        },
+        // js
+        "JavaScript": {
+            "formatter": {
+                "external": {
+                    "command": "prettier",
+                    "arguments": ["--stdin-filepath", "{buffer_path}"]
+                }
+            },
+            "code_actions_on_format": {
+                "source.fixAll.eslint": true,
+                "source.organizeImports": true
+            }
+        },
+        // html
+        "HTML": {
+            "formatter": {
+                "language_server": {
+                    "name": "superhtml"
+                }
+            }
+        },
+        // css
+        "CSS": {
+            "formatter": "prettier"
+        },
+        // md
+        "Markdown": {
+            "show_edit_predictions": true,
+            "soft_wrap": "editor_width",
+            "format_on_save": "prettier"
+        },
+        // xml
+        "XML": {
+            "formatter": "prettier"
+        },
+        // json
+        "JSON": {
+            "formatter": "prettier"
+        },
+        "JSONC": {
+            "formatter": "prettier"
+        },
+        // java
+        "Java": {
+            "formatter": "language_server"
         }
-      }
+    },
+    // --- lsp
+    "lsp": {
+        // js
+        "eslint": {
+            "settings": {
+                "codeActionOnSave": {
+                    "rules": ["import/order"]
+                }
+            }
+        },
+        // java
+        "jdtls": {
+            "initialization_options": {
+                "settings": {
+                    "java": {
+                        "errors": {
+                            "incompleteClasspath": {
+                                "severity": "warning"
+                            }
+                        },
+                        "configuration": {
+                            "updateBuildConfiguration": "interactive",
+                            "maven": {
+                                "userSettings": null
+                            }
+                        },
+                        "trace": {
+                            "server": "verbose"
+                        },
+                        "import": {
+                            "gradle": {
+                                "enabled": true
+                            },
+                            "maven": {
+                                "enabled": true
+                            },
+                            "exclusions": [
+                                "**/node_modules/**",
+                                "**/.metadata/**",
+                                "**/archetype-resources/**",
+                                "**/META-INF/maven/**",
+                                "/**/test/**"
+                            ]
+                        },
+                        "jdt": {
+                            "ls": {
+                                "lombokSupport": {
+                                    "enabled": true
+                                }
+                            }
+                        },
+                        "referencesCodeLens": {
+                            "enabled": false
+                        },
+                        "signatureHelp": {
+                            "enabled": false
+                        },
+                        "implementationsCodeLens": {
+                            "enabled": false
+                        },
+                        "format": {
+                            "enabled": true
+                        },
+                        "saveActions": {
+                            "organizeImports": true
+                        },
+                        "contentProvider": {
+                            "preferred": null
+                        },
+                        "autobuild": {
+                            "enabled": false
+                        },
+                        "completion": {
+                            "importOrder": ["java", "javax", "com", "org"]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    // --- privacy
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
     }
-  },
-  // --- privacy
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false
-  }
 }

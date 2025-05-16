@@ -1,5 +1,5 @@
 #compdef rustup
-
+# shellcheck shell=zsh
 autoload -U is-at-least
 
 _rustup() {
