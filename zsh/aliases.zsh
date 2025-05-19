@@ -5,9 +5,10 @@
 # |______|  aliases.zsh
 
 # cd
-alias dl="cd ~/Downloads"
-alias dt="cd ~/Desktop"
-alias pp="cd ~/Code/projects/personal"
+alias dwn="cd ~/Downloads"
+alias dsk="cd ~/Desktop"
+alias pic="cd ~/Pictures"
+alias pro="cd ~/Code/projects"
 
 # ls
 alias ls='ls -FG'
