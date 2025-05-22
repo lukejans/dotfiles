@@ -17,7 +17,7 @@ alias la='ls -lAFG'
 alias lsd="ll | grep --color=never '^d'"
 
 # git
-alias gs='git status -s'
+alias gs='git status'
 alias gp='git pull --recurse-submodules'
 alias ga='git add'
 alias gc='git commit'

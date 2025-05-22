@@ -44,12 +44,26 @@ FPATH="${HOME}/.local/share/zsh/completions:${FPATH}"
 autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
+# ps1 (prompt)
+# enable vcs_info
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats ':(%b)'
+
+precmd() {
+    vcs_info
+}
+
+setopt PROMPT_SUBST
+
+# build prompt: user@host in colours, then cwd, git‑branch, then $
+PS1='%n%F{red}@%f%m ''%F{blue}%c%f''%F{red}${vcs_info_msg_0_}%f%F{green} $%f '
+
 # --- custom aliases & functions
 source "${HOME}/.dotfiles/zsh/aliases.zsh"
 source "${HOME}/.dotfiles/zsh/functions.zsh"
 
 # --- load plugins
-eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(mise activate zsh)"

@@ -28,6 +28,12 @@
     "diagnostics": {
         "include_warnings": true
     },
+    "minimap": {
+        "show": "always"
+    },
+    "git_panel": {
+        "status_style": "label_color"
+    },
     // --- ui
     "tabs": {
         "file_icons": true,
@@ -119,7 +125,10 @@
         },
         // css
         "CSS": {
-            "formatter": "prettier"
+            "formatter": "prettier",
+            "code_actions_on_format": {
+                "source.fixAll.stylelint": true
+            }
         },
         // md
         "Markdown": {
@@ -150,6 +159,14 @@
             "settings": {
                 "codeActionOnSave": {
                     "rules": ["import/order"]
+                }
+            }
+        },
+        // stylelint
+        "stylelint-lsp": {
+            "settings": {
+                "stylelint": {
+                    "packageManager": "pnpm"
                 }
             }
         },
