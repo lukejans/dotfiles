@@ -44,7 +44,7 @@ FPATH="${HOME}/.local/share/zsh/completions:${FPATH}"
 autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
-# ps1 (prompt)
+# --- command prompt
 # enable vcs_info
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
@@ -57,7 +57,7 @@ precmd() {
 setopt PROMPT_SUBST
 
 # build prompt: user@host in colours, then cwd, git‑branch, then $
-PS1='%n%F{red}@%f%m ''%F{blue}%c%f''%F{red}${vcs_info_msg_0_}%f%F{green} $%f '
+PS1='%B%n%F{red}@%f%m ''%F{blue}%c%f''%F{red}${vcs_info_msg_0_}%f%F{green} $%f %b'
 
 # --- custom aliases & functions
 source "${HOME}/.dotfiles/zsh/aliases.zsh"
