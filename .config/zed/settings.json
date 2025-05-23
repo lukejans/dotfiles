@@ -115,6 +115,10 @@
                 "source.organizeImports": true
             }
         },
+        // rb
+        "Ruby": {
+            "language_servers": ["solargraph", "rubocop", "!ruby-lsp", "..."]
+        },
         // html
         "HTML": {
             "formatter": {
@@ -160,6 +164,13 @@
                 "codeActionOnSave": {
                     "rules": ["import/order"]
                 }
+            }
+        },
+        // ruby
+        "solargraph": {
+            "initialization_options": {
+                "diagnostics": true,
+                "formatting": true
             }
         },
         // stylelint

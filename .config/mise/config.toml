@@ -1,6 +1,7 @@
 [tools]
 java = "23"
 node = "lts"
+ruby = "latest"
 rust = "latest"
 
 [settings]
