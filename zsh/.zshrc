@@ -1,4 +1,5 @@
 # shellcheck disable=SC1091
+
 # --- set interactive options
 # don't add duplicate commands to the history
 setopt HIST_IGNORE_DUPS
@@ -37,19 +38,15 @@ autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
 # --- command prompt
-# enable vcs_info
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' formats ':(%b)'
-
 precmd() {
     vcs_info
 }
-
 setopt PROMPT_SUBST
-
-# build prompt: user@host in colours, then cwd, git‑branch, then $
-PS1='%B%n%F{red}@%f%m ''%F{blue}%c%f''%F{red}${vcs_info_msg_0_}%f%F{green} $%f %b'
+# shellcheck disable=SC2154
+PS1='%B%n%F{red}@%f%m %F{blue}%c%f%F{red}${vcs_info_msg_0_}%f%F{green} $%f %b'
 
 # --- custom aliases & functions
 source "${HOME}/.dotfiles/zsh/aliases.zsh"
