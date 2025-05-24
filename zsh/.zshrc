@@ -21,10 +21,6 @@ export TMUX_DIR="${XDG_CONFIG_HOME}/tmux"
 export TMUX_CONF="${TMUX_DIR}/tmux.conf"
 export TMUX_CONF_LOCAL="${TMUX_DIR}/tmux.conf.local"
 
-# starship
-export STARSHIP_CONFIG="${HOME}/.config/starship/starship.toml"
-export STARSHIP_CACHE="${HOME}/.cache/starship"
-
 # --- tab completions
 # completions that homebrew manages
 if type brew &>/dev/null; then
