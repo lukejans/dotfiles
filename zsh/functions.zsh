@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-#  ______
-# | $_   |    lukejans
-# |______|  functions.zsh
-
 # create a new directory and enter it
 mkd() {
     mkdir -p "${@}" && cd "${_}"

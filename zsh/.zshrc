@@ -1,8 +1,4 @@
-# shellcheck shell=zsh
-#  ______
-# | $_   |  lukejans
-# |______|   .zshrc
-
+# shellcheck disable=SC1091
 # --- set interactive options
 # don't add duplicate commands to the history
 setopt HIST_IGNORE_DUPS

@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-#  ______
-# | $_   |   lukejans
-# |______|  aliases.zsh
-
 # cd
 alias dwn="cd ~/Downloads"
 alias dsk="cd ~/Desktop"

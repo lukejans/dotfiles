@@ -1,8 +1,3 @@
-# shellcheck shell=zsh
-#  ______
-# | $_   |  lukejans
-# |______| .zprofile
-
 # --- homebrew
 # ensure homebrew installed binaries are found
 # see: https://brew.sh
