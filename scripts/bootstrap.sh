@@ -243,8 +243,25 @@
     # ---
     install_brew_packages() {
         print_info "Installing Homebrew packages from Brewfile..."
+
+        # check if the full xcode toolchain was already installed. This is
+        # just looking to see if metal is installed which is only installed
+        # with the ide and not with the command line tools. This is here
+        # because we must agree to the license on a fresh install.
+        local agree_to_license=false
+        if ! xcrun --find metal >/dev/null 2>&1; then
+            # metal was not found so we will have to agree to the xcode ide
+            # license after homebrew installs it.
+            agree_to_license=true
+        fi
+
         # install all packages if system dependencies are not up to date
         brew bundle check --global || brew bundle install --global
+
+        # agree to the xcode license after it's installed
+        if ${agree_to_license}; then
+            sudo xcodebuild -license accept
+        fi
 
         # display a summary of installed packages
         print_info "Summarizing installed packages..."
@@ -380,7 +397,6 @@
         done &>/dev/null &
 
         # run installation steps
-
         setup_homebrew
         clone_and_symlink_dotfiles
         install_brew_packages
