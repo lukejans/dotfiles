@@ -31,7 +31,6 @@ if type brew &>/dev/null; then
     FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
 fi
 # personal completions
-FPATH="${HOME}/.dotfiles/zsh/completions:${FPATH}"
 FPATH="${HOME}/.local/share/zsh/completions:${FPATH}"
 # setup zsh completions
 autoload -Uz compinit # enable completions system
