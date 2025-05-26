@@ -15,7 +15,7 @@ font-thicken-strength = 200
 
 # --- compatibility
 shell-integration = detect
-shell-integration-features = no-cursor
+shell-integration-features = no-cursor, sudo, title
 
 # --- cursor
 cursor-style = block
