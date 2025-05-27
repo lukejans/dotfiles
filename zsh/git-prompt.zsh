@@ -62,6 +62,8 @@ git_prompt_info() {
     fi
 
     # add status indicators
-    git_info+="[$status_indicators]"
+    if [[ -n "$status_indicators" ]]; then
+        git_info+="[$status_indicators]"
+    fi
     echo ":($git_info)"
 }
