@@ -36,20 +36,10 @@ FPATH="${HOME}/.local/share/zsh/completions:${FPATH}"
 autoload -Uz compinit # enable completions system
 compinit              # initialize all completions on $FPATH
 
-# --- command prompt
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:git:*' formats ':(%b)'
-precmd() {
-    vcs_info
-}
-setopt PROMPT_SUBST
-# shellcheck disable=SC2154
-PS1='%B%n%F{red}@%f%m %F{blue}%c%f%F{red}${vcs_info_msg_0_}%f%F{green} $%f %b'
-
 # --- custom aliases & functions
 source "${HOME}/.dotfiles/zsh/aliases.zsh"
 source "${HOME}/.dotfiles/zsh/functions.zsh"
+source "${HOME}/.dotfiles/zsh/git-prompt.zsh"
 
 # --- load plugins
 eval "$(fzf --zsh)"
@@ -60,3 +50,7 @@ eval "$(mise activate zsh)"
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# --- command prompt
+setopt PROMPT_SUBST
+PS1='%B%n%F{red}@%f%m %F{blue}%c%f%F{red}$(git_prompt_info)%f%F{green} $%f %b'
