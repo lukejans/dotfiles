@@ -9,7 +9,7 @@ theme = light:jans-light, dark:jans-dark
 # --- font
 font-family = Zed Plex Mono
 font-family = Zed Mono
-font-size = 12
+font-size = 14
 font-thicken = true
 font-thicken-strength = 200
 
