@@ -26,7 +26,6 @@
     "tab_size": 4,
     "buffer_font_family": "Zed Plex Mono",
     "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
-    "extend_comment_on_newline": false,
     "minimap": {
         "show": "always"
     },
