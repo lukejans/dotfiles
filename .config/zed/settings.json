@@ -1,16 +1,5 @@
-//  ______
-// | z.rs |  lukejans zed
-// |______|  settings.json
-//
-// for information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// to see all of Zed's default settings without changing your
-// custom settings, run `zed: open default settings` from the
-// command palette (cmd-shift-p / ctrl-shift-p)
 {
     // --- ui
-    "cursor_shape": "block",
     "theme": {
         "mode": "system",
         "light": "One Light",
@@ -24,6 +13,7 @@
 
     // --- editor
     "tab_size": 4,
+    "cursor_shape": "block",
     "buffer_font_family": "Zed Plex Mono",
     "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
     "minimap": {
@@ -49,6 +39,7 @@
 
     // --- ai
     "agent": {
+        "default_profile": "ask",
         "always_allow_tool_actions": true,
         "default_model": {
             "provider": "copilot_chat",
