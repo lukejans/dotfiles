@@ -30,8 +30,10 @@ alias grep='grep --color=always'
 alias py='python3'
 alias pip='pip3'
 
-# java
-alias jsweep='find . -name "*.class" -type f -exec trash {} \;'
+# find and delete
+alias java_sweep='find . -name "*.class" -type f -delete'
+alias node_sweep="find . -type d -name node_modules -prune -exec rm -rf '{}' \;"
+alias ds_sweep='find . -name ".DS_Store" -type f -delete'
 
 # because im used to neofetch
 alias neofetch='fastfetch'
