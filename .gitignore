@@ -8,14 +8,16 @@
 .ruby-lsp/
 github-copilot/
 
-# command line tools
-.config/gh/
-.config/btop/
-.config/htop/
-.config/git/config.local
 
 # used for testing scripts
 testing/
 
 # used for installation state
 .state/
+
+# CONFIG KEEP #
+.config/gh/
+.config/btop/
+.config/htop/
+.config/git/config.local
+.config/swiftpm/
