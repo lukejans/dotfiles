@@ -40,7 +40,7 @@
     // --- ai
     "agent": {
         "default_profile": "ask",
-        "always_allow_tool_actions": true,
+        "always_allow_tool_actions": false,
         "default_model": {
             "provider": "copilot_chat",
             "model": "claude-sonnet-4"
