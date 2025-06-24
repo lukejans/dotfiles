@@ -53,4 +53,5 @@ cask "raspberry-pi-imager"
 cask "utm"
 cask "zed"
 cask "zen"
+mas "Equinox", id: 1591510203
 mas "Xcode", id: 497799835
