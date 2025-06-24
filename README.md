@@ -1,28 +1,25 @@
-# dotfiles
+<div align="center">
+    <h1>dotfiles</h1>
+    <pre>
+          .:'
+      __ :'__
+   .'`__`-'__``.
+  :__________.-'
+  :_________:
+   :_________`-;
+    `.__.-.__.'
 
+MacOS development
+environment setup
+</pre>
+
+</div>
 > Configuration files and scripts for setting up a MacOS development environment.
-
-```txt
-        .:'       lukejans@ostrich-m3
-    __ :'__       -------------------
- .'`__`-'__``.    OS: macOS Sequoia 15.4.1 arm64
-:__________.-'    Host: MacBook Air (13-inch, M3, 2024)
-:_________:       Kernel: Darwin 24.4.0
- :_________`-;    Shell: zsh 5.9
-  `.__.-.__.'     DE: Aqua
-                  WM: Quartz Compositor 278.4.7
-                  Terminal: ghostty 1.1.3
-                  CPU: Apple M3 (8) @ 4.06 GHz
-                  GPU: Apple M3 (10) @ 1.34 GHz [Integrated]
-                  Memory: 16.00 GiB
-                  Disk (/): 460.43 GiB - apfs
-                  Locale: en_US.UTF-8
-```
 
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/scripts/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lukejans/dotfiles/main/bootstrap.sh | bash
 ```
 
 > [!note]
