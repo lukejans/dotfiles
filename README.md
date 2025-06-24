@@ -1,20 +1,17 @@
 <div align="center">
-    <h1>dotfiles</h1>
     <pre>
-          .:'
-      __ :'__
-   .'`__`-'__``.
-  :__________.-'
-  :_________:
-   :_________`-;
-    `.__.-.__.'
-
+    .:&#039;
+__ :&#039;__
+.&#039;`__`-&#039;__``.
+:__________.-&#039; 
+:_________:    
+:_________`-;
+`.__.-.__.&#039;
+        <br>
 MacOS development
 environment setup
-</pre>
-
+    </pre>
 </div>
-> Configuration files and scripts for setting up a MacOS development environment.
 
 ## Install
 
