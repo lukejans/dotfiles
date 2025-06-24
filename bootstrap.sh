@@ -286,14 +286,122 @@
     # ---
     # macOS
     # ---
-    setup_macos() {
-        # set defaults and system preferences
-        print_info "Setting MacOS system preferences..."
-        sudo bash "${DOTFILES_DIR}/scripts/macos.sh"
-        printf "MacOS system preferences set.\n"
+    setup_macos_wallpaper() {
+        # set wallpaper to mac-bg1.jpg
+        sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${HOME}/.dotfiles/desktop/images/mac-bg1.jpg\""
+    }
 
-        # add fonts to the font book
+    apply_macos_defaults() {
+        print_info "Setting MacOS system preferences..."
+        # close any open System Preferences panes, to prevent them from
+        # overriding settings we’re about to change
+        osascript -e 'tell application "System Preferences" to quit'
+        # save to disk (not to iCloud) by default
+        defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+        # automatically quit printer app once the print jobs complete
+        defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+        # enable auto-hide
+        defaults write com.apple.dock autohide -bool "true"
+        # change the dock size
+        defaults write com.apple.dock tilesize -int "36"
+        # change hide / show animation speed
+        defaults write com.apple.dock autohide-time-modifier -float "0.45"
+        # don't show recent apps
+        defaults write com.apple.dock show-recents -bool "false"
+        # change the animation to scale
+        defaults write com.apple.dock mineffect -string "scale"
+        # only show active apps
+        defaults write com.apple.dock static-only -bool "true"
+        # speed up Mission Control animations
+        defaults write com.apple.dock expose-animation-duration -float 0.1
+        # enable grouping of applications in Mission Control
+        defaults write com.apple.dock expose-group-apps -bool "true"
+        # don't show indicator lights for open applications in the dock
+        defaults write com.apple.dock show-process-indicators -bool false
+        # disable all hot corners
+        # top left screen corner -> do nothing
+        defaults write com.apple.dock wvous-tl-corner -int 1
+        defaults write com.apple.dock wvous-tl-modifier -int 0
+        # top right screen corner -> do nothing
+        defaults write com.apple.dock wvous-tr-corner -int 1
+        defaults write com.apple.dock wvous-tr-modifier -int 0
+        # bottom left screen corner -> do nothing
+        defaults write com.apple.dock wvous-bl-corner -int 1
+        defaults write com.apple.dock wvous-bl-modifier -int 0
+        # bottom right screen corner -> do nothing
+        defaults write com.apple.dock wvous-br-corner -int 1
+        defaults write com.apple.dock wvous-br-modifier -int 0
+        # show file extensions
+        defaults write NSGlobalDomain AppleShowAllExtensions -bool "true"
+        # show the file path bar
+        defaults write com.apple.finder ShowPathbar -bool "true"
+        # show status bar
+        defaults write com.apple.finder ShowStatusBar -bool "true"
+        # hide external disks / servers from showing on desktop
+        defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool "false"
+        defaults write com.apple.finder ShowHardDrivesOnDesktop -bool "false"
+        defaults write com.apple.finder ShowMountedServersOnDesktop -bool "false"
+        defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool "false"
+        # set the file view to column
+        defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+        # empty bin after 30 days
+        defaults write com.apple.finder FXRemoveOldTrashItems -bool "true"
+        # disable the warning before emptying the trash
+        defaults write com.apple.finder WarnOnEmptyTrash -bool false
+        # avoid creating .DS_Store files on network or USB volumes
+        defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+        defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+        # shorten the delay for spring loading
+        defaults write NSGlobalDomain com.apple.springing.delay -float 0.15
+        # keep folders on top when sorting by name
+        defaults write com.apple.finder _FXSortFoldersFirst -bool true
+        # when performing a search, search the current folder by default
+        defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+        # show the ~/Library folder in finder
+        sudo chflags nohidden ~/Library
+        # show the /Volumes folder in finder
+        sudo chflags nohidden /Volumes
+        # set flashing date time separators
+        defaults write com.apple.menuextra.clock FlashDateSeparators -bool "true"
+        # set movement speed
+        defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
+        # disable click to show desktop
+        defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool "false"
+        # enable tap to click for this user and for the login screen
+        defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+        defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+        defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+        # enable full keyboard access for all controls (tab selection)
+        defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+        # keyboard repeat
+        defaults write NSGlobalDomain KeyRepeat -int 1
+        defaults write NSGlobalDomain InitialKeyRepeat -int 10
+        # require password immediately after sleep or screen saver begins
+        defaults write com.apple.screensaver askForPassword -int 1
+        defaults write com.apple.screensaver askForPasswordDelay -int 0
+        # enable subpixel font rendering on non-Apple LCDs
+        defaults write NSGlobalDomain AppleFontSmoothing -int 1
+        # enable HiDPI display modes
+        sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
+        # save screenshots to ~/Pictures/screen-captures
+        mkdir -p "${HOME}/Pictures/screen-captures"
+        defaults write com.apple.screencapture location -string "${HOME}/Pictures/screen-captures"
+        # save screenshots in PNG format
+        defaults write com.apple.screencapture type -string "png"
+        # disable automatic emoji substitution in Messages.app
+        defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
+        # prevent time machine from prompting to use new hard drives as backup volume
+        defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+        # enable Secure Keyboard Entry in Terminal.app
+        defaults write com.apple.terminal SecureKeyboardEntry -bool true
+        # disable the annoying line marks in Terminal.app
+        defaults write com.apple.Terminal ShowLineMarks -int 0
+        printf_success "MacOS system preferences set.\n"
+    }
+
+    setup_macos_fonts() {
         print_info "Adding fonts to the font book..."
+
         if [ ! -d "${HOME}/Library/Fonts" ]; then
             printf "No fonts directory found.\n"
             mkdir -p "${HOME}/Library/Fonts"
