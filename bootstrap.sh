@@ -278,6 +278,10 @@
         (
             cd "${HOME}"
             mise install
+
+            # additional tool versions that might not be in mise.toml
+            mise install java@liberica-javafx-21
+            mise install node@latest
         )
         print_success "Mise packages installed successfully."
     }
