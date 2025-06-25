@@ -417,6 +417,10 @@
 
     # ---
     # zen browser
+    #
+    # this section just connects a custom stylesheet to zen
+    # browser. Note that this might need to be adjusted in the
+    # future as zen is still in beta.
     # ---
     setup_zen_browser() {
         # this function will setup the zen browser custom css
