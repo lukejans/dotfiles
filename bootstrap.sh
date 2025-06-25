@@ -170,7 +170,7 @@
     # ---
     # clone and symlink configuration files
     # ---
-    clone_and_symlink_dotfiles() {
+    setup_dotfiles() {
         print_info "Cloning the dotfiles repository..."
 
         # if git is not installed, install it so we can clone the dotfiles repo
@@ -517,7 +517,7 @@
 
         # run installation steps
         setup_homebrew
-        clone_and_symlink_dotfiles
+        setup_dotfiles
         install_brew_packages
         install_mise_packages
         ${do_minimal_install} || {
