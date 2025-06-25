@@ -64,7 +64,6 @@
 
         # capture the users response from
         read -r response </dev/tty
-        echo
 
         # check if the confirmation was positive by using a regex
         # that looks for a single "y" or "Y" character.
