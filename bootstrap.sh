@@ -530,16 +530,6 @@
     # main function
     # ---
     main() {
-        # a minimal install will only clone and link dotfiles then
-        # install and update packages.
-        local do_minimal_install=false
-
-        # ask the user if they want to do a full install
-        if ! get_confirmation "Do you want to do a full install"; then
-            # if the user doesn't want a full install do a minimal install
-            do_minimal_install=true
-        fi
-
         # confirm installation
         if ! get_confirmation "Proceed with installation"; then
             # abort install
@@ -560,15 +550,38 @@
             # discard all output and run as a background process
         done &>/dev/null &
 
-        # run installation steps
+        # allow the user to choose what to install. Note that some of
+        # these steps are not optional and are dependencies.
+        do_defaults=false
+        do_fonts=false
+        do_wallpaper=false
+        do_zen_css=false
+
+        get_confirmation "Setup macOS defaults" && do_defaults=true
+        get_confirmation "Setup macOS fonts" && do_fonts=true
+        get_confirmation "Setup macOS wallpaper" && do_wallpaper=true
+        if [[ "${do_wallpaper}" == "true" ]]; then
+            setup_macos_wallpaper
+        fi
+        get_confirmation "Setup Zen Browser Custom CSS" && do_zen_css=true
+
+        # run dependency installation steps
         setup_homebrew
         setup_dotfiles
         install_brew_packages
         install_mise_packages
-        ${do_minimal_install} || {
-            setup_macos
+
+        # run optional installation steps
+        if [[ "${do_defaults}" == "true" ]]; then
+            setup_macos_defaults
+        fi
+        if [[ "${do_fonts}" == "true" ]]; then
+            setup_macos_fonts
+        fi
+        if [[ "${do_zen_css}" == "true" ]]; then
             setup_zen_browser
-        }
+        fi
+
         restart_system
     }
 
