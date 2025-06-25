@@ -279,7 +279,7 @@
             cd "${HOME}"
             mise install
         )
-        print_success "mise packages installed successfully."
+        print_success "Mise packages installed successfully."
     }
 
     # ---
@@ -395,7 +395,7 @@
         defaults write com.apple.terminal SecureKeyboardEntry -bool true
         # disable the annoying line marks in Terminal.app
         defaults write com.apple.Terminal ShowLineMarks -int 0
-        printf_success "MacOS system preferences set.\n"
+        print_success "MacOS system preferences set."
     }
 
     setup_macos_fonts() {
@@ -423,7 +423,7 @@
     # ---
     setup_zen_browser() {
         # this function will setup the zen browser custom css
-        print_info "setting up zen browser custom css"
+        print_info "setting up zen browser custom css..."
 
         local ZEN_DIR="${HOME}/Library/Application Support/zen"
         local ZEN_CSS="${DOTFILES_DIR}/desktop/zen-browser/userChrome.css"
@@ -444,8 +444,10 @@
             done
         else
             # zen browser may not be installed or setup properly
-            printf "Zen browser is not installed so %s was not symlinked\n" "$(basename "${ZEN_CSS}")"
+            print_error "Zen browser is not installed so $(basename "${ZEN_CSS}") was not symlinked!"
         fi
+
+        print_success "Zen browser setup complete."
     }
 
     # ---
@@ -496,9 +498,9 @@
         fi
 
         # confirm installation
-        if ! get_confirmation "Continue"; then
+        if ! get_confirmation "Proceed with installation"; then
             # abort install
-            print_error "Installation aborted."
+            print_error "Installation aborted!"
             exit 0
         fi
 
