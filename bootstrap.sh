@@ -511,7 +511,7 @@
                 milliseconds=$((i % 1000))
 
                 # format to show as X.XX (seconds.milliseconds)
-                printf "\rRestarting in %d.%02d..." "$seconds" "$((milliseconds / 10))"
+                printf "\rRestarting in %d.%02d..." "${seconds}" "$((milliseconds / 10))"
 
                 # sleep for 10ms (the gap between updates)
                 sleep 0.01
