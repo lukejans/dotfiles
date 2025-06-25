@@ -63,8 +63,7 @@
         printf "%b?%b %s %b(y/N)%b: " "${cc}" "${ra}" "${1}" "${cc}" "${ra}"
 
         # capture the users response from
-        read -n 1 -r response </dev/tty
-        echo
+        read -r response </dev/tty
 
         # check if the confirmation was positive by using a regex
         # that looks for a single "y" or "Y" character.
@@ -171,7 +170,7 @@
     # ---
     # clone and symlink configuration files
     # ---
-    clone_and_symlink_dotfiles() {
+    setup_dotfiles() {
         print_info "Cloning the dotfiles repository..."
 
         # if git is not installed, install it so we can clone the dotfiles repo
@@ -280,20 +279,171 @@
             cd "${HOME}"
             mise install
         )
-        print_success "mise packages installed successfully."
+        print_success "Mise packages installed successfully."
     }
 
     # ---
     # macOS
     # ---
-    setup_macos() {
-        # set defaults and system preferences
-        print_info "Setting MacOS system preferences..."
-        sudo bash "${DOTFILES_DIR}/scripts/macos.sh"
-        printf "MacOS system preferences set.\n"
+    setup_macos_wallpaper() {
+        print_info "Setting up macOS wallpaper..."
 
-        # add fonts to the font book
+        declare selected_wallpaper
+        declare -a wallpaper_array
+        declare -i i=0
+
+        # build the wallpaper array
+        for wallpaper in "${DOTFILES_DIR}"/desktop/wallpapers/*; do
+            # store a wallpaper name in the array
+            wallpaper_array[i]="$(basename "${wallpaper}")"
+            # increment array index
+            i=$((i + 1))
+        done
+
+        # calculate the length of the array
+        arr_length=$((${#wallpaper_array[@]} - 1))
+
+        # print the wallpapers with their corresponding index
+        for i in "${!wallpaper_array[@]}"; do
+            printf "  %b%s%b: %s\n" "${cy}" "${i}" "${ra}" "${wallpaper_array[i]}"
+        done
+
+        # wait until the user inputs a valid wallpaper index
+        valid_input=false
+        while [ "${valid_input}" = false ]; do
+            printf "Select a wallpaper index %b(0 - %s)%b: " "${cy}" "${arr_length}" "${ra}"
+
+            # get the users response
+            read -r response </dev/tty
+
+            # make sure the input is numeric
+            if [[ "${response}" =~ ^[0-9]+$ ]]; then
+                # the input is numeric so we can safely compare
+                if [[ "${response}" -le ${arr_length} && "${response}" -ge 0 ]]; then
+                    # the user selected a valid index
+                    valid_input=true
+                    selected_wallpaper="${wallpaper_array[response]}"
+                fi
+            fi
+        done
+
+        # set the wallpaper
+        local path_to_wallpaper="${DOTFILES_DIR}/desktop/wallpapers/${selected_wallpaper}"
+        sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${path_to_wallpaper}\""
+        print_success "Wallpaper set."
+    }
+
+    setup_macos_defaults() {
+        print_info "Setting MacOS system preferences..."
+        # close any open System Preferences panes, to prevent them from
+        # overriding settings we’re about to change
+        osascript -e 'tell application "System Preferences" to quit'
+        # save to disk (not to iCloud) by default
+        defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+        # automatically quit printer app once the print jobs complete
+        defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+        # enable auto-hide
+        defaults write com.apple.dock autohide -bool "true"
+        # change the dock size
+        defaults write com.apple.dock tilesize -int "36"
+        # change hide / show animation speed
+        defaults write com.apple.dock autohide-time-modifier -float "0.45"
+        # don't show recent apps
+        defaults write com.apple.dock show-recents -bool "false"
+        # change the animation to scale
+        defaults write com.apple.dock mineffect -string "scale"
+        # only show active apps
+        defaults write com.apple.dock static-only -bool "true"
+        # speed up Mission Control animations
+        defaults write com.apple.dock expose-animation-duration -float 0.1
+        # enable grouping of applications in Mission Control
+        defaults write com.apple.dock expose-group-apps -bool "true"
+        # don't show indicator lights for open applications in the dock
+        defaults write com.apple.dock show-process-indicators -bool false
+        # disable all hot corners
+        # top left screen corner -> do nothing
+        defaults write com.apple.dock wvous-tl-corner -int 1
+        defaults write com.apple.dock wvous-tl-modifier -int 0
+        # top right screen corner -> do nothing
+        defaults write com.apple.dock wvous-tr-corner -int 1
+        defaults write com.apple.dock wvous-tr-modifier -int 0
+        # bottom left screen corner -> do nothing
+        defaults write com.apple.dock wvous-bl-corner -int 1
+        defaults write com.apple.dock wvous-bl-modifier -int 0
+        # bottom right screen corner -> do nothing
+        defaults write com.apple.dock wvous-br-corner -int 1
+        defaults write com.apple.dock wvous-br-modifier -int 0
+        # show file extensions
+        defaults write NSGlobalDomain AppleShowAllExtensions -bool "true"
+        # show the file path bar
+        defaults write com.apple.finder ShowPathbar -bool "true"
+        # show status bar
+        defaults write com.apple.finder ShowStatusBar -bool "true"
+        # hide external disks / servers from showing on desktop
+        defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool "false"
+        defaults write com.apple.finder ShowHardDrivesOnDesktop -bool "false"
+        defaults write com.apple.finder ShowMountedServersOnDesktop -bool "false"
+        defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool "false"
+        # set the file view to column
+        defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+        # empty bin after 30 days
+        defaults write com.apple.finder FXRemoveOldTrashItems -bool "true"
+        # disable the warning before emptying the trash
+        defaults write com.apple.finder WarnOnEmptyTrash -bool false
+        # avoid creating .DS_Store files on network or USB volumes
+        defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+        defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+        # shorten the delay for spring loading
+        defaults write NSGlobalDomain com.apple.springing.delay -float 0.15
+        # keep folders on top when sorting by name
+        defaults write com.apple.finder _FXSortFoldersFirst -bool true
+        # when performing a search, search the current folder by default
+        defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+        # show the ~/Library folder in finder
+        sudo chflags nohidden ~/Library
+        # show the /Volumes folder in finder
+        sudo chflags nohidden /Volumes
+        # set flashing date time separators
+        defaults write com.apple.menuextra.clock FlashDateSeparators -bool "true"
+        # set movement speed
+        defaults write NSGlobalDomain com.apple.mouse.scaling -float "3"
+        # disable click to show desktop
+        defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -bool "false"
+        # enable tap to click for this user and for the login screen
+        defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+        defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+        defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+        # enable full keyboard access for all controls (tab selection)
+        defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+        # keyboard repeat
+        defaults write NSGlobalDomain KeyRepeat -int 1
+        defaults write NSGlobalDomain InitialKeyRepeat -int 10
+        # require password immediately after sleep or screen saver begins
+        defaults write com.apple.screensaver askForPassword -int 1
+        defaults write com.apple.screensaver askForPasswordDelay -int 0
+        # enable subpixel font rendering on non-Apple LCDs
+        defaults write NSGlobalDomain AppleFontSmoothing -int 1
+        # enable HiDPI display modes
+        sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
+        # save screenshots to ~/Pictures/screen-captures
+        mkdir -p "${HOME}/Pictures/screen-captures"
+        defaults write com.apple.screencapture location -string "${HOME}/Pictures/screen-captures"
+        # save screenshots in PNG format
+        defaults write com.apple.screencapture type -string "png"
+        # disable automatic emoji substitution in Messages.app
+        defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
+        # prevent time machine from prompting to use new hard drives as backup volume
+        defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+        # enable Secure Keyboard Entry in Terminal.app
+        defaults write com.apple.terminal SecureKeyboardEntry -bool true
+        # disable the annoying line marks in Terminal.app
+        defaults write com.apple.Terminal ShowLineMarks -int 0
+        print_success "MacOS system preferences set."
+    }
+
+    setup_macos_fonts() {
         print_info "Adding fonts to the font book..."
+
         if [ ! -d "${HOME}/Library/Fonts" ]; then
             printf "No fonts directory found.\n"
             mkdir -p "${HOME}/Library/Fonts"
@@ -309,10 +459,14 @@
 
     # ---
     # zen browser
+    #
+    # this section just connects a custom stylesheet to zen
+    # browser. Note that this might need to be adjusted in the
+    # future as zen is still in beta.
     # ---
     setup_zen_browser() {
         # this function will setup the zen browser custom css
-        print_info "setting up zen browser custom css"
+        print_info "setting up zen browser custom css..."
 
         local ZEN_DIR="${HOME}/Library/Application Support/zen"
         local ZEN_CSS="${DOTFILES_DIR}/desktop/zen-browser/userChrome.css"
@@ -333,8 +487,10 @@
             done
         else
             # zen browser may not be installed or setup properly
-            printf "Zen browser is not installed so %s was not symlinked\n" "$(basename "${ZEN_CSS}")"
+            print_error "Zen browser is not installed so $(basename "${ZEN_CSS}") was not symlinked!"
         fi
+
+        print_success "Zen browser setup complete."
     }
 
     # ---
@@ -347,13 +503,21 @@
         printf "  - todo: create a ~/.config/git/config.local\n"
 
         if get_confirmation "Restart your computer now"; then
-            # visual countdown
-            for i in {5..1}; do
-                printf "\r%b Restarting in %s...\n" "${arrow}" "${i}"
-                sleep 1
+            # visual countdown with milliseconds
+            # start from 3000 milliseconds (3 seconds)
+            for ((i = 3000; i >= 0; i -= 10)); do
+                # calculate seconds and milliseconds
+                seconds=$((i / 1000))
+                milliseconds=$((i % 1000))
+
+                # format to show as X.XX (seconds.milliseconds)
+                printf "\rRestarting in %d.%02d..." "${seconds}" "$((milliseconds / 10))"
+
+                # sleep for 10ms (the gap between updates)
+                sleep 0.01
             done
-            printf "\rGoodBye!\n"
-            sleep 0.25
+            printf "\r%-40s\n" "Goodbye!" # make sure the line is clear
+            sleep 0.1                     # make sure goodbye is displayed
             # execute restart
             sudo shutdown -r now
         else
@@ -366,20 +530,10 @@
     # main function
     # ---
     main() {
-        # a minimal install will only clone and link dotfiles then
-        # install and update packages.
-        local do_minimal_install=false
-
-        # ask the user if they want to do a full install
-        if ! get_confirmation "Do you want to do a full install"; then
-            # if the user doesn't want a full install do a minimal install
-            do_minimal_install=true
-        fi
-
         # confirm installation
-        if ! get_confirmation "Continue"; then
+        if ! get_confirmation "Proceed with installation"; then
             # abort install
-            print_error "Installation aborted."
+            print_error "Installation aborted!"
             exit 0
         fi
 
@@ -396,15 +550,38 @@
             # discard all output and run as a background process
         done &>/dev/null &
 
-        # run installation steps
+        # allow the user to choose what to install. Note that some of
+        # these steps are not optional and are dependencies.
+        do_defaults=false
+        do_fonts=false
+        do_wallpaper=false
+        do_zen_css=false
+
+        get_confirmation "Setup macOS defaults" && do_defaults=true
+        get_confirmation "Setup macOS fonts" && do_fonts=true
+        get_confirmation "Setup macOS wallpaper" && do_wallpaper=true
+        if [[ "${do_wallpaper}" == "true" ]]; then
+            setup_macos_wallpaper
+        fi
+        get_confirmation "Setup Zen Browser Custom CSS" && do_zen_css=true
+
+        # run dependency installation steps
         setup_homebrew
-        clone_and_symlink_dotfiles
+        setup_dotfiles
         install_brew_packages
         install_mise_packages
-        ${do_minimal_install} || {
-            setup_macos
+
+        # run optional installation steps
+        if [[ "${do_defaults}" == "true" ]]; then
+            setup_macos_defaults
+        fi
+        if [[ "${do_fonts}" == "true" ]]; then
+            setup_macos_fonts
+        fi
+        if [[ "${do_zen_css}" == "true" ]]; then
             setup_zen_browser
-        }
+        fi
+
         restart_system
     }
 
