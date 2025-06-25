@@ -550,21 +550,6 @@
             # discard all output and run as a background process
         done &>/dev/null &
 
-        # allow the user to choose what to install. Note that some of
-        # these steps are not optional and are dependencies.
-        do_defaults=false
-        do_fonts=false
-        do_wallpaper=false
-        do_zen_css=false
-
-        get_confirmation "Setup macOS defaults" && do_defaults=true
-        get_confirmation "Setup macOS fonts" && do_fonts=true
-        get_confirmation "Setup macOS wallpaper" && do_wallpaper=true
-        if [[ "${do_wallpaper}" == "true" ]]; then
-            setup_macos_wallpaper
-        fi
-        get_confirmation "Setup Zen Browser Custom CSS" && do_zen_css=true
-
         # run dependency installation steps
         setup_homebrew
         setup_dotfiles
@@ -572,15 +557,10 @@
         install_mise_packages
 
         # run optional installation steps
-        if [[ "${do_defaults}" == "true" ]]; then
-            setup_macos_defaults
-        fi
-        if [[ "${do_fonts}" == "true" ]]; then
-            setup_macos_fonts
-        fi
-        if [[ "${do_zen_css}" == "true" ]]; then
-            setup_zen_browser
-        fi
+        get_confirmation "Setup macOS wallpaper" && setup_macos_wallpaper
+        get_confirmation "Setup macOS defaults" && setup_macos_defaults
+        get_confirmation "Setup macOS fonts" && setup_macos_fonts
+        get_confirmation "Setup Zen Browser Custom CSS" && setup_zen_browser
 
         restart_system
     }
