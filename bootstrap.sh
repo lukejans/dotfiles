@@ -63,7 +63,7 @@
         printf "%b?%b %s %b(y/N)%b: " "${cc}" "${ra}" "${1}" "${cc}" "${ra}"
 
         # capture the users response from
-        read -n 1 -r response </dev/tty
+        read -r response </dev/tty
         echo
 
         # check if the confirmation was positive by using a regex
