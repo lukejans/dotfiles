@@ -290,7 +290,7 @@
         sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${HOME}/.dotfiles/desktop/images/mac-bg1.jpg\""
     }
 
-    apply_macos_defaults() {
+    setup_macos_defaults() {
         print_info "Setting MacOS system preferences..."
         # close any open System Preferences panes, to prevent them from
         # overriding settings we’re about to change
