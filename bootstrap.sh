@@ -459,13 +459,21 @@
         printf "  - todo: create a ~/.config/git/config.local\n"
 
         if get_confirmation "Restart your computer now"; then
-            # visual countdown
-            for i in {5..1}; do
-                printf "\r%b Restarting in %s...\n" "${arrow}" "${i}"
-                sleep 1
+            # visual countdown with milliseconds
+            # start from 3000 milliseconds (3 seconds)
+            for ((i = 3000; i >= 0; i -= 10)); do
+                # calculate seconds and milliseconds
+                seconds=$((i / 1000))
+                milliseconds=$((i % 1000))
+
+                # format to show as X.XX (seconds.milliseconds)
+                printf "\rRestarting in %d.%02d..." "$seconds" "$((milliseconds / 10))"
+
+                # sleep for 10ms (the gap between updates)
+                sleep 0.01
             done
-            printf "\rGoodBye!\n"
-            sleep 0.25
+            printf "\r%-40s\n" "Goodbye!" # make sure the line is clear
+            sleep 0.1                     # make sure goodbye is displayed
             # execute restart
             sudo shutdown -r now
         else
