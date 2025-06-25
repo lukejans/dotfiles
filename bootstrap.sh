@@ -286,8 +286,51 @@
     # macOS
     # ---
     setup_macos_wallpaper() {
-        # set wallpaper to mac-bg1.jpg
-        sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${HOME}/.dotfiles/desktop/images/mac-bg1.jpg\""
+        print_info "Setting up macOS wallpaper..."
+
+        declare selected_wallpaper
+        declare -a wallpaper_array
+        declare -i i=0
+
+        # build the wallpaper array
+        for wallpaper in "${DOTFILES_DIR}"/desktop/wallpapers/*; do
+            # store a wallpaper name in the array
+            wallpaper_array[i]="$(basename "${wallpaper}")"
+            # increment array index
+            i=$((i + 1))
+        done
+
+        # calculate the length of the array
+        arr_length=$((${#wallpaper_array[@]} - 1))
+
+        # print the wallpapers with their corresponding index
+        for i in "${!wallpaper_array[@]}"; do
+            printf "  %b%s%b: %s\n" "${cy}" "${i}" "${ra}" "${wallpaper_array[i]}"
+        done
+
+        # wait until the user inputs a valid wallpaper index
+        valid_input=false
+        while [ "${valid_input}" = false ]; do
+            printf "Select a wallpaper index %b(0 - %s)%b: " "${cy}" "${arr_length}" "${ra}"
+
+            # get the users response
+            read -r response </dev/tty
+
+            # make sure the input is numeric
+            if [[ "${response}" =~ ^[0-9]+$ ]]; then
+                # the input is numeric so we can safely compare
+                if [[ "${response}" -le ${arr_length} && "${response}" -ge 0 ]]; then
+                    # the user selected a valid index
+                    valid_input=true
+                    selected_wallpaper="${wallpaper_array[response]}"
+                fi
+            fi
+        done
+
+        # set the wallpaper
+        local path_to_wallpaper="${DOTFILES_DIR}/desktop/wallpapers/${selected_wallpaper}"
+        sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${path_to_wallpaper}\""
+        print_success "Wallpaper set."
     }
 
     setup_macos_defaults() {
