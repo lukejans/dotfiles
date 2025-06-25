@@ -1,6 +1,6 @@
 [tools]
 java = "23"
-node = "lts"
+node = { version = "lts", postinstall = "corepack enable" }
 ruby = "latest"
 rust = "latest"
 
