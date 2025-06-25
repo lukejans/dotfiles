@@ -17,7 +17,8 @@
     "buffer_font_family": "Zed Plex Mono",
     "buffer_font_fallbacks": ["Zed Mono", "JetBrainsMono Nerd Font"],
     "minimap": {
-        "show": "always"
+        "show": "always",
+        "display_in": "active_editor"
     },
 
     // --- terminal
