@@ -2,22 +2,19 @@
 .DS_Store
 
 # editor
+.ruby-lsp
+
+# used for testing scripts
+testing
+
+# sync
+.config/btop
+.config/gh
+.config/git/config.local
+.config/github-copilot
+.config/htop
+.config/swiftpm
 .config/zed/conversations
 .config/zed/prompts
 .config/zed/themes
-.ruby-lsp/
-github-copilot/
-
-
-# used for testing scripts
-testing/
-
-# used for installation state
-.state/
-
-# CONFIG KEEP #
-.config/gh/
-.config/btop/
-.config/htop/
-.config/git/config.local
-.config/swiftpm/
+.config/karabiner/automatic_backups
