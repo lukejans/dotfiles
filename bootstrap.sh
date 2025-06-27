@@ -22,6 +22,7 @@
     # ---
     export XDG_CONFIG_HOME="${HOME}/.config"
     declare -r DOTFILES_DIR="${HOME}/.dotfiles"
+    declare DOTFILES_BACKUP_DIR
     declare -r REPO_URL="https://github.com/lukejans/dotfiles.git"
 
     # colors
@@ -133,7 +134,6 @@
 
     # ---
     # homebrew
-    # note: homebrew will install xcode command line tools if needed
     # ---
     setup_homebrew() {
         print_info "Checking for a homebrew installation..."
@@ -171,7 +171,7 @@
     # ---
     # clone and symlink configuration files
     # ---
-    setup_dotfiles() {
+    clone_repo() {
         print_info "Cloning the dotfiles repository..."
 
         # if git is not installed, install it so we can clone the dotfiles repo
@@ -188,26 +188,31 @@
             # change in the future but this seemed to make the most sense due to
             # the "$DOTFILES_DIR" potentially not being a git dir and also might
             # have uncommitted changes.
-            local dotfiles_backup
-            dotfiles_backup=$(backup "${DOTFILES_DIR}")
+            DOTFILES_BACKUP_DIR=$(backup "${DOTFILES_DIR}")
         fi
 
         # clone the repo
         git clone "${REPO_URL}" "${DOTFILES_DIR}"
 
-        # copy sensitive files from the gitignore that are present under the `#sync`
-        # section. These files might not exist in the backup depending on if the
-        # backup is an old version of this repo or not.
-        if [[ -n "${dotfiles_backup:-}" ]]; then
+        print_success "Dotfiles repository successfully cloned."
+    }
+
+    setup_dotfiles() {
+        print_info "Linking dotfiles..."
+
+        # if the DOTFILES_BACKUP_DIR variable is set and has a value then attempt
+        # to backup files listed under the "# sync" header in .gitignore.
+        if [[ -n "${DOTFILES_BACKUP_DIR:-}" ]]; then
+            # the repos gitignore file
             local gitignore_file="${HOME}/.dotfiles/.gitignore"
 
-            # get the line number of the `# sync` section
+            # get the line number of the `# sync` header
             line_num=$(grep -n "^# sync" "${gitignore_file}" | cut -d ":" -f 1)
 
             # loop over the files / directories present in that section to copy
             for item in $(tail -n +$((line_num + 1)) "${gitignore_file}"); do
 
-                local source="${dotfiles_backup}/${item}"
+                local source="${DOTFILES_BACKUP_DIR}/${item}"
                 local dest="${DOTFILES_DIR}/${item}"
 
                 if [ -e "${source}" ]; then
@@ -220,34 +225,30 @@
 
         # find all shell configuration files which is any file that start with
         # only a single dot inside of the shell and zsh directories.
-        for item in \
+        for item_src in \
             "${HOME}"/.dotfiles/zsh/.*[!.]* \
             "${HOME}"/.dotfiles/sh/.*[!.]* \
             "${HOME}"/.dotfiles/.config; do
 
-            # by existing item I really mean a file that might be in the home
-            # directory with the same name as the item being linked.
-            existing_item="${HOME}/$(basename "${item}")"
+            # the location a dotfile will be linked to
+            item_dest="${HOME}/$(basename "${item_src}")"
 
-            # back up existing configuration files
-            if [[ -e "${existing_item}" ]]; then
-                # if the file found is a symlink just delete the link because the
-                # file is either from a previous link from this repo or from a users
-                # setup in which we will just leave it alone.
-                if [[ -L "${existing_item}" ]]; then
-                    rm "${existing_item}"
+            # if the destination file already exists, create a backup
+            if [[ -e "${item_dest}" ]]; then
+                # if the destination is a symlink just remove the link
+                if [[ -L "${item_dest}" ]]; then
+                    rm "${item_dest}"
                 else
                     # the file is not a symlink so make a backup
-                    backup "${existing_item}" >/dev/null
+                    backup "${item_dest}" >/dev/null
                 fi
             fi
 
-            # link new shell file
-            ln -sf "${item}" "${existing_item}"
-            printf "Linked %b'%s'%b to %b'%s'%b.\n" "${cy}" "${item}" "${ra}" "${cy}" "${existing_item}" "${ra}"
+            # link the source item
+            ln -sf "${item_src}" "${item_dest}"
         done
 
-        print_success "Cloned and linked all configuration files."
+        print_success "Linked all configuration files."
     }
 
     # ---
@@ -302,10 +303,19 @@
     # ---
     # macOS
     # ---
-    setup_macos_wallpaper() {
+    declare SELECTED_WALLPAPER
+
+    set_mac_wallpaper() {
+        local path_to_wallpaper="${DOTFILES_DIR}/desktop/wallpapers/${SELECTED_WALLPAPER}"
+        # set the wallpaper
+        sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${path_to_wallpaper}\""
+
+        print_success "Wallpaper set."
+    }
+
+    choose_mac_wallpaper() {
         print_info "Setting up macOS wallpaper..."
 
-        declare selected_wallpaper
         declare -a wallpaper_array
         declare -i i=0
 
@@ -339,15 +349,10 @@
                 if [[ "${response}" -le ${arr_length} && "${response}" -ge 0 ]]; then
                     # the user selected a valid index
                     valid_input=true
-                    selected_wallpaper="${wallpaper_array[response]}"
+                    SELECTED_WALLPAPER="${wallpaper_array[response]}"
                 fi
             fi
         done
-
-        # set the wallpaper
-        local path_to_wallpaper="${DOTFILES_DIR}/desktop/wallpapers/${selected_wallpaper}"
-        sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${path_to_wallpaper}\""
-        print_success "Wallpaper set."
     }
 
     setup_macos_defaults() {
@@ -515,9 +520,6 @@
     # ---
     restart_system() {
         printf "%bInstallation complete!%b\n" "${cg}" "${ra}"
-        printf "  - warn: system restart required\n"
-        printf "  - todo: setup ssh keys\n"
-        printf "  - todo: create a ~/.config/git/config.local\n"
 
         if get_confirmation "Restart your computer now"; then
             # visual countdown with milliseconds
@@ -555,17 +557,58 @@
         fi
 
         # validate sudo access
-        sudo -v
+        sudo -v || {
+            print_error "Failed to obtain sudo access"
+            exit 1
+        }
+
         # keep sudo alive
-        while true; do
-            # refresh sudo timestamp
-            sudo -n true
-            # wait 60 seconds before the next loop
-            sleep 60
-            # exit if the script is done running
-            kill -0 "$$" || exit
+        local main_pid=$$
+
+        {
+            while kill -0 "${main_pid}"; do
+                # refresh sudo access and break if out of the loop
+                # if we fail to refresh sudo.
+                sudo -n true || break
+                sleep 60
+            done
             # discard all output and run as a background process
-        done &>/dev/null &
+        } &>/dev/null &
+
+        local sudo_keep_alive_pid=$!
+
+        # ---
+        # script execution order
+        # ---
+
+        # clone the repo first so that when we ask the user for confirmation
+        # with other install options we can properly check and access the
+        # respective files / directories.
+        clone_repo
+
+        # ask the user what optionally installation steps they would like for
+        # the script to run but don't run them right away.
+        local do_wallpaper_setup=false
+        local do_defaults_setup=false
+        local do_fonts_setup=false
+        local do_zen_browser_setup=false
+
+        if get_confirmation "Setup macOS wallpaper"; then
+            do_wallpaper_setup=true
+            choose_mac_wallpaper
+        fi
+
+        if get_confirmation "Setup macOS defaults"; then
+            do_defaults_setup=true
+        fi
+
+        if get_confirmation "Setup macOS fonts"; then
+            do_fonts_setup=true
+        fi
+
+        if get_confirmation "Setup Zen Browser Custom CSS"; then
+            do_zen_browser_setup=true
+        fi
 
         # run dependency installation steps
         setup_homebrew
@@ -574,10 +617,16 @@
         install_mise_packages
 
         # run optional installation steps
-        get_confirmation "Setup macOS wallpaper" && setup_macos_wallpaper
-        get_confirmation "Setup macOS defaults" && setup_macos_defaults
-        get_confirmation "Setup macOS fonts" && setup_macos_fonts
-        get_confirmation "Setup Zen Browser Custom CSS" && setup_zen_browser
+        ${do_wallpaper_setup} && set_mac_wallpaper
+        ${do_defaults_setup} && setup_macos_defaults
+        ${do_fonts_setup} && setup_macos_fonts
+        ${do_zen_browser_setup} && setup_zen_browser
+
+        # clean up sudo keep alive. This background process will die
+        # when it notices the script is no longer running but this is
+        # here just to explicitly kill the process because we know the
+        # script is done running.
+        kill "${sudo_keep_alive_pid}" 2>/dev/null
 
         restart_system
     }
