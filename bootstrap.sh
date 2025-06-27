@@ -20,8 +20,9 @@
     # ---
     # constants
     # ---
-    declare -r DOTFILES_DIR="${HOME}/.dotfiles"
     export XDG_CONFIG_HOME="${HOME}/.config"
+    declare -r DOTFILES_DIR="${HOME}/.dotfiles"
+    declare -r REPO_URL="https://github.com/lukejans/dotfiles.git"
 
     # colors
     cr="\033[31;1m" # bold red
@@ -192,17 +193,29 @@
         fi
 
         # clone the repo
-        git clone https://github.com/lukejans/dotfiles.git "${DOTFILES_DIR}"
+        git clone "${REPO_URL}" "${DOTFILES_DIR}"
 
-        # sync files from the old dotfiles clone that aren't being tracked.
-        # rsync was used instead of git pull to be less invasive with auto
-        # committing a users changes and instead they can reference the backup
-        # to get their old changes. This will also ensure that any untracked
-        # files in the old repo are present in the new clone.
+        # copy sensitive files from the gitignore that are present under the `#sync`
+        # section. These files might not exist in the backup depending on if the
+        # backup is an old version of this repo or not.
         if [[ -n "${dotfiles_backup:-}" ]]; then
-            # if we have a backup of the old dotfiles, sync from there to preserve custom files
-            rsync -ahP --ignore-existing --exclude=.git "${dotfiles_backup}/" "${DOTFILES_DIR}/"
-            printf "Synced custom files from backup %b'%s'%b to %b'%s'%b.\n" "${cy}" "${dotfiles_backup}" "${ra}" "${cy}" "${DOTFILES_DIR}" "${ra}"
+            local gitignore_file="${HOME}/.dotfiles/.gitignore"
+
+            # get the line number of the `# sync` section
+            line_num=$(grep -n "^# sync" "${gitignore_file}" | cut -d ":" -f 1)
+
+            # loop over the files / directories present in that section to copy
+            for item in $(tail -n +$((line_num + 1)) "${gitignore_file}"); do
+
+                local source="${dotfiles_backup}/${item}"
+                local dest="${DOTFILES_DIR}/${item}"
+
+                if [ -e "${source}" ]; then
+                    # make sure the parent directory is present before copying
+                    mkdir -p "$(dirname "${dest}")"
+                    rsync -a "${source}" "$(dirname "${dest}")/"
+                fi
+            done
         fi
 
         # find all shell configuration files which is any file that start with
