@@ -36,7 +36,7 @@ fzo() {
     local selected_file
     selected_file=$(fz)
     if [ -n "${selected_file}" ]; then
-        ${EDITOR} "${selected_file}"
+        ${EDITOR-nano} "${selected_file}"
     fi
 }
 

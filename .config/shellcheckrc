@@ -1,11 +1,2 @@
-#      /\
-#     {.-}
-#    ;_.-'\     shellcheck
-#   {    _.}_     config
-#    \.-' /  `,
-#     \  |    /
-#      \ |  ,/
-#       \|_/
-
 # enforce use of ${} braces around variable references
 enable=require-variable-braces
