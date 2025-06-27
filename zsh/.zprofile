@@ -31,4 +31,4 @@ if [[ ":${PATH}:" != *":${PNPM_HOME}:"* ]]; then
 fi
 
 # --- personal bin
-export PATH="${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.dotfiles/bin:${PATH}"
