@@ -19,7 +19,7 @@
 	reword = commit --amend
 	# add staged files to the last commit
 	oops = commit --amend --no-edit
-  # interactive rebase with the given number of latest commits.
+    # interactive rebase with the given number of latest commits.
 	ir = "!r() { git rebase -i HEAD~$1; }; r"
 	# add and commit all changes.
 	ac = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av

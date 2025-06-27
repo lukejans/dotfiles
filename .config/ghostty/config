@@ -1,10 +1,5 @@
-#  .--.
-# | >_ |     lukejans
-# |    |  ghostty config
-# '^^^^'
-
 # --- theme
-theme = light:jans-light, dark:jans-dark
+theme = light:custom-one-light, dark:custom-one-dark
 
 # --- font
 font-family = Zed Plex Mono
