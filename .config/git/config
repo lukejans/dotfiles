@@ -1,16 +1,12 @@
 [alias]
     # view commit log abbreviated SHA, description, and history graph
 	l = log --graph --abbrev-commit --pretty=oneline
-	# same as above but with author name, commit message, and date
-	ll = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-	# list contributors with number of commits.
-	peeps = shortlog --summary --numbered
-	# view the current working tree status using the short format.
+	# list contributors summary in order of most commits
+	ppl = shortlog --summary --numbered
+	# view the current working tree status using the short format
 	s = status -s
-	# show the diff between the latest commit and the current state.
-	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
-	# `git di $number` shows the diff between the state `$number` revisions ago and the current state.
-	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+	# shows the diff from the last commit or $n revisions ago
+	d = "!f() { git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat ${1:+HEAD~$1}; }; f"
 	# pull in remote changes for the current repository and all its submodules.
 	p = pull --recurse-submodules
 	# undo the last commit
@@ -19,68 +15,82 @@
 	reword = commit --amend
 	# add staged files to the last commit
 	oops = commit --amend --no-edit
-    # interactive rebase with the given number of latest commits.
-	ir = "!r() { git rebase -i HEAD~$1; }; r"
-	# add and commit all changes.
+    # interactive rebase with $n latest commits or from root
+	ir = "!r() { if [ \"$1\" = \"root\" ]; then git rebase -i --root; else git rebase -i ${1:+HEAD~$1}; fi; }; r"
+	# add and commit all changes
 	ac = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
 	# switch to a branch, creating it if necessary.
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
-	# find branches containing commit
-	fb = "!f() { git branch -a --contains $1; }; f"
-	# find tags containing commit
-	ft = "!f() { git describe --always --contains $1; }; f"
-	# find commits by source code
+	# find branches containing commit (did this commit make it to main?)
+	fb = branch -a --contains
+	# find tags containing commit (is this commit in a release?)
+	ft = describe --always --contains
+	# find commits by source code (who added or removed this code?)
 	fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
-	# find commits by commit message
+	# find commits by commit message (what commits did this?)
 	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
 [apply]
-	# detect whitespace errors when applying a patch.
+	# fix whitespace errors when applying a patch
 	whitespace = fix
 
 [core]
 	# default editor to use
 	editor = zed --wait
-	# global git ignore file
+	# global gitignore file
 	excludesFile = ~/.config/git/gitignore_global
 	# treat whitespace as an error
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 	# speed up commands involving untracked files
 	untrackedCache = true
-	# macOS git fixes
+	# macOS fix: more reliable at detecting changes but slower
 	trustctime = false
+	# macOS fix: compensate for mac storing unicode characters via NFD
 	precomposeunicode = false
 
 [color]
+    # this is the default color scheme but safe to be explicit
 	ui = auto
 
 [commit]
+    # commits must be signed
 	gpgsign = true
 
 [diff]
+    # make a distinction between add and delete, renames, and copies
 	renames = copies
 
 [gpg]
+    # ssh is being used for gpg authentication signatures
 	format = ssh
+
+[include]
+    # include the local config file settings
+    path = ~/.config/git/config.local
 
 [init]
 	defaultBranch = main
 
 [merge]
-    # fast forward merge
-	ff = only
-	# include summaries of merged commits in newly created merge commit messages
+    # always create merge commits
+	ff = false
+	# include summaries of commits in merge message
 	log = true
 
 [pull]
+    # avoids merge commits from ff false
 	rebase = true
 
 [push]
-	# make `git push` push relevant annotated tags when pushing branches out.
+	# push relevant annotated tags
 	followTags = true
 
 [url "git@github.com:"]
+    # use ssh when pushing. This is here because I only have
+    # authentication setup for ssh but the url might be https
+    # because a public repository was cloned.
     pushInsteadOf = https://github.com/
 
-[include]
-    path = ~/.config/git/config.local
+[fetch]
+    # always prune refs to remote branches that have been deleted
+	prune = true

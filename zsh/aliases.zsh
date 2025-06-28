@@ -12,12 +12,6 @@ alias ll='ls -lFG'
 alias la='ls -lAFG'
 alias lsd="ll | grep --color=never '^d'"
 
-# git
-alias gs='git status'
-alias gp='git pull --recurse-submodules'
-alias ga='git add'
-alias gc='git commit'
-
 # cat - note that bat can safely override cat as it can
 #       detect when its being used non-interactively and
 #       so will use the default cat like behavior.
