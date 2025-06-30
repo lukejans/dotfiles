@@ -15,7 +15,7 @@
 	reword = commit --amend
 	# add staged files to the last commit
 	oops = commit --amend --no-edit
-    # interactive rebase with $n latest commits or from root
+	# interactive rebase with $n latest commits or from root
 	ir = "!r() { if [ \"$1\" = \"root\" ]; then git rebase -i --root; else git rebase -i ${1:+HEAD~$1}; fi; }; r"
 	# add and commit all changes
 	ac = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
@@ -77,9 +77,12 @@
 	# include summaries of commits in merge message
 	log = true
 
+[rebase]
+	rebaseMerges = true
+
 [pull]
     # avoids merge commits from ff false
-	rebase = true
+	rebase = merges
 
 [push]
 	# push relevant annotated tags

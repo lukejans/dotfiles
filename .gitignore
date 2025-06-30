@@ -5,11 +5,12 @@
 .ruby-lsp
 
 # used for testing scripts
-testing
+testing/testing.sh
 
 # sync
 .config/btop
 .config/gh
+.config/gh-copilot
 .config/git/config.local
 .config/github-copilot
 .config/htop
