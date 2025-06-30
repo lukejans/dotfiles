@@ -18,11 +18,16 @@
     set -euo pipefail
 
     # ---
-    # constants
+    # exports
     # ---
     export XDG_CONFIG_HOME="${HOME}/.config"
-    declare -r DOTFILES_DIR="${HOME}/.dotfiles"
+
+    # ---
+    # constants
+    # ---
+    declare REQ_SYS_RESTART=false
     declare DOTFILES_BACKUP_DIR
+    declare -r DOTFILES_DIR="${HOME}/.dotfiles"
     declare -r REPO_URL="https://github.com/lukejans/dotfiles.git"
 
     # colors
@@ -43,17 +48,24 @@
     printf "\n%b         .:'%b\n" "${cg}" "${ra}"
     printf "%b     __ :'__%b\n" "${cg}" "${ra}"
     printf "%b  .'\`__\`-'__\`\`.%b\n" "${cy}" "${ra}"
-    printf "%b :__________.-'%b  Running bootstrap.sh'\n" "${cr}" "${ra}"
+    printf "%b :__________.-'%b  Running \"bootstrap.sh\"\n" "${cr}" "${ra}"
     printf "%b :_________:%b\n" "${cm}" "${ra}"
     printf "%b  :_________\`-;%b\n" "${cm}" "${ra}"
     printf "%b   \`.__.-.__.'%b\n" "${cb}" "${ra}"
     printf "\nRequirements:\n"
-    printf "    - stable internet connection\n"
+    printf "    - signed into an Apple ID\n"
     printf "    - sudo privileges\n"
 
     # ---
     # helper functions
     # ---
+
+    # brew command wrapper to ensure that brew does not interfere
+    # with sudo time stamps. This issue is explained in detail with
+    # [issue #17912](https://github.com/Homebrew/brew/issues/17912)
+    brew() {
+        script -q /dev/null "$(command -v brew)" "$@" | sed 's/\r//g'
+    }
 
     # get confirmation from the user
     #
@@ -98,10 +110,8 @@
             trash "${1}"
         fi
 
-        # print information about the backup process to stderr
-        printf "Backed up %b'%s'%b to %b'%s'%b.\n" "${cy}" "${name}" "${ra}" "${cy}" "${backup}" "${ra}" >&2
-
-        # output the backup path to stdout
+        # return the value to stdout so other operations know the
+        # path to the backed up version of the file / directory.
         echo "${backup}"
     }
 
@@ -136,31 +146,22 @@
     # homebrew
     # ---
     setup_homebrew() {
-        print_info "Checking for a homebrew installation..."
-
         if ! command -v brew &>/dev/null; then
-            printf "Homebrew not found.\n"
-            print_info "Installing Homebrew (this will also install Xcode Command Line Tools if needed)..."
-
             # the homebrew install command
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-            printf "Verifying Homebrew installation...\n"
-
             # make sure the brew command is available
-            printf "Adding %b\$(/opt/homebrew/bin/brew shellenv)%b to \$PATH.\n" "${cc}" "${ra}"
             eval "$(/opt/homebrew/bin/brew shellenv)"
-
-            print_success "Homebrew installation complete."
         else
-            printf "Homebrew installation found.\n"
             # brew is installed so make sure it's up to date
-            brew update && brew upgrade && brew cleanup && brew autoremove
+            brew update
+            brew upgrade
+            brew cleanup --prune=all
+            brew autoremove
         fi
 
         # turn homebrew analytics off
         if ! brew analytics state | grep -q "disabled"; then
-            printf "Disabling brew analytics...\n"
             brew analytics off
         fi
 
@@ -172,14 +173,9 @@
     # clone and symlink configuration files
     # ---
     clone_repo() {
-        print_info "Cloning the dotfiles repository..."
-
         # if git is not installed, install it so we can clone the dotfiles repo
         if ! command -v git &>/dev/null; then
-            printf "No git installation found.\n"
             brew install git
-        else
-            printf "Git installation found.\nUsing %b%s%b\n" "${cc}" "$(which git)" "${ra}"
         fi
 
         # check if the .dotfiles directory exists already then create a backup
@@ -193,13 +189,9 @@
 
         # clone the repo
         git clone "${REPO_URL}" "${DOTFILES_DIR}"
-
-        print_success "Dotfiles repository successfully cloned."
     }
 
     setup_dotfiles() {
-        print_info "Linking dotfiles..."
-
         # if the DOTFILES_BACKUP_DIR variable is set and has a value then attempt
         # to backup files listed under the "# sync" header in .gitignore.
         if [[ -n "${DOTFILES_BACKUP_DIR:-}" ]]; then
@@ -240,23 +232,19 @@
                     rm "${item_dest}"
                 else
                     # the file is not a symlink so make a backup
-                    backup "${item_dest}" >/dev/null
+                    backup "${item_dest}"
                 fi
             fi
 
             # link the source item
             ln -sf "${item_src}" "${item_dest}"
         done
-
-        print_success "Linked all configuration files."
     }
 
     # ---
     # brew bundle
     # ---
     install_brew_packages() {
-        print_info "Installing Homebrew packages from Brewfile..."
-
         # check if the full xcode toolchain was already installed. This is
         # just looking to see if metal is installed which is only installed
         # with the ide and not with the command line tools. This is here
@@ -275,29 +263,26 @@
         if ${agree_to_license}; then
             sudo xcodebuild -license accept
         fi
-
-        # display a summary of installed packages
-        print_info "Summarizing installed packages..."
-        brew list --versions | sort
-
-        print_success "Homebrew packages installed successfully."
     }
 
     # ---
     # mise toolchain setup
     # ---
-    install_mise_packages() {
-        print_info "Installing mise packages..."
+    install_mise_tools() {
         # install all packages if system dependencies are not up to date
         (
             cd "${HOME}"
+
+            # trust the global mise config on the first run
+            mise trust
+
+            # install the global mise tools
             mise install
 
             # additional tool versions that might not be in mise.toml
             mise install java@liberica-javafx-21
             mise install node@latest
         )
-        print_success "Mise packages installed successfully."
     }
 
     # ---
@@ -309,13 +294,9 @@
         local path_to_wallpaper="${DOTFILES_DIR}/desktop/wallpapers/${SELECTED_WALLPAPER}"
         # set the wallpaper
         sudo osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"${path_to_wallpaper}\""
-
-        print_success "Wallpaper set."
     }
 
     choose_mac_wallpaper() {
-        print_info "Setting up macOS wallpaper..."
-
         declare -a wallpaper_array
         declare -i i=0
 
@@ -356,7 +337,7 @@
     }
 
     setup_macos_defaults() {
-        print_info "Setting MacOS system preferences..."
+        REQ_SYS_RESTART=true
         # close any open System Preferences panes, to prevent them from
         # overriding settings we’re about to change
         osascript -e 'tell application "System Preferences" to quit'
@@ -460,80 +441,37 @@
         defaults write com.apple.terminal SecureKeyboardEntry -bool true
         # disable the annoying line marks in Terminal.app
         defaults write com.apple.Terminal ShowLineMarks -int 0
-        print_success "MacOS system preferences set."
     }
 
     setup_macos_fonts() {
-        print_info "Adding fonts to the font book..."
-
+        # create the users Fonts directory if it doesn't exist
         if [ ! -d "${HOME}/Library/Fonts" ]; then
-            printf "No fonts directory found.\n"
             mkdir -p "${HOME}/Library/Fonts"
-            printf "Created user fonts directory.\n"
-        else
-            printf "User fonts directory already exists.\n"
         fi
 
-        # copy fonts to the user fonts directory
+        # copy fonts to the user Fonts directory
         cp "${DOTFILES_DIR}"/desktop/fonts/*.ttf "${HOME}"/Library/Fonts/
-        print_success "Fonts copied to user fonts directory."
-    }
-
-    # ---
-    # zen browser
-    #
-    # this section just connects a custom stylesheet to zen
-    # browser. Note that this might need to be adjusted in the
-    # future as zen is still in beta.
-    # ---
-    setup_zen_browser() {
-        # this function will setup the zen browser custom css
-        print_info "setting up zen browser custom css..."
-
-        local ZEN_DIR="${HOME}/Library/Application Support/zen"
-        local ZEN_CSS="${DOTFILES_DIR}/desktop/zen-browser/userChrome.css"
-
-        # make sure zen is actually installed
-        if [[ -d "${ZEN_DIR}" ]]; then
-
-            # look for the (release) profile inside the zen profiles
-            for profile in "${ZEN_DIR}/Profiles/"*; do
-                # link the css file to the (release) profile
-                if [[ -d "${profile}" && "$(basename "${profile}")" == *"(release)"* ]]; then
-                    printf "Linking %s to the zen (release) profile\n" "$(basename "${ZEN_CSS}")"
-                    # make sure the chrome directory exists before linking
-                    mkdir -p "${profile}/chrome"
-                    ln -sf "${ZEN_CSS}" "${profile}/chrome/userChrome.css"
-                    break
-                fi
-            done
-        else
-            # zen browser may not be installed or setup properly
-            print_error "Zen browser is not installed so $(basename "${ZEN_CSS}") was not symlinked!"
-        fi
-
-        print_success "Zen browser setup complete."
     }
 
     # ---
     # restart system
     # ---
     restart_system() {
-        printf "%bInstallation complete!%b\n" "${cg}" "${ra}"
+        print_info "Installation complete!"
 
-        if get_confirmation "Restart your computer now"; then
+        if ${REQ_SYS_RESTART} && get_confirmation "Restart your computer now"; then
             # visual countdown with milliseconds
             # start from 3000 milliseconds (3 seconds)
-            for ((i = 3000; i >= 0; i -= 10)); do
+            for ((i = 3000; i >= 0; i -= 100)); do
                 # calculate seconds and milliseconds
                 seconds=$((i / 1000))
                 milliseconds=$((i % 1000))
 
-                # format to show as X.XX (seconds.milliseconds)
-                printf "\rRestarting in %d.%02d..." "${seconds}" "$((milliseconds / 10))"
+                # format to show as X.X (seconds.milliseconds)
+                printf "\rRestarting in %d.%02d..." "${seconds}" "$((milliseconds / 100))"
 
-                # sleep for 10ms (the gap between updates)
-                sleep 0.01
+                # sleep for 100ms (the gap between updates)
+                sleep 0.10
             done
             printf "\r%-40s\n" "Goodbye!" # make sure the line is clear
             sleep 0.1                     # make sure goodbye is displayed
@@ -541,7 +479,7 @@
             sudo shutdown -r now
         else
             print_error "Restart cancelled!"
-            printf "Please restart manually at your convenience!\n"
+            printf "Some of these changes require a system restart to take effect.\n"
         fi
     }
 
@@ -563,19 +501,20 @@
         }
 
         # keep sudo alive
-        local main_pid=$$
-
         {
-            while kill -0 "${main_pid}"; do
-                # refresh sudo access and break if out of the loop
-                # if we fail to refresh sudo.
+            while kill -0 $$; do
+                # refresh sudo access and break out of the loop if the
+                # sudo timestamp fails to refresh.
                 sudo -n true || break
-                sleep 60
+                sleep 30
             done
             # discard all output and run as a background process
         } &>/dev/null &
 
         local sudo_keep_alive_pid=$!
+        # we must disown the background process so that when we kill
+        # it or bash terminates it, the process won't output anything.
+        disown ${sudo_keep_alive_pid}
 
         # ---
         # script execution order
@@ -584,14 +523,15 @@
         # clone the repo first so that when we ask the user for confirmation
         # with other install options we can properly check and access the
         # respective files / directories.
-        clone_repo
+        print_info "Cloning the dotfiles repository..."
+        clone_repo &>/dev/null
+        print_success "Dotfiles repository successfully cloned."
 
         # ask the user what optionally installation steps they would like for
         # the script to run but don't run them right away.
         local do_wallpaper_setup=false
         local do_defaults_setup=false
         local do_fonts_setup=false
-        local do_zen_browser_setup=false
 
         if get_confirmation "Setup macOS wallpaper"; then
             do_wallpaper_setup=true
@@ -606,27 +546,44 @@
             do_fonts_setup=true
         fi
 
-        if get_confirmation "Setup Zen Browser Custom CSS"; then
-            do_zen_browser_setup=true
-        fi
-
         # run dependency installation steps
-        setup_homebrew
-        setup_dotfiles
-        install_brew_packages
-        install_mise_packages
+        print_info "Setting up homebrew..."
+        setup_homebrew &>/dev/null
+        print_success "Homebrew setup complete!"
+
+        print_info "Setting up dotfiles..."
+        setup_dotfiles &>/dev/null
+        print_success "Dotfiles setup complete!"
+
+        print_info "Installing packages with brew..."
+        install_brew_packages &>/dev/null
+        print_success "Packages installed with brew!"
+
+        print_info "Installing tools with mise..."
+        install_mise_tools &>/dev/null
+        print_success "Tools installed with mise!"
 
         # run optional installation steps
-        ${do_wallpaper_setup} && set_mac_wallpaper
-        ${do_defaults_setup} && setup_macos_defaults
-        ${do_fonts_setup} && setup_macos_fonts
-        ${do_zen_browser_setup} && setup_zen_browser
+        ${do_wallpaper_setup} && {
+            print_info "Setting up macOS wallpaper..."
+            set_mac_wallpaper &>/dev/null
+            print_success "Wallpaper setup complete!"
+        }
+        ${do_defaults_setup} && {
+            print_info "Setting up macOS defaults..."
+            setup_macos_defaults &>/dev/null
+            print_success "Defaults setup complete!"
+        }
+        ${do_fonts_setup} && {
+            print_info "Setting up macOS fonts..."
+            setup_macos_fonts &>/dev/null
+            print_success "Fonts setup complete!"
+        }
 
-        # clean up sudo keep alive. This background process will die
-        # when it notices the script is no longer running but this is
-        # here just to explicitly kill the process because we know the
-        # script is done running.
-        kill "${sudo_keep_alive_pid}" 2>/dev/null
+        # clean up sudo keep alive. This background process will be terminated
+        # when it notices the script is no longer running but this is here to
+        # explicitly kill the process as we know the script is done running.
+        kill ${sudo_keep_alive_pid} 2>/dev/null
 
         restart_system
     }
