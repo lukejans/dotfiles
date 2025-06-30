@@ -487,42 +487,6 @@
     }
 
     # ---
-    # zen browser
-    #
-    # this section just connects a custom stylesheet to zen
-    # browser. Note that this might need to be adjusted in the
-    # future as zen is still in beta.
-    # ---
-    setup_zen_browser() {
-        # this function will setup the zen browser custom css
-        print_info "setting up zen browser custom css..."
-
-        local ZEN_DIR="${HOME}/Library/Application Support/zen"
-        local ZEN_CSS="${DOTFILES_DIR}/desktop/zen-browser/userChrome.css"
-
-        # make sure zen is actually installed
-        if [[ -d "${ZEN_DIR}" ]]; then
-
-            # look for the (release) profile inside the zen profiles
-            for profile in "${ZEN_DIR}/Profiles/"*; do
-                # link the css file to the (release) profile
-                if [[ -d "${profile}" && "$(basename "${profile}")" == *"(release)"* ]]; then
-                    printf "Linking %s to the zen (release) profile\n" "$(basename "${ZEN_CSS}")"
-                    # make sure the chrome directory exists before linking
-                    mkdir -p "${profile}/chrome"
-                    ln -sf "${ZEN_CSS}" "${profile}/chrome/userChrome.css"
-                    break
-                fi
-            done
-        else
-            # zen browser may not be installed or setup properly
-            print_error "Zen browser is not installed so $(basename "${ZEN_CSS}") was not symlinked!"
-        fi
-
-        print_success "Zen browser setup complete."
-    }
-
-    # ---
     # restart system
     # ---
     restart_system() {
@@ -598,7 +562,6 @@
         local do_wallpaper_setup=false
         local do_defaults_setup=false
         local do_fonts_setup=false
-        local do_zen_browser_setup=false
 
         if get_confirmation "Setup macOS wallpaper"; then
             do_wallpaper_setup=true
@@ -611,10 +574,6 @@
 
         if get_confirmation "Setup macOS fonts"; then
             do_fonts_setup=true
-        fi
-
-        if get_confirmation "Setup Zen Browser Custom CSS"; then
-            do_zen_browser_setup=true
         fi
 
         # run dependency installation steps
