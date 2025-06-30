@@ -55,6 +55,13 @@
     # helper functions
     # ---
 
+    # brew command wrapper to ensure that brew does not interfere
+    # with sudo time stamps. This issue is explained in detail with
+    # [issue #17912](https://github.com/Homebrew/brew/issues/17912)
+    brew() {
+        script -q /dev/null "$(command -v brew)" "$@" | sed 's/\r//g'
+    }
+
     # get confirmation from the user
     #
     # $1 - prompt / question to display to the user
