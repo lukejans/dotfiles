@@ -7,15 +7,9 @@
 #              configuring system default settings, and linking dotfiles.
 #
 # author: luke janssen
-# date: may 15th, 2025
+# date: july 1st, 2025
 
 { # this ensures the entire script is downloaded before execution #
-
-    # ---
-    # setup
-    # ---
-    # exit on error, unset variables, and pipe failures
-    set -euo pipefail
 
     # ---
     # exports
@@ -47,14 +41,11 @@
     # print install banner
     printf "\n%b         .:'%b\n" "${cg}" "${ra}"
     printf "%b     __ :'__%b\n" "${cg}" "${ra}"
-    printf "%b  .'\`__\`-'__\`\`.%b\n" "${cy}" "${ra}"
-    printf "%b :__________.-'%b  Running \"bootstrap.sh\"\n" "${cr}" "${ra}"
-    printf "%b :_________:%b\n" "${cm}" "${ra}"
-    printf "%b  :_________\`-;%b\n" "${cm}" "${ra}"
-    printf "%b   \`.__.-.__.'%b\n" "${cb}" "${ra}"
-    printf "\nRequirements:\n"
-    printf "    - signed into an Apple ID\n"
-    printf "    - sudo privileges\n"
+    printf "%b  .'\`__\`-'__\`\`.%b  Running: \"bootstrap.sh\"\n" "${cy}" "${ra}"
+    printf "%b :__________.-'%b  Requirements:\n" "${cr}" "${ra}"
+    printf "%b :_________:%b        - signed into an Apple ID\n" "${cm}" "${ra}"
+    printf "%b  :_________\`-;%b     - sudo privileges\n" "${cm}" "${ra}"
+    printf "%b   \`.__.-.__.'%b\n\n" "${cb}" "${ra}"
 
     # ---
     # helper functions
@@ -62,9 +53,16 @@
 
     # brew command wrapper to ensure that brew does not interfere
     # with sudo time stamps. This issue is explained in detail with
-    # [issue #17912](https://github.com/Homebrew/brew/issues/17912)
+    # [issue #17912](https://github.com/Homebrew/brew/issues/17912).
+    # I had to update the script as some issues occurred when using
+    # command substitution with things like $(brew --prefix). Using
+    # this wrapper function with curl also seemed to change the way
+    # that the script command behaved so extra control characters
+    # needed to be removed with tr. Sadly this solution breaks all
+    # the output of brew commands so the script got a little messy
+    # with redirecting brew outputs and creating my own output.
     brew() {
-        script -q /dev/null "$(command -v brew)" "$@" | sed 's/\r//g'
+        script -q /dev/null "$(command -v brew)" "$@" | col -b | tr -d '\000-\037\177'
     }
 
     # get confirmation from the user
@@ -110,6 +108,11 @@
             trash "${1}"
         fi
 
+        # print information about the backup process to stderr. I know this
+        # doesn't semantically make sense, but it's the only way I could figure
+        # out how to easily separate output.
+        printf "Backed up %b'%s'%b to %b'%s'%b.\n" "${cy}" "${name}" "${ra}" "${cy}" "${backup}" "${ra}" >&2
+
         # return the value to stdout so other operations know the
         # path to the backed up version of the file / directory.
         echo "${backup}"
@@ -148,25 +151,52 @@
     setup_homebrew() {
         if ! command -v brew &>/dev/null; then
             # the homebrew install command
+            printf "Homebrew not found... Installing homebrew.\n"
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
             # make sure the brew command is available
-            eval "$(/opt/homebrew/bin/brew shellenv)"
+            eval "$(/opt/homebrew/bin/brew shellenv)" || return 1
         else
+            printf "Homebrew installation found\n"
+            printf "Running %bbrew%b %bupdate%b, %bcleanup%b and %bautoremove%b\n" "${cg}" "${ra}" "${cy}" "${ra}" "${cy}" "${ra}" "${cy}" "${ra}"
             # brew is installed so make sure it's up to date
-            brew update
-            brew upgrade
-            brew cleanup --prune=all
-            brew autoremove
+            {
+                brew update
+                brew cleanup --prune=all
+                brew autoremove
+            } &>/dev/null
         fi
 
         # turn homebrew analytics off
-        if ! brew analytics state | grep -q "disabled"; then
-            brew analytics off
-        fi
+        brew analytics off &>/dev/null
 
         # make sure we don't get "zsh compinit: insecure directories” warnings
         chmod -R go-w "$(brew --prefix)/share"
+    }
+
+    install_brew_packages() {
+        # check if the full xcode toolchain was already installed. This is
+        # just looking to see if metal is installed which is only installed
+        # with the ide and not with the command line tools. This is here
+        # because we must agree to the license on a fresh install.
+        local agree_to_license=false
+        if ! xcrun --find metal &>/dev/null; then
+            # metal was not found so we will have to agree to the xcode ide
+            # license after homebrew installs it.
+            agree_to_license=true
+        fi
+
+        # install all packages if system dependencies are not up to date
+        {
+            if ! brew bundle check --global; then
+                brew bundle install --global
+            fi
+        } &>/dev/null
+
+        # agree to the xcode license after it's installed
+        if ${agree_to_license}; then
+            sudo xcodebuild -license accept
+        fi
     }
 
     # ---
@@ -175,20 +205,18 @@
     clone_repo() {
         # if git is not installed, install it so we can clone the dotfiles repo
         if ! command -v git &>/dev/null; then
-            brew install git
+            brew install git &>/dev/null
         fi
 
         # check if the .dotfiles directory exists already then create a backup
         if [[ -d "${DOTFILES_DIR}" ]]; then
-            # backup the existing dotfiles repo before a fresh clone. This might
-            # change in the future but this seemed to make the most sense due to
-            # the "$DOTFILES_DIR" potentially not being a git dir and also might
-            # have uncommitted changes.
+            # backup any existing directory with the same name at the same location
+            # before cloning the repo.
             DOTFILES_BACKUP_DIR=$(backup "${DOTFILES_DIR}")
         fi
 
         # clone the repo
-        git clone "${REPO_URL}" "${DOTFILES_DIR}"
+        git clone "${REPO_URL}" "${DOTFILES_DIR}" || return 1
     }
 
     setup_dotfiles() {
@@ -211,6 +239,7 @@
                     # make sure the parent directory is present before copying
                     mkdir -p "$(dirname "${dest}")"
                     rsync -a "${source}" "$(dirname "${dest}")/"
+                    printf "Copied %b'%s'%b to the new clone\n" "${cc}" "${item}" "${ra}"
                 fi
             done
         fi
@@ -223,7 +252,8 @@
             "${HOME}"/.dotfiles/.config; do
 
             # the location a dotfile will be linked to
-            item_dest="${HOME}/$(basename "${item_src}")"
+            item="$(basename "${item_src}")"
+            item_dest="${HOME}/${item}"
 
             # if the destination file already exists, create a backup
             if [[ -e "${item_dest}" ]]; then
@@ -232,37 +262,14 @@
                     rm "${item_dest}"
                 else
                     # the file is not a symlink so make a backup
-                    backup "${item_dest}"
+                    backup "${item_dest}" >/dev/null # discard only stdout
                 fi
             fi
 
             # link the source item
-            ln -sf "${item_src}" "${item_dest}"
+            ln -sfF "${item_src}" "${item_dest}"
+            printf "linked %b'%s'%b to %b\$HOME%b\n" "${cc}" "${item}" "${ra}" "${cr}" "${ra}"
         done
-    }
-
-    # ---
-    # brew bundle
-    # ---
-    install_brew_packages() {
-        # check if the full xcode toolchain was already installed. This is
-        # just looking to see if metal is installed which is only installed
-        # with the ide and not with the command line tools. This is here
-        # because we must agree to the license on a fresh install.
-        local agree_to_license=false
-        if ! xcrun --find metal >/dev/null 2>&1; then
-            # metal was not found so we will have to agree to the xcode ide
-            # license after homebrew installs it.
-            agree_to_license=true
-        fi
-
-        # install all packages if system dependencies are not up to date
-        brew bundle check --global || brew bundle install --global
-
-        # agree to the xcode license after it's installed
-        if ${agree_to_license}; then
-            sudo xcodebuild -license accept
-        fi
     }
 
     # ---
@@ -271,7 +278,7 @@
     install_mise_tools() {
         # install all packages if system dependencies are not up to date
         (
-            cd "${HOME}"
+            cd "${HOME}" || return 1
 
             # trust the global mise config on the first run
             mise trust
@@ -429,8 +436,9 @@
         # enable HiDPI display modes
         sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
         # save screenshots to ~/Pictures/screen-captures
-        mkdir -p "${HOME}/Pictures/screen-captures"
-        defaults write com.apple.screencapture location -string "${HOME}/Pictures/screen-captures"
+        local screen_capture_dir="${HOME}/Pictures/screen-captures"
+        mkdir -p "${screen_capture_dir}"
+        defaults write com.apple.screencapture location -string "${screen_capture_dir}"
         # save screenshots in PNG format
         defaults write com.apple.screencapture type -string "png"
         # disable automatic emoji substitution in Messages.app
@@ -450,7 +458,7 @@
         fi
 
         # copy fonts to the user Fonts directory
-        cp "${DOTFILES_DIR}"/desktop/fonts/*.ttf "${HOME}"/Library/Fonts/
+        cp -v "${DOTFILES_DIR}"/desktop/fonts/*.ttf "${HOME}"/Library/Fonts/
     }
 
     # ---
@@ -459,27 +467,30 @@
     restart_system() {
         print_info "Installation complete!"
 
-        if ${REQ_SYS_RESTART} && get_confirmation "Restart your computer now"; then
-            # visual countdown with milliseconds
-            # start from 3000 milliseconds (3 seconds)
-            for ((i = 3000; i >= 0; i -= 100)); do
-                # calculate seconds and milliseconds
-                seconds=$((i / 1000))
-                milliseconds=$((i % 1000))
+        if ${REQ_SYS_RESTART}; then
+            # if a system restart is required, ask for confirmation before restarting
+            if get_confirmation "Restart your computer now"; then
+                # visual countdown with milliseconds
+                # start from 3000 milliseconds (3 seconds)
+                for ((i = 3000; i >= 0; i -= 100)); do
+                    # calculate seconds and milliseconds
+                    seconds=$((i / 1000))
+                    milliseconds=$((i % 1000))
 
-                # format to show as X.X (seconds.milliseconds)
-                printf "\rRestarting in %d.%02d..." "${seconds}" "$((milliseconds / 100))"
+                    # format to show as X.X (seconds.milliseconds)
+                    printf "\rRestarting in %d.%02d..." "${seconds}" "$((milliseconds / 100))"
 
-                # sleep for 100ms (the gap between updates)
-                sleep 0.10
-            done
-            printf "\r%-40s\n" "Goodbye!" # make sure the line is clear
-            sleep 0.1                     # make sure goodbye is displayed
-            # execute restart
-            sudo shutdown -r now
-        else
-            print_error "Restart cancelled!"
-            printf "Some of these changes require a system restart to take effect.\n"
+                    # sleep for 100ms (the gap between updates)
+                    sleep 0.10
+                done
+                printf "\r%-40s\n" "Goodbye!" # make sure the line is clear
+                sleep 0.1                     # make sure goodbye is displayed
+                # execute restart
+                sudo shutdown -r now
+            else
+                print_error "Restart cancelled!"
+                printf "Some of these changes require a system restart to take effect.\n"
+            fi
         fi
     }
 
@@ -524,8 +535,12 @@
         # with other install options we can properly check and access the
         # respective files / directories.
         print_info "Cloning the dotfiles repository..."
-        clone_repo &>/dev/null
-        print_success "Dotfiles repository successfully cloned."
+        if clone_repo; then
+            print_success "Repository successfully cloned."
+        else
+            print_error "Failed to clone dotfiles repository."
+            exit 1
+        fi
 
         # ask the user what optionally installation steps they would like for
         # the script to run but don't run them right away.
@@ -548,42 +563,58 @@
 
         # run dependency installation steps
         print_info "Setting up homebrew..."
-        setup_homebrew &>/dev/null
-        print_success "Homebrew setup complete!"
+        if setup_homebrew; then
+            print_success "Homebrew setup complete!"
+        else
+            print_error "Homebrew setup failed!"
+            exit 1
+        fi
 
         print_info "Setting up dotfiles..."
-        setup_dotfiles &>/dev/null
-        print_success "Dotfiles setup complete!"
+        if setup_dotfiles; then
+            print_success "Dotfiles setup complete!"
+        else
+            print_error "Dotfiles setup failed!"
+            exit 1
+        fi
 
         print_info "Installing packages with brew..."
-        install_brew_packages &>/dev/null
-        print_success "Packages installed with brew!"
+        if install_brew_packages; then
+            print_success "Packages installed with brew!"
+        else
+            print_error "Packages installation failed!"
+            exit 1
+        fi
 
         print_info "Installing tools with mise..."
-        install_mise_tools &>/dev/null
-        print_success "Tools installed with mise!"
+        if install_mise_tools; then
+            print_success "Tools installed with mise!"
+        else
+            print_error "Tools installation failed!"
+            exit 1
+        fi
 
         # run optional installation steps
         ${do_wallpaper_setup} && {
             print_info "Setting up macOS wallpaper..."
-            set_mac_wallpaper &>/dev/null
+            set_mac_wallpaper
             print_success "Wallpaper setup complete!"
         }
         ${do_defaults_setup} && {
             print_info "Setting up macOS defaults..."
-            setup_macos_defaults &>/dev/null
+            setup_macos_defaults
             print_success "Defaults setup complete!"
         }
         ${do_fonts_setup} && {
             print_info "Setting up macOS fonts..."
-            setup_macos_fonts &>/dev/null
+            setup_macos_fonts
             print_success "Fonts setup complete!"
         }
 
         # clean up sudo keep alive. This background process will be terminated
         # when it notices the script is no longer running but this is here to
         # explicitly kill the process as we know the script is done running.
-        kill ${sudo_keep_alive_pid} 2>/dev/null
+        kill ${sudo_keep_alive_pid}
 
         restart_system
     }

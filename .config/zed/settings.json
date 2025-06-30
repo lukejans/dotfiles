@@ -108,9 +108,14 @@
             "language_servers": ["solargraph", "rubocop", "!ruby-lsp"]
         },
         "HTML": {
+            "language_servers": [
+                "vscode-html-language-server",
+                "superhtml",
+                "..."
+            ],
             "formatter": {
                 "language_server": {
-                    "name": "superhtml"
+                    "name": "vscode-html-language-server"
                 }
             }
         },
