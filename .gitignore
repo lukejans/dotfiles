@@ -7,7 +7,9 @@
 # used for testing scripts
 testing/testing.sh
 
-# sync
+# below is a special line that bootstrap.sh recognizes to
+# sync all items to a newly cloned version of this repo
+# ----<sync>----
 .config/btop
 .config/gh
 .config/gh-copilot

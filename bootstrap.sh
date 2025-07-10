@@ -221,13 +221,13 @@
 
     setup_dotfiles() {
         # if the DOTFILES_BACKUP_DIR variable is set and has a value then attempt
-        # to backup files listed under the "# sync" header in .gitignore.
+        # to backup files listed under the "# ----<sync>----" header in .gitignore.
         if [[ -n "${DOTFILES_BACKUP_DIR:-}" ]]; then
             # the repos gitignore file
             local gitignore_file="${HOME}/.dotfiles/.gitignore"
 
-            # get the line number of the `# sync` header
-            line_num=$(grep -n "^# sync" "${gitignore_file}" | cut -d ":" -f 1)
+            # get the line number of the `# ----<sync>----` header
+            line_num=$(grep -n "^# ----<sync>----" "${gitignore_file}" | cut -d ":" -f 1)
 
             # loop over the files / directories present in that section to copy
             for item in $(tail -n +$((line_num + 1)) "${gitignore_file}"); do
