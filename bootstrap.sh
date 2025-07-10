@@ -435,10 +435,6 @@
         defaults write NSGlobalDomain AppleFontSmoothing -int 1
         # enable HiDPI display modes
         sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
-        # save screenshots to ~/Pictures/screen-captures
-        local screen_capture_dir="${HOME}/Pictures/screen-captures"
-        mkdir -p "${screen_capture_dir}"
-        defaults write com.apple.screencapture location -string "${screen_capture_dir}"
         # save screenshots in PNG format
         defaults write com.apple.screencapture type -string "png"
         # disable automatic emoji substitution in Messages.app
