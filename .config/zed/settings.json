@@ -40,13 +40,12 @@
 
     // --- ai
     "agent": {
-        "default_profile": "ask",
+        "default_profile": "minimal",
         "always_allow_tool_actions": false,
         "default_model": {
             "provider": "copilot_chat",
             "model": "claude-sonnet-4"
-        },
-        "version": "2"
+        }
     },
     "features": {
         "edit_prediction_provider": "zed"
