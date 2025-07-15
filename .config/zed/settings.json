@@ -1,5 +1,8 @@
 {
     // --- ui
+    "debugger": {
+        "dock": "left"
+    },
     "theme": {
         "mode": "system",
         "light": "One Light",
