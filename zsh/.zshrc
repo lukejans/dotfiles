@@ -48,8 +48,11 @@ eval "$(mise activate zsh)"
 
 # --- zsh plugins
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+# bind up and down keys for history search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # --- command prompt
 setopt PROMPT_SUBST
