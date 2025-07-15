@@ -20,6 +20,9 @@
         "show": "always",
         "display_in": "active_editor"
     },
+    "buffer_font_features": {
+        "calt": false
+    },
 
     // --- terminal
     "terminal": {
