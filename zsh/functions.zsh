@@ -60,13 +60,3 @@ uno_compile() {
 uno_upload() {
     arduino-cli upload -v -p /dev/cu.usbmodem2101 --fqbn arduino:avr:uno "${1}"
 }
-
-# workaround for `fast-syntax-highlighting` freezing when running `$ whatis`
-# see: https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27#issuecomment-1267278072
-whatis() {
-    if [[ -v THEFD ]]; then
-        :
-    else
-        command whatis "${@}"
-    fi
-}
