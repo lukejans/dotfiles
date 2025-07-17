@@ -1,5 +1,4 @@
 tap "beeftornado/rmtree"
-tap "danielgatis/imgcat"
 tap "homebrew/command-not-found"
 tap "homebrew/test-bot"
 brew "openssl@3"
