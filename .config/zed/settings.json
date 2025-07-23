@@ -1,7 +1,7 @@
 {
     // --- ui
     "debugger": {
-        "dock": "left"
+        "dock": "right"
     },
     "theme": {
         "mode": "system",
@@ -46,11 +46,12 @@
 
     // --- ai
     "agent": {
-        "default_profile": "minimal",
+        "play_sound_when_agent_done": true,
+        "default_profile": "write",
         "always_allow_tool_actions": false,
         "default_model": {
-            "provider": "copilot_chat",
-            "model": "claude-sonnet-4"
+            "provider": "google",
+            "model": "gemini-2.5-pro"
         }
     },
     "features": {
