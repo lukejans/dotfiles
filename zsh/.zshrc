@@ -39,12 +39,6 @@ compinit              # initialize all completions on $FPATH
 # --- custom aliases & functions
 source "${HOME}/.dotfiles/zsh/aliases.zsh"
 source "${HOME}/.dotfiles/zsh/functions.zsh"
-source "${HOME}/.dotfiles/zsh/git-prompt.zsh"
-
-# --- load plugins
-eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
-eval "$(mise activate zsh)"
 
 # --- zsh plugins
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
@@ -54,6 +48,8 @@ source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substrin
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
-# --- command prompt
-setopt PROMPT_SUBST
-PS1='%B%n%F{red}@%f%m %F{blue}%c%f%F{red}$(git_prompt_info)%f%F{green} $%f %b'
+# --- load plugins
+eval "$(fzf --zsh)"
+eval "$(zoxide init --cmd cd zsh)"
+eval "$(mise activate zsh)"
+eval "$(starship init zsh)"
