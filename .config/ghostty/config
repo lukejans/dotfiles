@@ -1,5 +1,5 @@
 # --- theme
-theme = light:Havn Daggry, dark:Kanagawa Dragon
+theme = light:minimal-light, dark:minimal-dark
 
 # --- font
 font-family = Zed Plex Mono
@@ -28,5 +28,5 @@ window-padding-x = 4
 window-padding-y = 4
 
 # --- macOS specific
-macos-titlebar-style = transparent
+macos-titlebar-style = tabs
 macos-option-as-alt = true

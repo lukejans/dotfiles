@@ -5,8 +5,8 @@
     },
     "theme": {
         "mode": "system",
-        "light": "Base16 Tokyo City Terminal Light",
-        "dark": "Kanagawa Dragon"
+        "light": "minimal light",
+        "dark": "minimal dark"
     },
     "tabs": {
         "file_icons": true,
