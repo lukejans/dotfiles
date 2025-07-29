@@ -43,10 +43,6 @@ source "${HOME}/.dotfiles/zsh/functions.zsh"
 # --- zsh plugins
 source "$(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "$(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
-# bind up and down keys for history search
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
 
 # --- load plugins
 eval "$(fzf --zsh)"
