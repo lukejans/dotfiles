@@ -4,7 +4,7 @@
 	# list contributors summary in order of most commits
 	ppl = shortlog --summary --numbered
 	# view the current working tree status using the short format
-	s = status -s
+	s = status
 	# shows the diff from the last commit or $n revisions ago
 	d = "!f() { git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat ${1:+HEAD~$1}; }; f"
 	# pull in remote changes for the current repository and all its submodules.
