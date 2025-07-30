@@ -22,6 +22,7 @@ adjust-cursor-thickness = 1
 mouse-hide-while-typing = true
 
 # --- window
+confirm-close-surface = false
 window-theme = system
 window-save-state = always
 window-padding-x = 4
