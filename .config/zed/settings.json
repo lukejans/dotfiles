@@ -47,11 +47,11 @@
     // --- ai
     "agent": {
         "play_sound_when_agent_done": true,
-        "default_profile": "write",
+        "default_profile": "ask",
         "always_allow_tool_actions": false,
         "default_model": {
-            "provider": "google",
-            "model": "gemini-2.5-pro"
+            "provider": "copilot_chat",
+            "model": "gpt-4.1"
         }
     },
     "features": {
@@ -135,7 +135,13 @@
             "format_on_save": "on"
         },
         "Java": {
-            "formatter": "language_server"
+            "language_servers": ["jdtls"],
+            "formatter": "language_server",
+            "code_actions_on_format": {
+                "source.organizeImports": true,
+                "quickfix": true,
+                "refactor": true
+            }
         }
     },
 
@@ -163,6 +169,9 @@
             "initialization_options": {
                 "settings": {
                     "java": {
+                        "cleanup": {
+                            "actions": ["qualifyMembers"]
+                        },
                         "errors": {
                             "incompleteClasspath": {
                                 "severity": "warning"
