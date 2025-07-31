@@ -5,8 +5,8 @@
     },
     "theme": {
         "mode": "system",
-        "light": "minimal light",
-        "dark": "minimal dark"
+        "light": "One Light",
+        "dark": "One Dark"
     },
     "tabs": {
         "file_icons": true,

@@ -1,5 +1,5 @@
 # --- theme
-theme = light:minimal-light, dark:minimal-dark
+theme = light:custom-one-light, dark:custom-one-dark
 
 # --- font
 font-family = Zed Plex Mono
