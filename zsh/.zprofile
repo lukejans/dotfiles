@@ -4,12 +4,9 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # --- ssh
-# load all identities used in the keychain to the ssh-agent and only add the
-# identities if they aren't already loaded. Note that this current setup is
-# using the agent that is automatically setup by launchd. This is generally
-# okay but launchd will not run it's agent when the shell is spawned from an
-# ssh connection. If you often do remote work, you may want to launch your
-# own ssh agent before loading your keys using the below command:
+# load all identities used in the keychain to the ssh-agent. Note that if
+# you want to use signing keys and what not from your local machine on a
+# remote host you will need to forward the agent to the host.
 #
 # ```sh
 # eval "$(ssh-agent -s)"
