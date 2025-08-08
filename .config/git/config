@@ -97,3 +97,9 @@
 [fetch]
     # always prune refs to remote branches that have been deleted
 	prune = true
+
+[color "status"]
+	added = blue
+	changed = yellow
+	untracked = green
+	deleted = red
