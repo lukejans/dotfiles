@@ -1,0 +1,67 @@
+#compdef javarun
+#autoload
+
+# shellcheck shell=zsh
+_javarun_entry_points() {
+    # This function is called to complete the argument for -e or --entry.
+    # It needs to find the java_project_path, which is the first positional argument.
+    # The _arguments call in _javarun populates line[1] with the first positional arg's value.
+    local original_path="${line[1]}"
+    local project_path="$original_path"
+    # Expand tilde in the project path
+    project_path="${project_path/#\~/$HOME}"
+    local -a java_files # Array to hold the final list of entry point names
+
+    # Check if the first argument is a .java file (single file mode)
+    if [[ "$original_path" == *.java ]]; then
+        _message "Entry point option (-e) not available in single file mode."
+        return 1
+    fi
+
+    if [[ -z "$original_path" ]]; then
+        _message "Java project path must be specified before completing entry point."
+        return 1
+    fi
+
+    if [[ ! -d "$project_path" ]]; then
+        _message "Specified Java project path '$original_path' is not a valid directory."
+        return 1
+    fi
+
+    local raw_file_list
+    raw_file_list="$(cd "$project_path" && printf '%s\n' *.java(N:t:r))"
+
+    if [[ -n "$raw_file_list" ]]; then
+        java_files=(${(f)raw_file_list})
+    else
+        java_files=()
+    fi
+
+    if (( ${#java_files[@]} > 0 )); then
+        _describe -t entry-points 'Java entry point file (without .java extension)' java_files
+    else
+        _message "No .java files found in '$project_path'"
+        return 1
+    fi
+}
+
+_javarun_first_arg() {
+    # Complete both directories and .java files for the first argument
+    local -a alternatives
+    alternatives=(
+        'directories:Java project directory:_path_files -/'
+        'java-files:Java source file:_path_files -g "*.java"'
+    )
+    _alternative $alternatives
+}
+
+_javarun() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments \
+        '1:java_project_or_file:_javarun_first_arg' \
+        {-e,--entry}'[Specify the entry point file (without .java extension)]:entry_point_file:_javarun_entry_points' \
+        {-h,--help}'[Show usage information]' \
+        '*:ignored_extra_args:_files'
+}
