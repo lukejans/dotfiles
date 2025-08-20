@@ -1,0 +1,31 @@
+# --- theme
+theme = light:custom-one-light, dark:custom-one-dark
+
+# --- font
+font-family = Zed Plex Mono
+font-family = Zed Mono
+font-size = 14
+font-thicken = true
+font-thicken-strength = 200
+font-feature = -calt, -liga, -dlig
+
+# --- compatibility
+shell-integration = detect
+shell-integration-features = no-cursor, sudo, title
+
+# --- cursor
+cursor-style = block
+cursor-style-blink = false
+adjust-cursor-thickness = 1
+
+# --- mouse
+mouse-hide-while-typing = true
+
+# --- window
+confirm-close-surface = false
+window-theme = system
+window-save-state = always
+
+# --- macOS specific
+macos-titlebar-style = tabs
+macos-option-as-alt = true

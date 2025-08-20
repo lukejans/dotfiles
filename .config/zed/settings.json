@@ -1,0 +1,214 @@
+{
+    // --- ui
+    "debugger": {
+        "dock": "right"
+    },
+    "theme": {
+        "mode": "system",
+        "light": "One Light",
+        "dark": "One Dark"
+    },
+    "tabs": {
+        "file_icons": true,
+        "git_status": true,
+        "show_diagnostics": "all"
+    },
+
+    // --- editor
+    "tab_size": 4,
+    "cursor_shape": "block",
+    "buffer_font_family": "Zed Plex Mono",
+    "buffer_font_fallbacks": [
+        "Zed Plex Mono",
+        "JetBrainsMonoNL Nerd Font Mono"
+    ],
+    "minimap": {
+        "show": "always",
+        "display_in": "active_editor"
+    },
+    "buffer_font_features": {
+        "calt": false
+    },
+
+    // --- terminal
+    "terminal": {
+        "line_height": "standard",
+        "copy_on_select": true,
+        "option_as_meta": true,
+        "font_features": {
+            "calt": false
+        }
+    },
+
+    // --- file associations
+    "file_types": {
+        "Shell Script": [".env.*", "**/.zprofile", "**/completions/_*"],
+        "Git Config": ["**/git/config*"],
+        "Git Ignore": ["**/git/gitignore*"]
+    },
+
+    // --- ai
+    "agent": {
+        "play_sound_when_agent_done": true,
+        "default_profile": "ask",
+        "always_allow_tool_actions": false,
+        "default_model": {
+            "provider": "copilot_chat",
+            "model": "claude-3.7-sonnet-thought"
+        }
+    },
+    "features": {
+        "edit_prediction_provider": "zed"
+    },
+    "edit_predictions": {
+        "disabled_globs": ["**/.ssh/**"],
+        "mode": "subtle",
+        "enabled_in_text_threads": false
+    },
+
+    // --- privacy
+    "private_files": ["**/.env*", "**/.ssh/**"],
+
+    // --- journal
+    "journal": {
+        "path": "~/Notes",
+        "hour_format": "hour24"
+    },
+
+    // --- git
+    "git_panel": {
+        "status_style": "label_color"
+    },
+
+    // --- language specific settings
+    "languages": {
+        "Shell Script": {
+            "formatter": {
+                "external": {
+                    "command": "shfmt",
+                    "arguments": [
+                        "--filename",
+                        "{buffer_path}",
+                        "--indent",
+                        "4"
+                    ]
+                }
+            }
+        },
+        "JavaScript": {
+            "code_actions_on_format": {
+                "source.fixAll.eslint": true,
+                "source.organizeImports": true
+            }
+        },
+        "TypeScript": {
+            "code_actions_on_format": {
+                "source.fixAll.eslint": true,
+                "source.organizeImports": true
+            }
+        },
+        "TSX": {
+            "code_actions_on_format": {
+                "source.fixAll.eslint": true,
+                "source.organizeImports": true
+            }
+        },
+        "Ruby": {
+            "language_servers": [
+                "solargraph",
+                "rubocop",
+                "codebook",
+                "!ruby-lsp"
+            ]
+        },
+        "HTML": {
+            "language_servers": [
+                "vscode-html-language-server",
+                "superhtml",
+                "..."
+            ],
+            "formatter": {
+                "language_server": {
+                    "name": "vscode-html-language-server"
+                }
+            }
+        },
+        "CSS": {
+            "formatter": "prettier",
+            "code_actions_on_format": {
+                "source.fixAll.stylelint": true
+            }
+        },
+        "Markdown": {
+            "format_on_save": "on"
+        },
+        "Java": {
+            "language_servers": ["jdtls", "codebook"],
+            "formatter": "language_server",
+            "code_actions_on_format": {
+                "source.organizeImports": true,
+                "quickfix": true,
+                "refactor": true
+            }
+        }
+    },
+
+    // --- language server settings
+    "lsp": {
+        // ruby related langauge servers
+        "solargraph": {
+            "initialization_options": {
+                "diagnostics": true,
+                "formatting": true
+            }
+        },
+
+        // css related language servers
+        "stylelint-lsp": {
+            "settings": {
+                "stylelint": {
+                    "packageManager": "pnpm"
+                }
+            }
+        },
+
+        // java related language servers
+        "jdtls": {
+            "initialization_options": {
+                "settings": {
+                    "java": {
+                        "cleanup": {
+                            "actions": ["qualifyMembers"]
+                        },
+                        "errors": {
+                            "incompleteClasspath": {
+                                "severity": "warning"
+                            }
+                        },
+                        "trace": {
+                            "server": "verbose"
+                        },
+                        "jdt": {
+                            "ls": {
+                                "lombokSupport": {
+                                    "enabled": true
+                                }
+                            }
+                        },
+                        "format": {
+                            "enabled": true
+                        },
+                        "saveActions": {
+                            "organizeImports": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    // --- privacy
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    }
+}
