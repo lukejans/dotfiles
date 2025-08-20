@@ -1,0 +1,98 @@
+[alias]
+    # view commit log abbreviated SHA, description, and history graph
+    l = log --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) %s %C(italic dim default)- %an%C(reset)%C(auto)%d%C(reset)'
+    lg = log --graph --abbrev-commit --decorate --format=format:'%C(yellow)%h%C(reset) - %C(cyan)%aD%C(reset) %C(green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %s %C(dim italic)- %an%C(reset)' --all
+    llg = log --graph --abbrev-commit --decorate --pretty
+    # list contributors summary in order of most commits
+    ppl = shortlog --summary --numbered
+    # quick aliases
+    s = status
+    a = add
+    p = pull --recurse-submodules
+    # shows the diff from the last commit or $n revisions ago
+    d = "!f() { git diff-index --quiet HEAD -- || clear; git diff --patch-with-stat ${1:+HEAD~$1}; }; f"
+    # undo the last commit
+    undo = reset --soft HEAD~1
+    # reword the last commit
+    reword = commit --amend
+    # add staged files to the last commit
+    oops = commit --amend --no-edit
+    # interactive rebase with $n latest commits or from root
+    ir = "!f() { if [ \"$1\" = \"root\" ]; then git rebase -i --root; elif [ -n \"$1\" ]; then git rebase -i HEAD~\"$1\"; else echo 'Error: Please specify the number of commits (or \"root\")' >&2; exit 1; fi; }; f"
+    # add and commit all changes
+    ac = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
+    # switch to a branch, creating it if necessary.
+    go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+    # find branches containing commit (did this commit make it to main?)
+    fb = branch -a --contains
+    # find tags containing commit (is this commit in a release?)
+    ft = describe --always --contains
+    # find commits by source code (who added or removed this code?)
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+    # find commits by commit message (what commits did this?)
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+
+[apply]
+    # fix whitespace errors when applying a patch
+    whitespace = fix
+
+[core]
+    # default editor to use
+    editor = micro
+    # global gitignore file
+    excludesFile = ~/.config/git/gitignore_global
+    # treat whitespace as an error
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+    # speed up commands involving untracked files
+    untrackedCache = true
+    # macOS fix: more reliable at detecting changes but slower
+    trustctime = false
+    # macOS fix: compensate for mac storing unicode characters via NFD
+    precomposeunicode = false
+
+[color]
+    # this is the default color scheme but safe to be explicit
+    ui = auto
+
+[diff]
+    # make a distinction between add and delete, renames, and copies
+    renames = copies
+
+[include]
+    # include the local config file settings
+    path = ~/.config/git/config.local
+
+[init]
+    defaultBranch = main
+
+[merge]
+    # always create merge commits
+    ff = false
+    # include summaries of commits in merge message
+    log = true
+
+[rebase]
+    rebaseMerges = true
+
+[pull]
+    # avoids merge commits from ff false
+    rebase = merges
+
+[push]
+    # push relevant annotated tags
+    followTags = true
+
+[url "git@github.com:"]
+    # use ssh when pushing. This is here because I only have
+    # authentication setup for ssh but the url might be https
+    # because a public repository was cloned.
+    pushInsteadOf = https://github.com/
+
+[fetch]
+    # always prune refs to remote branches that have been deleted
+    prune = true
+
+[color "status"]
+    added = blue
+    changed = yellow
+    untracked = green

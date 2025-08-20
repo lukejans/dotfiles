@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# notes
+notes.md
+
+# privacy
+.config/micro/buffers
+.config/micro/backups
+
+# used for testing scripts
+testing/testing.sh
+
+# below is a special line that bootstrap.sh recognizes to
+# sync all items to a newly cloned version of this repo
+# ----<sync>----
+.config/gh
+.config/gh-copilot
+.config/git/config.local
+.config/github-copilot
+.config/swiftpm
+.config/zed/conversations
+.config/zed/prompts
+.config/karabiner/automatic_backups
