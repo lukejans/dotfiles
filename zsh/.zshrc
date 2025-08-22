@@ -31,6 +31,11 @@ export TMUX_CONF_LOCAL="${TMUX_DIR}/tmux.conf.local"
 # man eza_colors(5) for more info
 export EZA_COLORS="di=34:cm=0;2:sc=0:cd=33;1;3;4:bd=35;1;3;4:ur=0:uw=0:ux=0:gr=0:gw=0:gx=0:tr=0:tw=0:tx=0:ex=31;1:uu=0:gu=0:da=0:da=0;2;3:lc=31:lm=31;1;4:nb=0;2:nk=32:nt=31;1;3;4:im=0:vi=0:mu=0:lo=0:co=35;3:tm=0:bu=0;3:sc=0:do=0:gm=33:Go=35:Gm=35"
 
+# help
+export HELPDIR=/usr/share/zsh/${ZSH_VERSION}/help
+unalias run-help
+autoload -Uz run-help
+
 # --- tab completions
 # completions that homebrew manages
 if type brew &>/dev/null; then

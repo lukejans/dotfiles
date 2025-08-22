@@ -48,3 +48,6 @@ alias reload="exec ${SHELL} -l"
 
 # ip address
 alias localip="ipconfig getifaddr en0"
+
+# help
+alias help='run-help'
