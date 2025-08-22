@@ -7,6 +7,10 @@ setopt HIST_IGNORE_DUPS
 setopt INC_APPEND_HISTORY
 
 # --- set interactive env variables
+# pager
+export PAGER="less"
+export LESS='-R -F -M -i --incsearch'
+
 # history
 export HISTFILE="${HOME}/.zsh_history"
 export HISTSIZE=10000000
