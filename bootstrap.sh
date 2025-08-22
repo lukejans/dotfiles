@@ -41,16 +41,16 @@
     # helper functions
     # ---
 
-    # brew command wrapper to ensure that brew does not interfere
-    # with sudo time stamps. This issue is explained in detail with
-    # [issue #17912](https://github.com/Homebrew/brew/issues/17912).
-    # I had to update the script as some issues occurred when using
-    # command substitution with things like $(brew --prefix). Using
-    # this wrapper function with curl also seemed to change the way
-    # that the script command behaved so extra control characters
-    # needed to be removed with tr. Sadly this solution breaks all
-    # the output of brew commands so the script got a little messy
-    # with redirecting brew outputs and creating my own output.
+    # brew command wrapper
+    #
+    # ensures that brew does not reset the sudo time stamp. Homebrew resets
+    # sudo timestamps on every brew command to prevent privilege escalation
+    # attacks. However this makes brew really annoying in shell scripts that
+    # require sudo for the duration of their execution. This is explained in
+    # detail with issue linked below. Sadly this solution breaks all output.
+    #
+    # - https://github.com/Homebrew/brew/issues/17912
+    # - https://stackoverflow.com/questions/1401002/how-to-trick-an-application-into-thinking-its-stdout-is-a-terminal-not-a-pipe
     brew() {
         script -q /dev/null "$(command -v brew)" "$@" | col -b | tr -d '\000-\037\177'
     }
@@ -139,7 +139,7 @@
     # homebrew
     # ---
     setup_homebrew() {
-        if ! command -v brew &>/dev/null; then
+        if ! type -P brew &>/dev/null; then
             # the homebrew install command
             printf "Homebrew not found... Installing homebrew.\n"
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -190,7 +190,7 @@
     # ---
     clone_repo() {
         # if git is not installed, install it so we can clone the dotfiles repo
-        if ! command -v git &>/dev/null; then
+        if ! type -P git &>/dev/null; then
             brew install git &>/dev/null
         fi
 
