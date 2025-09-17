@@ -1,0 +1,67 @@
+#!/usr/bin/env zsh
+# author: Luke Janssen
+# date: 2025-09-10
+#
+# ```
+# $ swphp 8.4 # Now using php@8.4
+# ```
+
+# the version a user is switching to
+declare -r target_version="${@}"
+
+# make sure php is available in the users path
+if ! command -v php &>/dev/null; then
+    echo "Error: php is not available in the users path" >&2
+    exit 1
+fi
+
+# make sure only one parameter was provided
+if [[ "${#}" -ne 1 ]]; then
+    echo "Error: no argument was provided" >&2
+    exit 1
+fi
+
+# make sure the version passed is in the format (major.minor)
+if ! [[ ${target_version} =~ '^[0-9]+(\.?[0-9])?$' ]]; then
+    echo "Error: version must be in the format 0.0 (major.minor)" >&2
+    exit 1
+fi
+
+# the current version of php being used
+declare -r current_version="$(
+    php --version |
+        grep --color=never -Eo '^PHP [0-9]+(\.?[0-9])*' |
+        grep --color=never -Eo '[0-9]\.[0-9]'
+)"
+
+# just exit if we are already using the target version
+if [[ "${target_version}" == "${current_version}" ]]; then
+    exit 0
+fi
+
+error_occurred=false
+
+# switch the php version
+{
+    # unlink both the target and current version just in case the user
+    # had previously linked the target. This will stop brew from throwing
+    # any errors that may prevent the link from occurring.
+    brew unlink "php@${target_version}" &&
+        brew unlink "php@${current_version}" ||
+        error_occurred=true
+
+    if ! ${error_occurred}; then
+        # link the target php version
+        brew link --overwrite --force "shivammathur/php/php@${target_version}"
+    fi
+} >/dev/null
+
+if ${error_occurred}; then
+    echo "Error: the specified version might not be installed" >&2
+    exit 1
+else
+    # only show the version changed if stdout is a terminal
+    if [[ -t 1 ]]; then
+        echo "Now using php@${target_version} \n"
+    fi
+fi

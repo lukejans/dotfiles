@@ -1,0 +1,49 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$hostname\
+$directory\
+(:\\(\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+\\))\
+$character
+"""
+
+right_format = """
+$git_metrics\
+"""
+
+add_newline = false
+
+[character]
+success_symbol = ' [%](bold green)'
+error_symbol = ' [%](bold red)'
+
+[directory]
+format = '[$path]($style)[$read_only]($read_only_style)'
+
+[git_branch]
+format = '[$branch(:$remote_branch)]($style)'
+
+[git_commit]
+format = '[\($hash$tag\)]($style)'
+
+[git_metrics]
+disabled = false
+
+[git_state]
+format = '[{$state( $progress_current/$progress_total)}]($style)'
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style))'
+deleted = 'x'
+ahead = '↑'
+behind = '↓'
+diverged = "↕"
+
+[hostname]
+ssh_symbol = '@'
+format = '[$ssh_symbol](bold magenta dimmed)[$hostname](bold blue dimmed):'
