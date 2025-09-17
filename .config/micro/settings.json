@@ -1,0 +1,8 @@
+{
+    "colorscheme": "tty",
+    "diffgutter": true,
+    "divchars": "  ",
+    "softwrap": true,
+    "tabstospaces": true,
+    "wordwrap": true
+}

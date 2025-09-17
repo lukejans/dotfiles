@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+
+# java runner
+#
+# description: a simplified way to run java projects or single java files
+#              so you don't need to run multiple commands on each run.
+#
+# usage:
+#   javarun <java_project_path> -e <entry_point_file>  (for projects)
+#   javarun <java_file_path>                           (for single files)
+
+# --- fail fast
+set -eou pipefail
+
+# make sure java is installed
+if ! command -v java &>/dev/null; then
+    echo "Error: Java is either not installed or not in your PATH." >&2
+    exit 1
+fi
+
+# --- variables
+declare entry_point_file=""
+declare java_project_path=""
+declare absolute_project_path=""
+declare single_file_mode=false
+declare java_file_path=""
+
+# --- helper functions
+show_usage() {
+    echo "Usage: $(basename "$0") <java_project_path> -e <entry_point_file>"
+    echo "   OR: $(basename "$0") <java_file_path>"
+    echo ""
+    echo "Examples:"
+    echo "  $(basename "$0") /path/to/project -e Main"
+    echo "  $(basename "$0") /path/to/MyClass.java"
+    echo ""
+    echo "Options:"
+    echo "  -e, --entry    Specify the entry point file (required for project mode)"
+    echo "  -h, --help     Show this help message"
+    exit 1
+}
+
+cleanup() {
+    printf "\n\033[1;32m==>\033[0;1m Cleaning up class files...\033[0m\n"
+    find "${absolute_project_path}" -name "*.class" -delete
+    printf "\033[1mCleanup complete.\033[0m\n"
+}
+
+# --- process command line arguments
+while [[ $# -gt 0 ]]; do
+    case "${1}" in
+    -e | --entry)
+        if [[ $# -lt 2 || -z "${2:-}" || "${2:-}" == -* ]]; then
+            echo "Error: Option -e requires an argument." >&2
+            show_usage
+        fi
+        entry_point_file="${2}"
+        shift 2
+        ;;
+    -h | --help)
+        show_usage
+        ;;
+    -*)
+        echo "Error: Unknown option $1" >&2
+        show_usage
+        ;;
+    *)
+        if [[ -z "${java_project_path}" && -z "${java_file_path}" ]]; then
+            # check if the argument is a .java file
+            if [[ "${1}" == *.java ]]; then
+                java_file_path="${1}"
+                single_file_mode=true
+                # extract directory and filename
+                if [[ "${java_file_path}" = /* ]]; then
+                    absolute_project_path="$(dirname "${java_file_path}")"
+                else
+                    declare dir_part
+                    dir_part="$(dirname "${java_file_path}")"
+                    if [[ "${dir_part}" == "." ]]; then
+                        absolute_project_path="$(pwd)"
+                    else
+                        absolute_project_path="$(pwd)/${dir_part}"
+                    fi
+                fi
+                entry_point_file="$(basename "${java_file_path}" .java)"
+            else
+                java_project_path="${1}"
+                # convert to absolute path
+                if [[ "${java_project_path}" = /* ]]; then
+                    absolute_project_path="${java_project_path}"
+                else
+                    absolute_project_path="$(pwd)/${java_project_path}"
+                fi
+            fi
+        else
+            echo "Error: Multiple paths specified." >&2
+            show_usage
+        fi
+        shift
+        ;;
+    esac
+done
+
+# --- validate required parameters
+if [[ -z "${java_project_path}" && -z "${java_file_path}" ]]; then
+    printf "Error: No Java project or file specified.\n" >&2
+    show_usage
+fi
+
+if [[ "${single_file_mode}" == false ]]; then
+    # project mode validation
+    if [[ -z "${entry_point_file}" ]]; then
+        echo "Error: No entry point specified for project mode. Use -e option." >&2
+        show_usage
+    elif [[ "${entry_point_file}" == */* ]]; then
+        # check if the entry point may include a path separator
+        echo "Error: Only use the file name! Don't use a path as the entry point: ${entry_point_file}"
+        show_usage
+    fi
+
+    if [[ ! -d "${absolute_project_path}" ]]; then
+        echo "Error: Project path '${java_project_path}' is not a valid directory." >&2
+        exit 1
+    fi
+else
+    # single file mode validation
+    if [[ -n "${entry_point_file}" && "${entry_point_file}" != "$(basename "${java_file_path}" .java)" ]]; then
+        echo "Error: Cannot use -e option in single file mode." >&2
+        show_usage
+    fi
+
+    if [[ ! -f "${java_file_path}" ]]; then
+        echo "Error: Java file '${java_file_path}' does not exist." >&2
+        exit 1
+    fi
+fi
+
+# --- run the java project or file
+(
+    # change to the project directory
+    cd "${absolute_project_path}"
+
+    if [[ "${single_file_mode}" == true ]]; then
+        # single file mode: compile just the specified file
+        javac "$(basename "${java_file_path}")"
+    else
+        # project mode: compile all java files in the project
+        javac ./*.java
+    fi
+
+    # get the package name of the project using the entry point file
+    package_name=$(sed -n 's/^package \([^;]*\);/\1/p' "${entry_point_file}.java")
+
+    # set up trap for cleanup on script exit
+    trap cleanup EXIT
+
+    # project mode: cd, single file mode:
+    if [[ "${single_file_mode}" == false || -n "${package_name}" ]]; then
+        cd ..
+    fi
+
+    # run the program
+    if [[ -n "${package_name}" ]]; then
+        java "${package_name}.${entry_point_file}"
+    else
+        java "${entry_point_file}"
+    fi
+)

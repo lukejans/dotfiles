@@ -1,0 +1,41 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+    {
+        "context": "Workspace",
+        "bindings": {}
+    },
+    {
+        "context": "Editor && vim_mode == insert",
+        "bindings": {}
+    },
+    {
+        "context": "Editor",
+        "bindings": {
+            "cmd-;": null
+        }
+    },
+    {
+      "context": "Editor",
+      "bindings": {
+        "cmd-shift-a": "editor::FindAllReferences"
+      }
+    },
+    {
+      "context": "MarkdownPreview",
+      "bindings": {
+        "alt-up": "markdown::MovePageUp"
+      }
+    },
+    {
+      "context": "MarkdownPreview",
+      "bindings": {
+        "alt-down": "markdown::MovePageDown"
+      }
+    }
+]

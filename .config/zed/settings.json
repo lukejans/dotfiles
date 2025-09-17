@@ -1,0 +1,270 @@
+{
+    "buffer_font_size": 15.0,
+    "ui_font_family": ".ZedSans",
+    "tab_size": 4,
+    "base_keymap": "VSCode",
+    "format_on_save": "on",
+    "buffer_font_family": "Liga SFMono Nerd Font",
+    "buffer_font_features": {
+        "calt": false
+    },
+    "debugger": {
+        "dock": "bottom"
+    },
+    "icon_theme": {
+        "mode": "system",
+        "light": "Zed (Default)",
+        "dark": "Zed (Default)"
+    },
+    "theme": {
+        "mode": "system",
+        "light": "One Light",
+        "dark": "One Dark"
+    },
+    "use_system_window_tabs": true,
+    "tabs": {
+        "close_position": "left",
+        "file_icons": true,
+        "git_status": true,
+        "show_diagnostics": "all"
+    },
+    "title_bar": {
+        "show_branch_icon": true
+    },
+    "minimap": {
+        "show": "always",
+        "display_in": "active_editor"
+    },
+    "git": {
+        "blame": {
+            "show_avatar": true
+        }
+    },
+    "git_panel": {
+        "status_style": "label_color"
+    },
+    "terminal": {
+        "line_height": {
+            "custom": 1.5
+        },
+        "copy_on_select": true,
+        "option_as_meta": true,
+        "font_features": {
+            "calt": false
+        }
+    },
+    "file_types": {
+        "Shell Script": ["**/completions/_*"],
+        "Git Config": ["**/git/config*"],
+        "Git Ignore": ["**/git/gitignore*"],
+        "XML": ["*.csproj", "*.svg"],
+        "JSON": ["site.webmanifest", ".prettierrc"]
+    },
+    "agent": {
+        "inline_assistant_model": {
+            "provider": "copilot_chat",
+            "model": "claude-sonnet-4"
+        },
+        "play_sound_when_agent_done": true,
+        "default_profile": "write",
+        "always_allow_tool_actions": false,
+        "default_model": {
+            "provider": "copilot_chat",
+            "model": "gpt-5-mini"
+        }
+    },
+    "features": {
+        "edit_prediction_provider": "zed"
+    },
+    "edit_predictions": {
+        "disabled_globs": ["/**/.ssh/*"],
+        "mode": "subtle",
+        "enabled_in_text_threads": false
+    },
+    "private_files": ["**/.env*", "/**/.ssh/*"],
+    "redact_private_values": true,
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false
+    },
+    "journal": {
+        "path": "~/Notes",
+        "hour_format": "hour24"
+    },
+    "languages": {
+        "TOML": {
+            "formatter": "language_server"
+        },
+        "Plain Text": {
+            "format_on_save": "off"
+        },
+        "JSON": {
+            "prettier": {
+                "allowed": true
+            },
+            "formatter": "prettier"
+        },
+        "CSharp": {
+            "formatter": [
+                {
+                    "external": {
+                        "command": "csharpier",
+                        "arguments": ["format", "--stdin-path", "{buffer_path}"]
+                    }
+                }
+            ]
+        },
+        "PHP": {
+            "prettier": { "allowed": false },
+            "language_servers": [
+                "intelephense",
+                "!phptools",
+                "!phpactor",
+                "..."
+            ],
+            "formatter": [
+                {
+                    "language_server": {
+                        "name": "intelephense"
+                    }
+                }
+            ]
+        },
+        "Java": {
+            "language_servers": ["jdtls", "codebook"],
+            "formatter": [
+                {
+                    "code_action": "source.organizeImports"
+                },
+                "language_server"
+            ]
+        },
+        "SQL": {
+            "formatter": {
+                "external": {
+                    "command": "sql-formatter"
+                }
+            }
+        },
+        "Shell Script": {
+            "formatter": {
+                "external": {
+                    "command": "shfmt",
+                    "arguments": [
+                        "--filename",
+                        "{buffer_path}",
+                        "--indent",
+                        "4"
+                    ]
+                }
+            }
+        },
+        "Markdown": {
+            "prettier": {
+                "allowed": true
+            },
+            "soft_wrap": "editor_width",
+            "language_servers": ["codebook", "..."]
+        },
+        "HTML": {
+            "code_actions_on_format": {
+                "source.fixAll.eslint": true
+            },
+            "language_servers": ["eslint", "vscode-html-language-server", "..."]
+        },
+        "CSS": {
+            "prettier": {
+                "allowed": true
+            },
+            "formatter": [
+                "prettier",
+                {
+                    "code_action": "source.fixAll.stylelint"
+                }
+            ]
+        },
+        "JavaScript": {
+            "prettier": {
+                "allowed": true
+            },
+            "formatter": [
+                "prettier",
+                {
+                    "code_action": "source.fixAll.eslint"
+                },
+                {
+                    "code_action": "source.organizeImports"
+                }
+            ]
+        },
+        "TypeScript": {
+            "prettier": {
+                "allowed": true
+            },
+            "formatter": [
+                "prettier",
+                {
+                    "code_action": "source.fixAll.eslint"
+                },
+                {
+                    "code_action": "source.organizeImports"
+                }
+            ]
+        },
+        "TSX": {
+            "prettier": {
+                "allowed": true
+            },
+            "formatter": [
+                "prettier",
+                {
+                    "code_action": "source.fixAll.eslint"
+                },
+                {
+                    "code_action": "source.organizeImports"
+                }
+            ]
+        }
+    },
+    "lsp": {
+        "stylelint-lsp": {
+            "settings": {
+                "stylelint": {
+                    "packageManager": "pnpm"
+                }
+            }
+        },
+        "jdtls": {
+            "initialization_options": {
+                "settings": {
+                    "java": {
+                        "cleanup": {
+                            "actions": ["qualifyMembers"]
+                        },
+                        "errors": {
+                            "incompleteClasspath": {
+                                "severity": "warning"
+                            }
+                        },
+                        "trace": {
+                            "server": "verbose"
+                        },
+                        "jdt": {
+                            "ls": {
+                                "lombokSupport": {
+                                    "enabled": true
+                                }
+                            }
+                        },
+                        "format": {
+                            "enabled": true
+                        },
+                        "saveActions": {
+                            "organizeImports": true
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

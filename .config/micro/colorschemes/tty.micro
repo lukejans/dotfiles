@@ -1,0 +1,47 @@
+color-link line-number "brightwhite"
+color-link current-line-number "bold default,brightblack"
+color-link cursor-line "brightblack"
+color-link divider "black,black"
+color-link indent-char "black"
+color-link hlsearch "black,yellow"
+color-link trailingws ",brightwhite"
+
+color-link gutter-info "blue"
+color-link gutter-error "red"
+color-link gutter-warning "yellow"
+color-link diff-added "brightgreen"
+color-link diff-deleted "brightred"
+color-link diff-modified "brightyellow"
+
+color-link comment "brightwhite"
+color-link todo ",italic brightyellow"
+color-link error ",brightred"
+color-link error-message "bold red"
+color-link tab-error "brightred"
+color-link ignore "default"
+
+color-link match-brace ",white"
+
+color-link constant "green"
+color-link constant.number "brightyellow"
+color-link constant.bool "red"
+color-link constant.specialChar "blue"
+color-link constant.string "green"
+color-link constant.string.url "brightwhite"
+
+color-link type "cyan"
+color-link special "magenta"
+color-link statement "blue"
+
+color-link identifier "magenta"
+color-link identifier.macro "default"
+color-link identifier.class "cyan"
+color-link identifier.var "default"
+
+color-link symbol "yellow"
+color-link symbol.tag "blue"
+color-link symbol.brackets "brightwhite"
+color-link symbol.operator "cyan"
+
+color-link preproc "italic magenta"
+color-link preproc.shebang "italic brightwhite"
