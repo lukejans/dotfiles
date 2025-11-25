@@ -49,6 +49,45 @@
     trustctime = false
     # macOS fix: compensate for mac storing unicode characters via NFD
     precomposeunicode = false
+    # use delta as the diff pager
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    side-by-side = true
+    detect-dark-light = never
+    line-numbers = true
+    wrap-max-lines = unlimited
+    line-numbers-wrap-style = omit
+    syntax-theme = base16
+    line-numbers-left-format = "{nm:>4}┊"
+    line-numbers-right-format = "{np:>4}│"
+    line-numbers-left-style = black
+    line-numbers-right-style = black
+    line-numbers-zero-style = brightblack
+    line-numbers-plus-style = 2
+    line-numbers-minus-style = 1
+    plus-style = normal 119
+    plus-emph-style = normal bold 120
+    plus-empty-line-marker-style = normal 119
+    minus-style = normal 204
+    minus-emph-style = normal bold 205
+    minus-empty-line-marker-style = normal 204
+    blame-palette = normal 254 255
+    hunk-header-style = italic brightblack 122
+    hunk-header-line-number-style = brightblack 123
+    hunk-header-decoration-style = omit
+    hunk-label = "@@"
+    hunk-header-file-style = italic bold
+    file-style = italic
+    file-decoration-style = black ul ol
+    file-modified-label = "   "
+    file-added-label = "   "
+    file-removed-label = "   "
+    file-renamed-label ="   "
 
 [color]
     # this is the default color scheme but safe to be explicit
@@ -59,17 +98,15 @@
     renames = copies
 
 [include]
-    # include the local config file settings
     path = ~/.config/git/config.local
 
 [init]
     defaultBranch = main
 
 [merge]
-    # always create merge commits
     ff = false
-    # include summaries of commits in merge message
     log = true
+    conflictStyle = zdiff3
 
 [rebase]
     rebaseMerges = true
