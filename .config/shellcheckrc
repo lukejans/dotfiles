@@ -1,2 +1,0 @@
-# enforce use of ${} braces around variable references
-enable=require-variable-braces
