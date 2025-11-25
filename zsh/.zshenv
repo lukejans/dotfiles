@@ -4,10 +4,6 @@ export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
 
-# dotnet
-export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
-export MONO_GAC_PREFIX="/opt/homebrew"
-
 # use zed as the default editor
 export EDITOR="zed"
 

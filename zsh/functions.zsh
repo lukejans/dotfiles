@@ -5,19 +5,6 @@ mkcd() {
     mkdir -p -- "${@}" && cd "${@: -1}"
 }
 
-# fzf preview and open a selected file in $EDITOR
-fzo() {
-    local selected_file
-    selected_file=$(fzf)
-    if [ -n "${selected_file}" ]; then
-        if [ -n "${SSH_CLIENT}" ] || [ -n "${SSH_TTY}" ]; then
-            ${GIT_EDITOR-nano} "${selected_file}"
-        else
-            ${EDITOR-nano} "${selected_file}"
-        fi
-    fi
-}
-
 # yazi
 y() {
     local tmp cwd

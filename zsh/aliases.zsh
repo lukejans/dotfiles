@@ -26,6 +26,9 @@ alias latddu='latd --total-size'
 #       so will use the default cat like behavior.
 alias cat='bat'
 
+# trash - my saving grace
+alias rm='trash'
+
 # grep
 alias grep='grep --color=always'
 
@@ -43,14 +46,8 @@ alias theme="osascript -e 'tell application \"System Events\" to tell appearance
 alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="osascript -e 'set volume output volume 100'"
 
-# reload the shell
-alias reload="exec ${SHELL} -l"
-
 # ip address
 alias localip="ipconfig getifaddr en0"
-
-# help
-alias help='run-help'
 
 # misc
 alias leetcode='leetgo'

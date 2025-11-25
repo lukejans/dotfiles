@@ -20,7 +20,9 @@ export SAVEHIST=10000000
 # bat
 export BAT_CONFIG_DIR="${XDG_CONFIG_HOME}/bat"
 export BAT_CONFIG_PATH="${BAT_CONFIG_DIR}/bat.conf"
-# use bat as the man pager for colorized man pages
+
+# man
+# use bat to view colored man pages
 export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
 
 # fzf
@@ -31,7 +33,7 @@ export FZF_DEFAULT_OPTS='
     --info="right"
     --preview "bat --color=always --style=full {} --terminal-width=$FZF_PREVIEW_COLUMNS"
     --bind "focus:transform-header:file --brief {}"
-    --preview-window "right,55%"
+    --preview-window "right,70%"
     --color header:italic
 '
 # --color=fg:#d0d0d0,fg+:#d0d0d0,bg:#121212,bg+:#262626

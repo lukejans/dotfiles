@@ -29,6 +29,3 @@ fi
 
 # personal bin
 export PATH="${HOME}/.dotfiles/bin:${PATH}"
-
-# add .NET Core SDK tools
-export PATH="${PATH}:/Users/lukejans/.dotnet/tools"
