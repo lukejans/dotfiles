@@ -1,4 +1,10 @@
 {
+    "sticky_scroll": {
+        "enabled": true
+    },
+    "audio": {
+        "experimental.rodio_audio": true
+    },
     "buffer_font_size": 15.0,
     "ui_font_family": ".ZedSans",
     "tab_size": 4,
@@ -18,8 +24,8 @@
     },
     "theme": {
         "mode": "system",
-        "light": "One Light",
-        "dark": "One Dark"
+        "light": "Github Light",
+        "dark": "Github Dark"
     },
     "use_system_window_tabs": true,
     "tabs": {
@@ -29,10 +35,12 @@
         "show_diagnostics": "all"
     },
     "title_bar": {
+        "show_sign_in": true,
         "show_branch_icon": true
     },
     "minimap": {
-        "show": "always",
+        "thumb": "always",
+        "show": "never",
         "display_in": "active_editor"
     },
     "git": {
@@ -54,7 +62,7 @@
         }
     },
     "file_types": {
-        "Shell Script": ["**/completions/_*"],
+        "Shell Script": ["**/completions/_*", "*.tmux"],
         "Git Config": ["**/git/config*"],
         "Git Ignore": ["**/git/gitignore*"],
         "XML": ["*.csproj", "*.svg"],
@@ -70,11 +78,11 @@
         "always_allow_tool_actions": false,
         "default_model": {
             "provider": "copilot_chat",
-            "model": "gpt-5-mini"
+            "model": "claude-sonnet-4.5"
         }
     },
     "features": {
-        "edit_prediction_provider": "zed"
+        "edit_prediction_provider": "copilot"
     },
     "edit_predictions": {
         "disabled_globs": ["/**/.ssh/*"],
@@ -92,12 +100,6 @@
         "hour_format": "hour24"
     },
     "languages": {
-        "TOML": {
-            "formatter": "language_server"
-        },
-        "Plain Text": {
-            "format_on_save": "off"
-        },
         "JSON": {
             "prettier": {
                 "allowed": true
@@ -154,7 +156,8 @@
                         "--filename",
                         "{buffer_path}",
                         "--indent",
-                        "4"
+                        "4",
+                        "--binary-next-line"
                     ]
                 }
             }
