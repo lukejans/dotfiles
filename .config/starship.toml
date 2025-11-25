@@ -19,7 +19,7 @@ success_symbol = ' [%](bold green)'
 error_symbol = ' [%](bold red)'
 
 [directory]
-truncation_length = 1
+truncation_length = 2
 format = '[$path]($style)[$read_only]($read_only_style)'
 
 [git_branch]

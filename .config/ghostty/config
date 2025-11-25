@@ -1,5 +1,5 @@
-# theme
-theme = light:custom-one-light, dark:custom-one-dark
+theme = light:github-light-default-custom, dark:github-dark-default-custom
+#theme = light:custom-one-light, dark:custom-one-dark
 
 # font
 font-family = Liga SFMono Nerd Font
@@ -37,7 +37,7 @@ macos-option-as-alt = true
 #macos-titlebar-proxy-icon = visible
 
 # bell
-bell-features = system
+bell-features = system, no-title, no-attention
 
 # shader
 custom-shader = ~/.config/ghostty/shaders/shader.glsl

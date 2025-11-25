@@ -1,4 +1,5 @@
 [tools]
+dotnet = "7"
 java = "23"
 node = { version = "lts", postinstall = "corepack enable" }
 rust = "latest"
