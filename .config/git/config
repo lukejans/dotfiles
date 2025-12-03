@@ -70,11 +70,11 @@
     line-numbers-zero-style = brightblack
     line-numbers-plus-style = 2
     line-numbers-minus-style = 1
-    plus-style = normal 119
-    plus-emph-style = normal bold 120
+    plus-style = syntax 119
+    plus-emph-style = syntax bold 120
     plus-empty-line-marker-style = normal 119
-    minus-style = normal 204
-    minus-emph-style = normal bold 205
+    minus-style = syntax 204
+    minus-emph-style = syntax bold 205
     minus-empty-line-marker-style = normal 204
     blame-palette = normal 254 255
     hunk-header-style = italic brightblack 122

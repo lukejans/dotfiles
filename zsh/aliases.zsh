@@ -21,11 +21,6 @@ alias lltddu='lltd --total-size'
 alias latd='ltd --all --ignore-glob "node_modules|.git"'
 alias latddu='latd --total-size'
 
-# cat - note that bat can safely override cat as it can
-#       detect when its being used non-interactively and
-#       so will use the default cat like behavior.
-alias cat='bat'
-
 # trash - my saving grace
 alias rm='trash'
 
@@ -40,11 +35,6 @@ alias pip='pip3'
 alias java_sweep='find . -name "*.class" -type f -delete'
 alias node_sweep="find . -type d -name node_modules -prune -exec rm -rf '{}' \;"
 alias ds_sweep='find . -name ".DS_Store" -type f -delete'
-
-# macOS apple script shortcuts
-alias theme="osascript -e 'tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode'"
-alias stfu="osascript -e 'set volume output muted true'"
-alias pumpitup="osascript -e 'set volume output volume 100'"
 
 # ip address
 alias localip="ipconfig getifaddr en0"
