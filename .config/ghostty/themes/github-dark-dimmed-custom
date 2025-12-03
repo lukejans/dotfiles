@@ -15,7 +15,6 @@ palette = 13=#dcbdfb
 palette = 14=#56d4dd
 palette = 15=#cdd9e5
 
-
 # colors for git diff
 # insertions (green)
 palette = 119=#2A3834
@@ -34,8 +33,5 @@ background = #22282F
 foreground = #adbac7
 cursor-color = #539bf5
 cursor-text = #539bf5
-#selection-background = #1F3C75
-#selection-foreground = #adbac7
-
 selection-background = #adbac7
 selection-foreground = #22272e
