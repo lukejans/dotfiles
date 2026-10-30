@@ -1,0 +1,239 @@
+[env]
+CARGO_HOME = "{{ env.HOME }}/.local/share/cargo"
+RUSTUP_HOME = "{{ env.HOME }}/.local/share/rustup"
+
+[tools]
+aube = { version = "latest", workflow = [
+    "release-plz.yml@refs/heads/main",
+    "release.yml@refs/heads/main"
+] }
+go = "latest"
+java = "lts"
+node = "lts"
+npm = "latest"
+"npm:@biomejs/biome" = "latest"
+"npm:@stripe/cli" = "latest"
+"npm:@trailhq/trail-code" = "latest"
+"npm:sql-formatter" = "latest"
+python = "latest"
+rust = "latest"
+usage = { version = "latest", workflow = "publish-cli.yml" }
+uv = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["java"]
+experimental = true
+color = false
+
+[settings.self_update]
+auto = true
+check_duration = "2d"
+
+[bootstrap]
+[bootstrap.directories]
+[bootstrap.directories."~/.ssh"]
+os = "unix"
+mode = "0700"
+
+[bootstrap.directories."~/.cache/zsh"]
+os = "unix"
+mode = "0700"
+
+[bootstrap.directories."~/.local/state/zsh"]
+os = "unix"
+mode = "0700"
+
+[bootstrap.directories."~/.local/share/zsh"]
+os = "unix"
+mode = "0700"
+
+[bootstrap.directories."/opt/homebrew/share"]
+os = "unix"
+mode = "0755"
+
+[bootstrap.files]
+[bootstrap.files."/etc/zshenv"]
+# set `$ZDOTDIR` in the system `zshenv` file so it's
+# picked up before a users zsh login shell is spawned
+content = """
+export ZDOTDIR="${HOME}/.config/zsh"
+"""
+os = "macos"
+owner = "root"
+group = "wheel"
+
+[bootstrap.brew]
+adopt = true
+homebrew_metadata = true
+
+[bootstrap.packages]
+"brew:bat" = "latest"
+"brew:bat-extras" = "latest"
+"brew:container" = "latest"
+"brew:eza" = "latest"
+"brew:fd" = "latest"
+"brew:ffmpeg" = "latest"
+"brew:fzf" = "latest"
+"brew:git" = "latest"
+"brew:git-delta" = "latest"
+"brew:git-filter-repo" = "latest"
+"brew:git-xet" = "latest"
+"brew:hf" = "latest"
+"brew:imagemagick" = "latest"
+"brew:jq" = "latest"
+"brew:libtiff" = "latest"
+"brew:llama.cpp" = "latest"
+"brew:mas" = "latest"
+"brew:nano" = "latest"
+"brew:nmap" = "latest"
+"brew:qemu" = "latest"
+"brew:redis" = "latest"
+"brew:resvg" = "latest"
+"brew:ripgrep" = "latest"
+"brew:rumdl" = "latest"
+"brew:sd" = "latest"
+"brew:shellcheck" = "latest"
+"brew:shfmt" = "latest"
+"brew:sqruff" = "latest"
+"brew:starship" = "latest"
+"brew:tailscale" = "latest"
+"brew:tbls" = "latest"
+"brew:tlrc" = "latest"
+"brew:tombi" = "latest"
+"brew:watchman" = "latest"
+"brew:yazi" = "latest"
+"brew:yt-dlp" = "latest"
+"brew:zoxide" = "latest"
+"brew:zsh-autosuggestions" = "latest"
+"brew:zsh-completions" = "latest"
+"brew:zsh-fast-syntax-highlighting" = "latest"
+
+"brew-cask:balenaetcher" = "latest"
+"brew-cask:blender" = "latest"
+"brew-cask:bruno" = "latest"
+"brew-cask:codex" = "latest"
+"brew-cask:discord" = "latest"
+"brew-cask:docker-desktop" = "latest"
+"brew-cask:equinox" = "latest"
+"brew-cask:figma" = "latest"
+"brew-cask:font-sf-mono" = { os = "macos", version = "latest" }
+"brew-cask:font-sf-mono-nerd-font-ligaturized" = { os = "macos", version = "latest" }
+"brew-cask:font-sf-pro" = { os = "macos", version = "latest" }
+"brew-cask:ghostty" = { os = "macos", version = "latest" }
+"brew-cask:google-chrome" = "latest"
+"brew-cask:libreoffice" = "latest"
+"brew-cask:linear" = "latest"
+"brew-cask:llama-app" = { os = "macos", version = "latest" }
+"brew-cask:raycast" = "latest"
+"brew-cask:sjmcl" = { os = "macos", version = "latest" }
+"brew-cask:telegram" = "latest"
+"brew-cask:utm" = { os = "macos", version = "latest" }
+"brew-cask:whatsapp" = "latest"
+"brew-cask:zed" = "latest"
+
+"mas:985367838" = "latest"   # Microsoft Outlook
+"mas:462054704" = "latest"   # Microsoft Word
+"mas:1592917505" = "latest"  # Noir
+"mas:6745342698" = "latest"  # uBlock Origin Lite
+"mas:497799835" = "latest"   # Xcode
+
+[bootstrap.macos]
+[bootstrap.macos.dock]
+autohide = true
+autohide_delay = 0
+autohide_time_modifier = 0.15
+orientation = "bottom"
+tilesize = 56
+show_recents = false
+magnification = false
+mru_spaces = true
+
+[bootstrap.macos.finder]
+show_all_files = false
+show_pathbar = true
+show_status_bar = true
+sort_folders_first = true
+preferred_view_style = "column"
+save_new_documents_to_cloud = false
+
+[bootstrap.macos.keyboard]
+key_repeat = 1
+initial_key_repeat = 10
+press_and_hold = false
+automatic_capitalization = false
+automatic_spelling_correction = true
+fn_state = false
+
+[bootstrap.macos.trackpad]
+tap_to_click = true
+three_finger_drag = false
+
+[[bootstrap.macos.defaults_entries]]
+domain = "NSGlobalDomain"
+key = "com.apple.mouse.scaling"
+value = 3
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.finder"
+key = "ShowHardDrivesOnDesktop"
+value = false
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.desktopservices"
+key = "DSDontWriteUSBStores"
+value = true
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "expose-animation-duration"
+value = 0.1
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "show-process-indicators"
+value = false
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-tl-corner"
+value = 1
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-tl-modifier"
+value = 0
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-tr-corner"
+value = 1
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-tr-modifier"
+value = 0
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-bl-corner"
+value = 1
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-bl-modifier"
+value = 0
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-br-corner"
+value = 1
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.dock"
+key = "wvous-br-modifier"
+value = 0
+
+[[bootstrap.macos.defaults_entries]]
+domain = "com.apple.menuextra.clock"
+key = "FlashDateSeparators"
+value = true

@@ -1,0 +1,8 @@
+# git/config.local
+#
+# user information and local key configuration
+
+[user]
+    name = Luke Janssen
+    email =  lukejans5@gmail.com
+    signingkey = ~/.ssh/github_signing_ed25519

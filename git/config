@@ -1,0 +1,55 @@
+# git/config
+#
+
+# ---- files & patches ----
+[core]
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+    untrackedCache = true
+    trustctime = false
+[apply]
+    whitespace = fix
+[diff]
+    renames = copies
+
+# ---- history ----
+[init]
+    defaultBranch = main
+[merge]
+    conflictStyle = zdiff3
+[pull]
+    ff = only
+[branch "main"]
+    mergeOptions = --no-ff
+
+# ---- remotes ----
+[push]
+    followTags = true
+[url "git@github.com:"]
+    pushInsteadOf = https://github.com/
+[fetch]
+    prune = true
+
+# ---- signing ----
+# config.local supplies the identity and signing-key path
+[commit]
+    gpgsign = true
+[gpg]
+    format = ssh
+
+# ---- large-file support ----
+#
+# hugging face model/dataset clones use git-xet
+[lfs "customtransfer.xet"]
+    path = git-xet
+    args = transfer
+    concurrent = true
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+# ---- config files ----
+[include]
+    path = config.pref   # aliases & ui formatting
+    path = config.local  # auth & user information

@@ -1,0 +1,471 @@
+{
+	"use_system_window_tabs": true,
+	"use_display_p3": true,
+	"semantic_tokens": "off",
+	"icon_theme": {
+		"mode": "light",
+		"light": "Zed (Default)",
+		"dark": "Zed (Default)"
+	},
+	"minimum_split_diff_width": 120.0,
+	"scroll_beyond_last_line": "one_page",
+	"context_servers": {
+		"cloudflare": {
+			"enabled": true,
+			"url": "https://mcp.cloudflare.com/mcp"
+		},
+		"linear": {
+			"enabled": true,
+			"url": "https://mcp.linear.app/mcp"
+		},
+		"context7": {
+			"enabled": true,
+			"url": "https://mcp.context7.com/mcp/oauth"
+		}
+	},
+	"diff_view_style": "split",
+	"markdown_preview": {
+		"limit_content_width": true,
+		"open_markdown_files_in_preview": true,
+		"font_size": 15.0
+	},
+	"fullscreen_mode": "simple",
+	"ui_font_family": "SF Pro",
+	"text_rendering_mode": "platform_default",
+	"buffer_font_size": 14.0,
+	"buffer_font_family": "Liga SFMono Nerd Font",
+	"language_models": {
+		"openai_compatible": {},
+		"llama.cpp": {
+			"api_url": "http://localhost:8080"
+		}
+	},
+	"completion_menu_item_kind": "symbol",
+	"cli_default_open_behavior": "new_window",
+	"server_url": "https://zed.dev",
+	"proxy": "",
+	"disable_ai": false,
+	"bottom_dock_layout": "contained",
+	"preview_tabs": {
+		"enable_preview_from_file_finder": false
+	},
+	"outline_panel": {
+		"dock": "right"
+	},
+	"collaboration_panel": {
+		"dock": "right"
+	},
+	"gutter": {
+		"min_line_number_digits": 4,
+		"line_numbers": true
+	},
+	"project_panel": {
+		"sort_order": "lower",
+		"hide_hidden": false,
+		"auto_fold_dirs": true,
+		"git_status": true,
+		"entry_spacing": "comfortable",
+		"hide_gitignore": false,
+		"hide_root": false,
+		"git_status_indicator": true,
+		"diagnostic_badges": true,
+		"bold_folder_labels": false,
+		"dock": "right"
+	},
+	"diagnostics_max_severity": "all",
+	"inline_code_actions": true,
+	"diagnostics": {
+		"include_warnings": true,
+		"inline": {
+			"enabled": true
+		}
+	},
+	"toolbar": {
+		"code_actions": false,
+		"breadcrumbs": true,
+		"quick_actions": true,
+		"selections_menu": true,
+		"agent_review": true
+	},
+	"scrollbar": {
+		"show": "auto"
+	},
+	"document_folding_ranges": "on",
+	"document_symbols": "on",
+	"calls": {
+		"mute_on_join": true
+	},
+	"inlay_hints": {
+		"enabled": false
+	},
+	"use_system_path_prompts": true,
+	"agent_servers": {
+		"github-copilot": {
+			"type": "registry"
+		}
+	},
+	"tab_bar": {
+		"show_pinned_tabs_in_separate_row": false,
+		"show": true,
+		"show_nav_history_buttons": true,
+		"show_tab_bar_buttons": true
+	},
+	"session": {
+		"trust_all_worktrees": true
+	},
+	"restore_on_startup": "launchpad",
+	"colorize_brackets": false,
+	"sticky_scroll": {},
+	"audio": {
+		"experimental.input_audio_device": "coreaudio:60-FD-A6-14-86-CE:input",
+		"experimental.output_audio_device": "coreaudio:60-FD-A6-14-86-CE:output"
+	},
+	"tab_size": 4,
+	"base_keymap": "Zed",
+	"format_on_save": "on",
+	"buffer_font_features": {
+		"calt": false
+	},
+	"debugger": {
+		"dock": "bottom"
+	},
+	"theme": {
+		"mode": "system",
+		"light": "One Light",
+		"dark": "One Dark"
+	},
+	"tabs": {
+		"close_position": "left",
+		"file_icons": true,
+		"git_status": true,
+		"show_diagnostics": "all"
+	},
+	"title_bar": {
+		"show_user_picture": true,
+		"show_user_menu": true,
+		"show_onboarding_banner": true,
+		"show_project_items": true,
+		"show_branch_status_icon": false,
+		"show_branch_name": true,
+		"show_menus": false,
+		"show_sign_in": true
+	},
+	"minimap": {
+		"thumb_border": "left_open",
+		"show": "never",
+		"display_in": "active_editor"
+	},
+	"git": {
+		"path_style": "file_name_first",
+		"disable_git": false,
+		"inline_blame": {
+			"enabled": true,
+			"show_commit_summary": false
+		},
+		"blame": {
+			"show_avatar": true
+		}
+	},
+	"git_panel": {
+		"sort_by": "path",
+		"group_by": "none",
+		"status_style": "icon",
+		"dock": "right",
+		"button": true,
+		"diff_stats": true,
+		"file_icons": false,
+		"tree_view": true
+	},
+	"terminal": {
+		"font_size": 14.0,
+		"font_family": "Liga SFMono Nerd Font",
+		"toolbar": {
+			"breadcrumbs": false
+		},
+		"show_count_badge": false,
+		"line_height": {
+			"custom": 1.5
+		},
+		"copy_on_select": true,
+		"option_as_meta": true,
+		"font_features": {
+			"calt": false
+		}
+	},
+	"file_types": {
+		"Shell Script": ["**/completions/_*", "*.tmux"],
+		"Git Config": ["**/git/config*"],
+		"Git Ignore": ["**/git/gitignore*"],
+		"env": [".dev.vars*"],
+		"XML": ["*.svg"],
+		"TOML": ["mise.lock"]
+	},
+	"agent": {
+		"expand_edit_card": false,
+		"expand_terminal_card": false,
+		"single_file_review": false,
+		"threads_sidebar": {
+			"position": "left"
+		},
+		"thinking_display": "always_collapsed",
+		"sandbox_permissions": {
+			"allow_all_hosts": true,
+			"network_hosts": [],
+			"allow_fs_write_all": false,
+			"allow_unsandboxed": true
+		},
+		"show_turn_stats": true,
+		"use_modifier_to_send": true,
+		"tool_permissions": {
+			"tools": {
+				"mcp:linear:extract_images": {
+					"default": "allow"
+				},
+				"mcp:cloudflare:whoami": {
+					"default": "allow"
+				},
+				"mcp:cloudflare:search": {
+					"default": "allow"
+				},
+				"mcp:cloudflare:execute": {
+					"default": "allow"
+				},
+				"mcp:cloudflare:docs": {
+					"default": "allow"
+				},
+				"copy_path": {
+					"default": "allow"
+				},
+				"mcp:linear:get_user": {
+					"default": "allow"
+				},
+				"mcp:linear:get_document": {
+					"default": "allow"
+				},
+				"mcp:linear:get_team": {
+					"default": "allow"
+				},
+				"mcp:linear:list_documents": {
+					"default": "allow"
+				},
+				"mcp:linear:get_issue": {
+					"default": "allow"
+				},
+				"mcp:linear:get_project": {
+					"default": "allow"
+				},
+				"mcp:linear:list_issues": {
+					"default": "allow"
+				},
+				"mcp:linear:list_issue_statuses": {
+					"default": "allow"
+				},
+				"mcp:linear:get_workspace": {
+					"default": "allow"
+				},
+				"mcp:linear:list_issue_labels": {
+					"default": "allow"
+				},
+				"mcp:linear:list_projects": {
+					"default": "allow"
+				},
+				"mcp:linear:list_teams": {
+					"default": "allow"
+				},
+				"create_directory": {
+					"default": "allow"
+				},
+				"move_path": {
+					"default": "allow"
+				},
+				"search_web": {
+					"default": "allow"
+				},
+				"skill": {
+					"default": "allow"
+				},
+				"fetch": {
+					"default": "allow"
+				},
+				"terminal": {
+					"default": "allow",
+					"always_allow": [
+						{
+							"pattern": "^javac\\b"
+						},
+						{
+							"pattern": "^java\\b"
+						},
+						{
+							"pattern": "^git\\b"
+						},
+						{
+							"pattern": "^npm\\s+run(\\s|$)"
+						},
+						{
+							"pattern": "^npx\\s+biome(\\s|$)"
+						},
+						{
+							"pattern": "^stripe\\s+docs(\\s|$)"
+						},
+						{
+							"pattern": "^npm\\s+view(\\s|$)"
+						},
+						{
+							"pattern": "^rg\\b"
+						}
+					]
+				}
+			}
+		},
+		"dock": "left",
+		"play_sound_when_agent_done": "always",
+		"default_profile": "write",
+		"default_model": {
+			"effort": "max",
+			"speed": "standard",
+			"enable_thinking": true,
+			"provider": "openai-subscribed",
+			"model": "gpt-6.1-sol"
+		},
+		"commit_message_model": {
+			"provider": "openai-subscribed",
+			"model": "gpt-6-luna"
+		}
+	},
+	"edit_predictions": {
+		"allow_data_collection": "no",
+		"provider": "zed",
+		"disabled_globs": ["/**/.ssh/*", "/**/journal/*", "/**/.env"],
+		"mode": "subtle"
+	},
+	"private_files": [
+		"**/.env*",
+		"/**/.ssh/*",
+		"/**/journal/*",
+		"**/{.dev.vars,.dev.vars.*}"
+	],
+	"redact_private_values": true,
+	"telemetry": {
+		"diagnostics": false,
+		"metrics": false
+	},
+	"journal": {
+		"path": "~/Notes",
+		"hour_format": "hour24"
+	},
+	"code_actions_on_format": {
+		"source.fixAll.biome": true,
+		"source.organizeImports.biome": true,
+		"source.action.noDuplicateClasses.biome": true,
+		"source.action.useSortedAttributes.biome": true
+	},
+	"languages": {
+		"Markdown": {
+			"soft_wrap": "editor_width",
+			"language_servers": ["rumdl", "codebook"],
+			"formatter": { "language_server": { "name": "rumdl" } },
+			"code_actions_on_format": {
+				"source.fixAll.rumdl": true
+			}
+		},
+		"Python": {
+			"language_servers": ["ty", "ruff", "codebook"]
+		},
+		"Java": {
+			"language_servers": ["jdtls", "codebook"],
+			"formatter": {
+				"language_server": {
+					"name": "jdtls"
+				}
+			}
+		},
+		// "SQL": {
+		// 	"language_servers": ["sqruff"],
+		// 	"formatter": { "language_server": { "name": "sqruff" } },
+		// 	"format_on_save": "on"
+		// },
+		"Shell Script": {
+			"formatter": {
+				"external": {
+					"command": "shfmt",
+					"arguments": [
+						"--filename",
+						"{buffer_path}",
+						"--indent",
+						"4",
+						"--binary-next-line"
+					]
+				}
+			}
+		},
+		"HTML": {
+			"language_servers": ["vscode-html-language-server", "!eslint", "..."],
+			"formatter": { "language_server": { "name": "biome" } }
+		},
+		"CSS": {
+			"formatter": { "language_server": { "name": "biome" } },
+			"code_actions_on_format": {
+				"source.fixAll.biome": true,
+				"source.action.useSortedProperties.biome": true
+			}
+		},
+		"JavaScript": {
+			"language_servers": ["!typescript-language-server", "!eslint", "..."],
+			"formatter": { "language_server": { "name": "biome" } }
+		},
+		"TypeScript": {
+			"language_servers": ["!typescript-language-server", "!eslint", "..."],
+			"formatter": { "language_server": { "name": "biome" } }
+		},
+		"TSX": {
+			"language_servers": ["!typescript-language-server", "!eslint", "..."],
+			"formatter": { "language_server": { "name": "biome" } }
+		},
+		"JSON": { "formatter": { "language_server": { "name": "biome" } } },
+		"JSONC": { "formatter": { "language_server": { "name": "biome" } } },
+		"TOML": {
+			"language_servers": ["tombi"],
+			"formatter": { "language_server": { "name": "tombi" } }
+		}
+	},
+	"lsp": {
+		"vtsls": {
+			"settings": {
+				"typescript": {
+					"updateImportsOnFileMove": {
+						"enabled": "always"
+					}
+				},
+				"javascript": {
+					"updateImportsOnFileMove": {
+						"enabled": "always"
+					}
+				}
+			},
+			"enable_lsp_tasks": true
+		},
+		"jdtls": {
+			"settings": {
+				"lombok_support": true,
+				"jdk_auto_download": false,
+				"check_updates": "always"
+			}
+		},
+		"rumdl": {
+			"binary": {
+				"path": "/opt/homebrew/bin/rumdl",
+				"arguments": ["server"]
+			}
+		},
+		// "sqruff": {
+		// 	"binary": {
+		// 		"path": "/opt/homebrew/bin/sqruff",
+		// 		"arguments": ["lsp"]
+		// 	}
+		// },
+		"biome": {
+			"settings": {}
+		}
+	}
+}

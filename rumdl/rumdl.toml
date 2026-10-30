@@ -1,0 +1,80 @@
+[global]
+cache-dir = "~/.cache/rumdl"
+editorconfig = true
+disable = ["MD045"]
+exclude = [
+    "node_modules",
+    "build/**",
+    "*.tmp.md",
+    "docs/generated/**",
+    "vendor/",
+    ".agents/",
+    ".trail/"
+]
+
+# [code-block-tools]
+# enabled = true
+#
+# [code-block-tools.languages]
+# shell = { lint = ["shellcheck"], format = ["shfmt"] }
+
+[per-file-flavor]
+"**/*.mdx" = "mdx"
+
+# ul-style
+[MD004]
+style = "dash"
+
+# ul-indent
+[MD007]
+style = "fixed"
+indent = 4
+
+# line-length
+[MD013]
+line-length = 0
+reflow = true
+reflow-mode = "normalize"
+
+# commands-show-output
+[MD014]
+show-output = true
+
+# fenced-code-language
+[MD040]
+style = "consistent"
+unknown-language-action = "warn"
+
+# code-block-style
+[MD046]
+style = "fenced"
+
+# code-fence-style
+[MD048]
+style = "backtick"
+
+# emphasis-style
+[MD049]
+style = "underscore"
+
+# table-format
+[MD060]
+enabled = true
+style = "compact"
+aligned-delimiter = true
+
+# heading-capitalization
+[MD063]
+enabled = true
+style = "title-case"
+
+# frontmatter-key-sort
+[MD072]
+enabled = true
+key-order = [
+    "title",
+    "date",
+    "author",
+    "tags",
+    "categories"
+]

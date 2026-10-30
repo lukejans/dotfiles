@@ -1,0 +1,284 @@
+colourful: true
+
+filekinds:
+    normal:
+        foreground: default
+    directory:
+        is_bold: false
+    symlink:
+        foreground: cyan
+    pipe:
+        foreground: yellow
+    block_device:
+        foreground: yellow
+        is_bold: true
+        is_underline: true
+        is_italic: true
+    char_device:
+        foreground: yellow
+        is_bold: true
+        is_underline: true
+        is_italic: true
+    socket:
+        foreground: red
+        is_bold: true
+    special:
+        foreground: yellow
+    executable:
+        foreground: green
+        is_italic: true
+        is_bold: true
+    mount_point:
+        foreground: blue
+        is_bold: true
+        is_underline: true
+
+filenames:
+    "worktrees":
+        filename:
+            foreground: default
+            is_dimmed: true
+            is_italic: true
+    ".git":
+        filename:
+            foreground: default
+            is_dimmed: true
+            is_bold: true
+    "vite.config.ts":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "vite.config.js":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "vitest.config.ts":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "vitest.config.js":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "wrangler.jsonc":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "package-lock.json":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "mise.toml":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+    "mise.lock":
+        filename:
+            foreground: yellow
+            is_underline: true
+            is_bold: false
+extensions:
+    md:
+        filename:
+            foreground: default
+            is_bold: false
+            is_italic: true
+            is_underline: true
+
+perms:
+    user_read:
+        foreground: default
+        is_bold: false
+    user_write:
+        foreground: default
+        is_bold: false
+    user_execute_file:
+        foreground: green
+        is_bold: false
+        is_underline: true
+    user_execute_other:
+        foreground: default
+        is_bold: false
+    group_read:
+        foreground: default
+    group_write:
+        foreground: default
+    group_execute:
+        foreground: default
+    other_read:
+        foreground: default
+    other_write:
+        foreground: default
+    other_execute:
+        foreground: default
+    special_user_file:
+        foreground: magenta
+    special_other:
+        foreground: magenta
+    attribute:
+        foreground: default
+
+size:
+    major:
+        foreground: green
+        is_bold: false
+    minor:
+        foreground: green
+    number_byte:
+        foreground: default
+        is_dimmed: true
+        is_bold: false
+    number_kilo:
+        foreground: green
+        is_bold: false
+    number_mega:
+        foreground: green
+        is_bold: false
+    number_giga:
+        foreground: green
+        is_bold: false
+    number_huge:
+        foreground: green
+        is_bold: false
+    unit_byte:
+        foreground: green
+    unit_kilo:
+        foreground: green
+    unit_mega:
+        foreground: green
+    unit_giga:
+        foreground: green
+    unit_huge:
+        foreground: green
+
+users:
+    user_you:
+        foreground: default
+        is_bold: false
+    user_root:
+        foreground: default
+    user_other:
+        foreground: default
+    group_yours:
+        foreground: default
+        is_bold: false
+    group_other:
+        foreground: default
+    group_root:
+        foreground: default
+
+links:
+    normal:
+        foreground: red
+        is_bold: false
+    multi_link_file:
+        foreground: red
+        background: yellow
+
+git:
+    new:
+        foreground: green
+    modified:
+        foreground: yellow
+    deleted:
+        foreground: red
+    renamed:
+        foreground: blue
+    typechange:
+        foreground: purple
+    ignored:
+        foreground: default
+        is_dimmed: true
+    conflicted:
+        foreground: red
+
+git_repo:
+    branch_main:
+        foreground: magenta
+    branch_other:
+        foreground: yellow
+    git_clean:
+        foreground: green
+    git_dirty:
+        foreground: yellow
+
+security_context:
+    colon:
+        foreground: default
+        is_dimmed: true
+    user:
+        foreground: blue
+    role:
+        foreground: green
+    typ:
+        foreground: yellow
+    range:
+        foreground: cyan
+
+file_type:
+    image:
+        foreground: purple
+    video:
+        foreground: purple
+        is_bold: true
+    music:
+        foreground: cyan
+    lossless:
+        foreground: cyan
+        is_bold: true
+    crypto:
+        foreground: green
+        is_bold: true
+    document:
+        foreground: green
+    compressed:
+        foreground: red
+    temp:
+        foreground: white
+    compiled:
+        foreground: yellow
+        is_italic: true
+    build:
+        foreground: yellow
+        is_underline: true
+        is_bold: false
+    source:
+        foreground: default
+        is_bold: false
+
+punctuation:
+    foreground: default
+    is_dimmed: true
+    is_bold: true
+date:
+    foreground: default
+    is_dimmed: true
+    is_italic: true
+inode:
+    foreground: purple
+blocks:
+    foreground: cyan
+header:
+    foreground: default
+    is_underline: true
+octal:
+    foreground: purple
+flags:
+    foreground: default
+
+symlink_path:
+    foreground: cyan
+control_char:
+    foreground: red
+broken_symlink:
+    foreground: red
+broken_path_overlay:
+    foreground: default
+    is_underline: true

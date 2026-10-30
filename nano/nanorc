@@ -1,0 +1,8 @@
+# --- editor configuration
+set linenumbers
+set tabsize 4
+set softwrap
+set tabstospaces
+
+# --- syntax highlighting
+include /opt/homebrew/share/nano/*.nanorc

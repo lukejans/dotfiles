@@ -1,0 +1,29 @@
+[
+	{
+		"label": "Debug Active Python File",
+		"adapter": "Debugpy",
+		"program": "$ZED_FILE",
+		"request": "launch"
+	},
+	{
+		"label": "Debug Active Java File",
+		"adapter": "Java",
+		"request": "launch",
+		"mainClass": "$ZED_STEM",
+		"build": {
+			"command": "javac -d ./bin $ZED_FILE",
+			"shell": {
+				"with_arguments": {
+					"program": "/bin/sh",
+					"args": ["-c"]
+				}
+			}
+		}
+	},
+	{
+		"label": "Debug Java Project",
+		"adapter": "Java",
+		"request": "launch",
+		"cwd": "$ZED_WORKTREE_ROOT"
+	}
+]

@@ -1,0 +1,38 @@
+palette = 0=#4a4b4d
+palette = 1=#eb4056
+palette = 2=#82d2ce
+palette = 3=#fad075
+palette = 4=#4b8dec
+palette = 5=#eb83e2
+palette = 6=#2ccce6
+palette = 7=#e0e1e4
+
+palette = 8=#4a4b4d
+palette = 9=#c7001b
+palette = 10=#009e6f
+palette = 11=#e09119
+palette = 12=#0067e6
+palette = 13=#eb4dde
+palette = 14=#00bad6
+palette = 15=#9d9d9f
+
+# colors for git diff
+# insertions (green)
+palette = 119=#2a3834
+palette = 120=#384f3f
+# deletions (red)
+palette = 204=#342d33
+palette = 205=#583839
+# hunk header (blue)
+palette = 122=#273141
+palette = 123=#1f3c75
+# blame (grey)
+palette = 254=#1b2129
+palette = 255=#161b22
+
+background = #18191b
+foreground = #e0e1e4
+cursor-color = #e0e1e4
+cursor-text = cell-background
+selection-background = #225090
+selection-foreground = cell-background

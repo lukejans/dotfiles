@@ -1,0 +1,113 @@
+# git/config.pref
+#
+# personal preferences:
+# 	- ui
+#   - aliases
+#   - git-delta: https://github.com/dandavison/delta
+
+# ---- ui ----
+[color "status"]
+    added = blue
+    changed = yellow
+    untracked = green
+[pretty]
+    compact  = tformat:%C(yellow)%h%C(reset) %s %C(italic dim default)- %an%C(reset)%C(auto)%d%C(reset)
+    detailed = tformat:%C(yellow)%h%C(reset) - %C(cyan)%aD%C(reset) %C(green)(%ar)%C(reset)%C(auto)%d%C(reset)%n          %s %C(dim italic)- %an%C(reset)
+    search   = tformat:%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d%Creset
+
+# ---- aliases ----
+[alias]
+    # -- status & diff --
+    # short status with branch info
+    st = status --short --branch
+    # unstaged changes, or working tree vs HEAD~n (including uncommitted changes)
+    d = "!f() { git diff --patch-with-stat ${1:+HEAD~$1}; }; f"
+    # staged changes
+    ds = diff --staged --patch-with-stat
+
+    # -- history & log --
+    # graph: current branch / all branches / all branches with dates
+    l = log --graph --pretty=compact
+    la = log --graph --pretty=compact --all
+    ll = log --graph --pretty=detailed --all
+    # contributors ranked by commit count
+    contributors = shortlog --summary --numbered HEAD
+    # local branches, most recently committed first
+    recent = branch --sort=-committerdate -vv
+    # last commit with changed files
+    last = log -1 --stat
+
+    # -- search --
+    # commits touching a file (follows renames)
+    file-history = log --follow --oneline --
+    # commits that deleted a file (works even if it no longer exists)
+    file-deleted = log --diff-filter=D --oneline --
+    # commits where a string was added/removed (pickaxe): git find-code "foo bar"
+    find-code = log --pretty=search --date=short -S
+    # commits by message, case-insensitive regex: git find-msg "fix.*login"
+    find-msg = log --pretty=search --date=short -i --grep
+    # branches / tags containing a commit
+    branches-with = branch -a --contains
+    tags-with = tag --contains
+    # list all aliases
+    aliases = config --get-regexp ^alias[.]
+
+    # -- editing history --
+    # undo the last commit, keeping changes staged
+    uncommit = reset --soft HEAD~1
+    # unstage files
+    unstage = restore --staged --
+    # reword the last commit (ignores staged changes)
+    reword = commit --amend --only
+    # fold staged changes into the last commit
+    amend = commit --amend --no-edit
+    # create a fixup commit for <sha>; fold it in with git rebase -i --autosquash
+    fixup = commit --fixup
+    # interactive rebase: git rbi <n> or git rbi root
+    rbi = "!f() { case \"$1\" in root) git rebase -i --root;; '') echo 'usage: git rbi <n>|root' >&2; return 1;; *) git rebase -i \"HEAD~$1\";; esac; }; f"
+    # force push that refuses to clobber unseen remote work
+    pushf = push --force-with-lease
+
+    # -- branching --
+    # try switching (including remote-tracking guesses); on failure, try creating from HEAD
+    go = "!f() { git switch \"$1\" 2>/dev/null || git switch -c \"$1\"; }; f"
+
+
+#  ---- delta ----
+[core]
+    pager = delta
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    side-by-side = true
+    detect-dark-light = never
+    line-numbers = true
+    wrap-max-lines = unlimited
+    line-numbers-wrap-style = omit
+    syntax-theme = base16
+    line-numbers-left-format = "{nm:>4}┊"
+    line-numbers-right-format = "{np:>4}│"
+    line-numbers-left-style = black
+    line-numbers-right-style = black
+    line-numbers-zero-style = brightblack
+    line-numbers-plus-style = 2
+    line-numbers-minus-style = 1
+    plus-style = syntax 119
+    plus-emph-style = syntax bold 120
+    plus-empty-line-marker-style = normal 119
+    minus-style = syntax 204
+    minus-emph-style = syntax bold 205
+    minus-empty-line-marker-style = normal 204
+    blame-palette = normal 254 255
+    hunk-header-style = italic brightblack 122
+    hunk-header-line-number-style = brightblack 123
+    hunk-header-decoration-style = omit
+    hunk-label = "@@"
+    hunk-header-file-style = italic bold
+    file-style = italic
+    file-decoration-style = black ul ol
+    file-modified-label = "   "
+    file-added-label = "   "
+    file-removed-label = "   "
+    file-renamed-label ="   "
