@@ -9,7 +9,7 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
 setopt AUTO_PARAM_SLASH
-setopt GLOB_DOTS
+unsetopt BANG_HIST
 
 # ghostty zsh shell integration
 if [[ -n ${GHOSTTY_RESOURCES_DIR} ]]; then
