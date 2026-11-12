@@ -4,6 +4,7 @@ dictionaries = [
 ]
 words = [
     "Cloudflare",
+    "EOF",
     "FPATH",
     "Fastino",
     "GST",
@@ -33,6 +34,7 @@ words = [
     "janssen",
     "leetgo",
     "lesshistfile",
+    "logfile",
     "lukejans",
     "mise",
     "mkcert",
